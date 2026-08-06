@@ -1,14 +1,73 @@
-import React from 'react';
-import { Dumbbell, Activity, HeartPulse, Zap, ShieldCheck, Flame, Leaf, Award, Sparkles, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Dumbbell, Activity, HeartPulse, Zap, ShieldCheck, Flame, Leaf, Award, Sparkles, CheckCircle, Image as ImageIcon } from 'lucide-react';
 
 interface ProductGraphicProps {
   productId: string;
   name: string;
   category: string;
   gradient: string;
+  image?: string;
 }
 
-export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name }) => {
+export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name, image }) => {
+  const [imgError, setImgError] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  // If a custom image prop exists and has not errored out, attempt rendering the photo container
+  const showPhoto = Boolean(image && !imgError);
+
+  if (showPhoto) {
+    return (
+      <div className="relative w-full h-80 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 p-4 shadow-2xl flex flex-col justify-between group-hover:border-blue-500/50 transition-all duration-300">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-950/40 via-slate-950 to-black pointer-events-none" />
+        
+        {/* Poster Top Banner */}
+        <div className="relative z-10 flex flex-col items-center text-center">
+          <div className="flex items-center gap-1 text-[10px] font-black uppercase text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2.5 py-0.5 rounded-full mb-1">
+            <Sparkles size={12} />
+            <span>ORIGINAL MGREFOTS FORMULA</span>
+          </div>
+          <h4 className="text-base font-black text-white tracking-wider uppercase leading-none truncate max-w-full px-2">
+            {name}
+          </h4>
+        </div>
+
+        {/* Center Product Photo */}
+        <div className="relative z-10 my-auto flex items-center justify-center w-full px-2">
+          <div className="relative max-w-[210px] h-48 w-full rounded-2xl overflow-hidden bg-slate-900/90 border border-slate-700/80 shadow-2xl flex items-center justify-center p-2 group-hover:scale-105 transition-transform duration-300">
+            <img
+              src={image}
+              alt={name}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgError(true)}
+              className={`w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)] transition-opacity duration-300 ${
+                imgLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+            {!imgLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90 text-slate-400 text-xs gap-2">
+                <ImageIcon size={18} className="animate-spin text-blue-400" />
+                <span>MGREFOTS Product Image</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="relative z-10 flex items-center justify-between border-t border-slate-800/80 pt-2 text-[10px] text-slate-400 font-mono">
+          <div className="flex items-center gap-1 text-blue-400 font-bold">
+            <CheckCircle size={12} />
+            <span>AUTHENTIC PRODUCT</span>
+          </div>
+          <div className="flex items-center gap-2 text-slate-400">
+            <span>LAB TESTED</span>
+            <span>•</span>
+            <span className="text-emerald-400 font-bold">PREMIUM</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
   // 1. CREATINE MONOHYDRATE (Exact visual replica of poster 1)
   if (productId === 'creatine-monohydrate') {
     return (
