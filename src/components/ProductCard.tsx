@@ -57,6 +57,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           name={name}
           category={product.category}
           gradient={product.gradient}
+          image={product.image}
         />
         
         {/* Floating Category Badge */}
@@ -67,9 +68,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* Product Header: Name right under Graphic Box */}
       <div className="mb-3">
-        <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-blue-400 transition-colors leading-snug mb-2">
-          {name}
-        </h3>
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-blue-400 transition-colors leading-snug">
+            {name}
+          </h3>
+          {/* Price Badge */}
+          <span className={`shrink-0 px-3 py-1 rounded-full text-xs font-black shadow-lg ${
+            product.isSoldOut
+              ? 'bg-red-950/90 text-red-400 border border-red-800'
+              : 'bg-emerald-950/90 text-emerald-400 border border-emerald-800/80'
+          }`}>
+            {product.isSoldOut
+              ? (isRtl ? 'نفدت الكمية' : 'Sold Out')
+              : product.price}
+          </span>
+        </div>
 
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{product.size}</span>
