@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { ProductCard } from './components/ProductCard';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { CertificationsBanner } from './components/CertificationsBanner';
+import { EgyptianOfferBanner } from './components/EgyptianOfferBanner';
 import { InBodyAnalysis } from './components/InBodyAnalysis';
 import { SupplementsEncyclopedia } from './components/SupplementsEncyclopedia';
 import { ExpertChat } from './components/ExpertChat';
@@ -137,6 +138,9 @@ export default function App() {
         {activeTab === 'home' && (
           <div className="space-y-8 animate-fade-in">
             
+            {/* Egyptian Special Offer Banner (Always in Arabic) */}
+            <EgyptianOfferBanner />
+
             {/* Quality Certifications Banner */}
             <CertificationsBanner lang={lang} />
 
