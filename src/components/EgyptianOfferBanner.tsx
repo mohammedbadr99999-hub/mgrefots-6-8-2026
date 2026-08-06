@@ -2,7 +2,7 @@ import React from 'react';
 import { MessageSquare, Sparkles } from 'lucide-react';
 
 export const EgyptianOfferBanner: React.FC = () => {
-  const whatsappUrl = "https://wa.me/250796348633?text=" + encodeURIComponent("مرحباً MGREFOTS، أنا مصري وأرغب في معرفة الأسعار والعروض الخاصة للمصريين 🇪🇬");
+  const whatsappUrl = "https://wa.me/250792294432?text=" + encodeURIComponent("مرحباً MGREFOTS، أنا مصري وأرغب في معرفة الأسعار والعروض الخاصة للمصريين 🇪🇬");
 
   return (
     <div className="relative w-full rounded-3xl overflow-hidden bg-gradient-to-r from-[#0B1F45] via-[#0E2247] to-[#173A73] border-2 border-[#F5A623]/60 p-4 sm:p-5 shadow-2xl mb-8 group animate-fade-in">
