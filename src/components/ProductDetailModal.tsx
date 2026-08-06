@@ -92,7 +92,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         {/* Modal Header */}
         <div className="mb-6">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="text-xs font-black uppercase tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-3 py-1 rounded-full">
+            {/* Price / Sold Out Badge */}
+            <span className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md ${
+              product.isSoldOut 
+                ? 'bg-red-950 text-red-400 border border-red-800' 
+                : 'bg-emerald-950 text-emerald-400 border border-emerald-800/80'
+            }`}>
+              {product.isSoldOut ? (isRtl ? 'نفدت الكمية' : 'Sold Out') : product.price}
+            </span>
+
+            <span className="text-xs font-black uppercase tracking-widest text-blue-400 bg-blue-950/80 border border-blue-800/80 px-3 py-1 rounded-full">
               {product.size} · {product.servings}
             </span>
 
