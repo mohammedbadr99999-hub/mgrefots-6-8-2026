@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, MessageSquare, Info, Sparkles, Star, ShoppingCart, ThumbsUp } from 'lucide-react';
+import { CheckCircle2, MessageSquare, Info, Sparkles, Star, ShoppingCart, ThumbsUp, ChevronDown } from 'lucide-react';
 import { Product, Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 import { ProductGraphic } from './ProductGraphic';
@@ -22,6 +22,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   const [userRating, setUserRating] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
 
   const name = product.name[lang] || product.name.en;
   const subtitle = product.subtitle[lang] || product.subtitle.en;
@@ -40,11 +41,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     }, 4000);
   };
 
+  const moreBtnLabel = {
+    ar: { more: 'المزيد (عرض جميع التفاصيل والمعلومات)', less: 'إخفاء التفاصيل' },
+    en: { more: 'More (View All Details & Specs)', less: 'Hide Details' },
+    rw: { more: 'Ibindi (Soma Ibisobanuro Byose)', less: 'Hisha Ibisobanuro' }
+  }[lang] || { more: 'More Details', less: 'Hide Details' };
+
   return (
     <div className="group bg-slate-900/90 rounded-3xl border border-slate-800 hover:border-blue-500/50 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-blue-600/10 hover:-translate-y-1 relative overflow-hidden">
       
       {/* Top Graphic Banner */}
-      <div className="relative mb-5">
+      <div className="relative mb-4">
         <ProductGraphic
           productId={product.id}
           name={name}
@@ -58,11 +65,37 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
       </div>
 
-      {/* Product Information */}
-      <div className="flex-1 flex flex-col justify-between mb-5">
-        <div>
+      {/* Product Header: Name right under Graphic Box */}
+      <div className="mb-3">
+        <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-blue-400 transition-colors leading-snug mb-2">
+          {name}
+        </h3>
+
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{product.size}</span>
+          <span className="text-xs font-extrabold text-blue-400 bg-blue-950/60 border border-blue-800/60 px-2.5 py-0.5 rounded-full">
+            {product.servings}
+          </span>
+        </div>
+
+        {/* More Details Toggle Button */}
+        <button
+          onClick={() => setShowMoreDetails(!showMoreDetails)}
+          className="w-full py-2.5 px-4 rounded-xl bg-slate-950/90 hover:bg-slate-800 text-blue-400 hover:text-blue-300 text-xs font-black uppercase tracking-wider border border-blue-900/60 hover:border-blue-700/80 flex items-center justify-between transition shadow-md group/btn"
+        >
+          <span className="flex items-center gap-2">
+            <Sparkles size={14} className="text-amber-400" />
+            <span>{showMoreDetails ? moreBtnLabel.less : moreBtnLabel.more}</span>
+          </span>
+          <ChevronDown size={16} className={`transition-transform duration-300 ${showMoreDetails ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
+
+      {/* Collapsible Additional Details */}
+      {showMoreDetails && (
+        <div className="flex-1 space-y-4 mb-4 animate-fade-in pt-3 border-t border-slate-800/80">
           {/* Buyers & Ratings Bar */}
-          <div className="flex items-center justify-between mb-3 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
+          <div className="flex items-center justify-between bg-slate-950/80 p-2.5 rounded-xl border border-slate-800/80">
             {/* Star Rating & Review count */}
             <div className="flex items-center gap-1.5">
               <div className="flex items-center text-amber-400">
@@ -83,84 +116,76 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{product.size}</span>
-            <span className="text-xs font-extrabold text-blue-400 bg-blue-950/60 border border-blue-800/60 px-2.5 py-0.5 rounded-full">
-              {product.servings}
-            </span>
+          <div>
+            <p className="text-xs font-semibold text-slate-400 leading-relaxed mb-2">
+              {subtitle}
+            </p>
+
+            <p className="text-sm font-medium text-slate-300 leading-relaxed">
+              {description}
+            </p>
           </div>
 
-          <h3 className="text-xl font-black text-white group-hover:text-blue-400 transition-colors leading-snug mb-1">
-            {name}
-          </h3>
-          <p className="text-xs font-semibold text-slate-400 leading-relaxed mb-4">
-            {subtitle}
-          </p>
+          {/* Highlights List */}
+          <div className="space-y-2 pt-3 border-t border-slate-800/80">
+            {highlights.map((highlight, idx) => (
+              <div key={idx} className="flex items-start gap-2">
+                <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
+                <span className="text-xs font-semibold text-slate-300 leading-tight">
+                  {highlight}
+                </span>
+              </div>
+            ))}
+          </div>
 
-          <p className="text-sm font-medium text-slate-300 line-clamp-2 leading-relaxed mb-4">
-            {description}
-          </p>
-        </div>
-
-        {/* Highlights List */}
-        <div className="space-y-2 pt-3 border-t border-slate-800/80 mb-5">
-          {highlights.map((highlight, idx) => (
-            <div key={idx} className="flex items-start gap-2">
-              <CheckCircle2 size={15} className="text-emerald-400 shrink-0 mt-0.5" />
-              <span className="text-xs font-semibold text-slate-300 leading-tight">
-                {highlight}
+          {/* Interactive Customer Rating Section (1 to 10) */}
+          <div className="bg-slate-950/90 p-3.5 rounded-2xl border border-slate-800">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-black text-slate-300 flex items-center gap-1.5">
+                <ThumbsUp size={13} className="text-amber-400" />
+                <span>{isRtl ? 'قيم هذا المنتج (من 1 إلى 10):' : 'Rate this product (1-10):'}</span>
               </span>
+              {userRating && (
+                <span className="text-[11px] font-extrabold text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-800/60">
+                  {userRating}/10 ⭐
+                </span>
+              )}
             </div>
-          ))}
-        </div>
 
-        {/* Interactive Customer Rating Section (1 to 10) */}
-        <div className="bg-slate-950/90 p-3.5 rounded-2xl border border-slate-800 mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-black text-slate-300 flex items-center gap-1.5">
-              <ThumbsUp size={13} className="text-amber-400" />
-              <span>{isRtl ? 'قيم هذا المنتج (من 1 إلى 10):' : 'Rate this product (1-10):'}</span>
-            </span>
-            {userRating && (
-              <span className="text-[11px] font-extrabold text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-800/60">
-                {userRating}/10 ⭐
-              </span>
+            {/* 10 Buttons Scale */}
+            <div className="grid grid-cols-10 gap-1" dir="ltr">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
+                const isSelected = userRating === num;
+                return (
+                  <button
+                    key={num}
+                    onClick={() => handleRateProduct(num)}
+                    className={`py-1.5 rounded-lg font-black text-xs transition-all ${
+                      isSelected
+                        ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md scale-110 font-black ring-2 ring-amber-400'
+                        : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'
+                    }`}
+                    title={`Rate ${num}/10`}
+                  >
+                    {num}
+                  </button>
+                );
+              })}
+            </div>
+
+            {showFeedback && (
+              <div className="mt-2 text-[10px] font-bold text-emerald-400 bg-emerald-950/90 border border-emerald-800/80 p-2 rounded-xl text-center animate-fade-in">
+                {isRtl
+                  ? `شغف ورأيك يهمنا! تم تسجيل تقييمك (${userRating}/10) بنجاح.`
+                  : `Thank you! Your rating of (${userRating}/10) was submitted successfully.`}
+              </div>
             )}
           </div>
-
-          {/* 10 Buttons Scale */}
-          <div className="grid grid-cols-10 gap-1" dir="ltr">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => {
-              const isSelected = userRating === num;
-              return (
-                <button
-                  key={num}
-                  onClick={() => handleRateProduct(num)}
-                  className={`py-1.5 rounded-lg font-black text-xs transition-all ${
-                    isSelected
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md scale-110 font-black ring-2 ring-amber-400'
-                      : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'
-                  }`}
-                  title={`Rate ${num}/10`}
-                >
-                  {num}
-                </button>
-              );
-            })}
-          </div>
-
-          {showFeedback && (
-            <div className="mt-2 text-[10px] font-bold text-emerald-400 bg-emerald-950/90 border border-emerald-800/80 p-2 rounded-xl text-center animate-fade-in">
-              {isRtl
-                ? `شغف ورأيك يهمنا! تم تسجيل تقييمك (${userRating}/10) بنجاح.`
-                : `Thank you! Your rating of (${userRating}/10) was submitted successfully.`}
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
       {/* Action Buttons */}
-      <div className="space-y-2.5 pt-2">
+      <div className="space-y-2.5 pt-3 border-t border-slate-800/80">
         {/* Primary Action: Order via WhatsApp */}
         <a
           href={whatsappUrl}
