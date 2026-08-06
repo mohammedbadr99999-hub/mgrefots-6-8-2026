@@ -66,16 +66,16 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
         <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
           {t.analysis_title}
         </h2>
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">
+        <p className="text-[#A7B3C4] text-sm sm:text-base max-w-2xl mx-auto">
           {t.analysis_subtitle}
         </p>
       </div>
 
-      <div className="bg-slate-900 p-6 sm:p-12 rounded-3xl border border-slate-800 shadow-2xl space-y-8">
+      <div className="bg-[#0E2247] p-6 sm:p-12 rounded-3xl border border-[rgba(255,255,255,0.08)] shadow-2xl space-y-8">
         
         {/* Direct Coach Contact Banner */}
-        <div className="p-6 bg-slate-950/80 rounded-2xl border border-blue-900/60 text-center">
-          <p className="font-bold text-blue-300 text-sm sm:text-base leading-relaxed mb-4">
+        <div className="p-6 bg-[#071426] rounded-2xl border border-[#F5A623]/30 text-center">
+          <p className="font-bold text-[#F5A623] text-sm sm:text-base leading-relaxed mb-4">
             {lang === 'ar' 
               ? 'للتعرف بشكل أوسع على النظام التدريبي والنظام الغذائي يرجى التواصل مع كابتن Mohamed Zeina'
               : lang === 'rw'
@@ -87,7 +87,7 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
               href="https://www.instagram.com/mobadr2026/?hl=ar" 
               target="_blank" 
               rel="noreferrer"
-              className="p-3 rounded-xl bg-slate-900 text-pink-500 hover:text-white hover:bg-pink-600 border border-slate-800 shadow-md hover:scale-110 transition"
+              className="p-3 rounded-xl bg-[#0B1F45] text-pink-500 hover:text-white hover:bg-pink-600 border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
               title="Instagram"
             >
               <Instagram size={20} />
@@ -96,7 +96,7 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
               href="https://www.facebook.com/profile.php?id=61580765596064" 
               target="_blank" 
               rel="noreferrer"
-              className="p-3 rounded-xl bg-slate-900 text-blue-400 hover:text-white hover:bg-blue-600 border border-slate-800 shadow-md hover:scale-110 transition"
+              className="p-3 rounded-xl bg-[#0B1F45] text-[#F5A623] hover:text-white hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
               title="Facebook"
             >
               <Facebook size={20} />
@@ -105,7 +105,7 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
               href="https://wa.me/250792294432" 
               target="_blank" 
               rel="noreferrer"
-              className="p-3 rounded-xl bg-slate-900 text-emerald-400 hover:text-white hover:bg-emerald-600 border border-slate-800 shadow-md hover:scale-110 transition"
+              className="p-3 rounded-xl bg-[#0B1F45] text-emerald-400 hover:text-white hover:bg-emerald-600 border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
               title="WhatsApp"
             >
               <MessageCircle size={20} />
@@ -117,18 +117,18 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* File Picker */}
           <div className="space-y-3">
-            <label className="text-xs font-black text-slate-300 flex items-center gap-2 uppercase tracking-wider">
-              <Camera size={16} className="text-blue-400" /> 1. InBody Scan
+            <label className="text-xs font-black text-[#F5F7FA] flex items-center gap-2 uppercase tracking-wider">
+              <Camera size={16} className="text-[#F5A623]" /> 1. InBody Scan
             </label>
             <div 
               onClick={() => document.getElementById('inbody-file-input')?.click()} 
-              className="border-2 border-dashed border-slate-700 hover:border-blue-500 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer bg-slate-950/60 transition min-h-[180px] group"
+              className="border-2 border-dashed border-[rgba(255,255,255,0.15)] hover:border-[#F5A623] rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer bg-[#071426] transition min-h-[180px] group"
             >
-              <FileText size={40} className="text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
-              <p className="font-bold text-slate-300 text-sm text-center">
+              <FileText size={40} className="text-[#F5A623] mb-3 group-hover:scale-110 transition-transform" />
+              <p className="font-bold text-[#F5F7FA] text-sm text-center">
                 {selectedFile ? selectedFile.name : t.upload_placeholder}
               </p>
-              <p className="text-[10px] text-slate-500 uppercase mt-2 font-bold">{t.support_files}</p>
+              <p className="text-[10px] text-[#A7B3C4] uppercase mt-2 font-bold">{t.support_files}</p>
             </div>
             <input 
               type="file" 
@@ -141,14 +141,14 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
 
           {/* Goal Input */}
           <div className="space-y-3">
-            <label className="text-xs font-black text-slate-300 flex items-center gap-2 uppercase tracking-wider">
-              <Zap size={16} className="text-emerald-400" /> 2. Fitness Goal
+            <label className="text-xs font-black text-[#F5F7FA] flex items-center gap-2 uppercase tracking-wider">
+              <Zap size={16} className="text-[#F5A623]" /> 2. Fitness Goal
             </label>
             <textarea 
               value={goal} 
               onChange={(e) => setGoal(e.target.value)} 
               rows={7} 
-              className="w-full p-5 bg-slate-950/60 rounded-2xl border border-slate-800 focus:border-blue-500 outline-none font-medium text-slate-200 text-sm transition"
+              className="w-full p-5 bg-[#071426] rounded-2xl border border-[rgba(255,255,255,0.08)] focus:border-[#F5A623] outline-none font-medium text-[#F5F7FA] text-sm transition"
               placeholder={t.goal_label}
             />
           </div>
@@ -158,7 +158,7 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
         <button
           onClick={handleSubmit}
           disabled={isAnalyzing}
-          className="w-full py-5 bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600 text-white rounded-2xl font-black text-lg hover:shadow-xl hover:shadow-blue-500/25 transition disabled:opacity-50 shadow-lg flex items-center justify-center gap-3"
+          className="w-full py-5 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#071426] rounded-2xl font-black text-lg transition disabled:opacity-50 shadow-lg flex items-center justify-center gap-3"
         >
           {isAnalyzing ? (
             <span className="flex items-center justify-center gap-3 animate-pulse">
@@ -172,9 +172,9 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
         
         {/* Result & PDF Output */}
         {analysisResult && !isAnalyzing && (
-          <div className="bg-slate-950 p-6 sm:p-10 rounded-3xl border border-blue-900/60 shadow-inner mt-8 space-y-6">
-            <h3 className="text-xl font-black text-white flex items-center gap-3 uppercase border-b border-slate-800 pb-4">
-              <Award className="text-emerald-400" size={28} />
+          <div className="bg-[#071426] p-6 sm:p-10 rounded-3xl border border-[rgba(255,255,255,0.08)] shadow-inner mt-8 space-y-6">
+            <h3 className="text-xl font-black text-white flex items-center gap-3 uppercase border-b border-[rgba(255,255,255,0.08)] pb-4">
+              <Award className="text-[#F5A623]" size={28} />
               <span>{isRtl ? 'خطة التدريب والتغذية المصممة لك:' : 'Your Custom Program:'}</span>
             </h3>
 
@@ -183,13 +183,13 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
             </div>
             
             {pdfUrl && (
-              <div className="mt-8 text-center pt-6 border-t border-slate-800">
+              <div className="mt-8 text-center pt-6 border-t border-[rgba(255,255,255,0.08)]">
                 <a
                   href={pdfUrl}
                   download
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl font-black text-base hover:scale-105 transition shadow-lg shadow-emerald-600/25"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] rounded-xl font-black text-base hover:scale-105 transition shadow-lg"
                 >
                   <FileText size={20} />
                   <span>{t.download_pdf}</span>

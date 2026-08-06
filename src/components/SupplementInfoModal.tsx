@@ -90,25 +90,25 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
       onClick={onClose}
     >
       <div 
-        className="relative w-full max-w-3xl bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col"
+        className="relative w-full max-w-3xl bg-[#071426] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[90vh] flex flex-col"
         dir={isRtl ? 'rtl' : 'ltr'}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Banner */}
-        <div className="relative p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-slate-950 to-black border-b border-slate-800 flex items-start justify-between">
+        <div className="relative p-6 sm:p-8 bg-[#0E2247] border-b border-[rgba(255,255,255,0.08)] flex items-start justify-between">
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-3xl sm:text-4xl shadow-inner shrink-0">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#0B1F45] border border-[rgba(255,255,255,0.08)] flex items-center justify-center text-3xl sm:text-4xl shadow-inner shrink-0">
               {supplement.emoji}
             </div>
             <div>
-              <div className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-black uppercase mb-2 border shadow-sm ${supplement.badgeColor}`}>
+              <div className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-black uppercase mb-2 border shadow-sm bg-[#0B1F45] border-[#F5A623]/30 text-[#F5A623]`}>
                 <Sparkles size={12} />
                 <span>{category}</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
                 {name}
               </h3>
-              <p className="text-xs sm:text-sm font-semibold text-slate-400 mt-1">
+              <p className="text-xs sm:text-sm font-semibold text-[#A7B3C4] mt-1">
                 {subtitle}
               </p>
             </div>
@@ -116,7 +116,7 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2.5 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800 transition"
+            className="p-2.5 rounded-full bg-[#0B1F45] text-[#A7B3C4] hover:text-white hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] transition"
             aria-label="Close"
           >
             <X size={20} />
@@ -124,24 +124,24 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
         </div>
 
         {/* Modal Scrollable Content */}
-        <div className="p-6 sm:p-8 space-y-6 overflow-y-auto custom-scrollbar flex-1 text-slate-200">
+        <div className="p-6 sm:p-8 space-y-6 overflow-y-auto custom-scrollbar flex-1 text-[#F5F7FA]">
           
           {/* Summary Box */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-slate-800 text-sm leading-relaxed text-slate-300 font-medium">
+          <div className="p-4 sm:p-5 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] text-sm leading-relaxed text-[#F5F7FA] font-medium">
             {summary}
           </div>
 
           {/* Key Benefits */}
           <div className="space-y-3">
-            <h4 className="text-sm font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-sm font-black text-[#F5A623] uppercase tracking-wider flex items-center gap-2">
               <CheckCircle2 size={16} />
               <span>{labels.benefitsTitle}</span>
             </h4>
             <div className="grid gap-2.5 sm:grid-cols-2">
               {benefits.map((b, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-slate-900/70 border border-slate-850 flex items-start gap-2.5">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                  <span className="text-xs sm:text-sm font-semibold text-slate-200 leading-snug">{b}</span>
+                <div key={idx} className="p-3.5 rounded-xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] flex items-start gap-2.5">
+                  <div className="w-2 h-2 rounded-full bg-[#F5A623] mt-1.5 shrink-0" />
+                  <span className="text-xs sm:text-sm font-semibold text-[#F5F7FA] leading-snug">{b}</span>
                 </div>
               ))}
             </div>
@@ -150,23 +150,23 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
           {/* Mechanism & Dosage Split */}
           <div className="grid gap-4 sm:grid-cols-2">
             {/* Mechanism */}
-            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-850 space-y-2">
-              <h4 className="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] space-y-2">
+              <h4 className="text-xs font-black text-[#F5A623] uppercase tracking-wider flex items-center gap-2">
                 <Flame size={15} />
                 <span>{labels.mechanismTitle}</span>
               </h4>
-              <p className="text-xs sm:text-sm font-medium text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm font-medium text-[#A7B3C4] leading-relaxed">
                 {mechanism}
               </p>
             </div>
 
             {/* Dosage & Timing */}
-            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-850 space-y-2">
-              <h4 className="text-xs font-black text-sky-400 uppercase tracking-wider flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] space-y-2">
+              <h4 className="text-xs font-black text-[#FF8A00] uppercase tracking-wider flex items-center gap-2">
                 <Clock size={15} />
                 <span>{labels.dosageTitle}</span>
               </h4>
-              <p className="text-xs sm:text-sm font-medium text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm font-medium text-[#A7B3C4] leading-relaxed">
                 {dosage}
               </p>
             </div>
@@ -175,35 +175,35 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
           {/* Best For & Synergies */}
           <div className="grid gap-4 sm:grid-cols-2">
             {/* Best For */}
-            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-850 space-y-2">
-              <h4 className="text-xs font-black text-indigo-400 uppercase tracking-wider flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] space-y-2">
+              <h4 className="text-xs font-black text-[#F5A623] uppercase tracking-wider flex items-center gap-2">
                 <Zap size={15} />
                 <span>{labels.bestForTitle}</span>
               </h4>
-              <p className="text-xs sm:text-sm font-medium text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm font-medium text-[#A7B3C4] leading-relaxed">
                 {bestFor}
               </p>
             </div>
 
             {/* Synergies */}
-            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-850 space-y-2">
-              <h4 className="text-xs font-black text-purple-400 uppercase tracking-wider flex items-center gap-2">
+            <div className="p-5 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] space-y-2">
+              <h4 className="text-xs font-black text-[#FF8A00] uppercase tracking-wider flex items-center gap-2">
                 <Layers size={15} />
                 <span>{labels.synergiesTitle}</span>
               </h4>
-              <p className="text-xs sm:text-sm font-medium text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm font-medium text-[#A7B3C4] leading-relaxed">
                 {synergies}
               </p>
             </div>
           </div>
 
           {/* Safety & Research Note */}
-          <div className="p-5 rounded-2xl bg-emerald-950/30 border border-emerald-900/50 space-y-1.5">
-            <h4 className="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+          <div className="p-5 rounded-2xl bg-[#0E2247] border border-[#F5A623]/30 space-y-1.5">
+            <h4 className="text-xs font-black text-[#F5A623] uppercase tracking-wider flex items-center gap-2">
               <ShieldCheck size={16} />
               <span>{labels.safetyTitle}</span>
             </h4>
-            <p className="text-xs sm:text-sm font-medium text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm font-medium text-[#F5F7FA] leading-relaxed">
               {safetyNote}
             </p>
           </div>
@@ -211,13 +211,13 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-5 bg-slate-900/90 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="p-5 bg-[#0E2247] border-t border-[rgba(255,255,255,0.08)] flex flex-col sm:flex-row items-center justify-between gap-3">
           <button
             onClick={() => {
               onClose();
               onAskAI(name);
             }}
-            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg"
+            className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg"
           >
             <MessageSquare size={16} />
             <span>{labels.askAiBtn}</span>
@@ -225,7 +225,7 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
 
           <button
             onClick={onClose}
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs uppercase transition"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#0B1F45] hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] text-[#F5F7FA] font-bold text-xs uppercase transition"
           >
             {labels.closeBtn}
           </button>

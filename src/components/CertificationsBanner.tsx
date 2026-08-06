@@ -216,13 +216,13 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
   }, [selectedCert]);
 
   return (
-    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-900 via-slate-950 to-black border border-slate-800/90 p-5 sm:p-6 shadow-2xl transition-all">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-600/10 via-emerald-600/10 to-transparent pointer-events-none" />
+    <div className="relative rounded-2xl overflow-hidden bg-[#0E2247] border border-[rgba(255,255,255,0.08)] p-5 sm:p-6 shadow-2xl transition-all">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#0B1F45]/60 via-[#071426] to-transparent pointer-events-none" />
       
       {/* Top Header Label */}
-      <div className="text-center mb-5">
-        <div className="inline-flex items-center gap-2 bg-slate-900 border border-emerald-500/40 px-3.5 py-1 rounded-full text-[11px] font-black text-emerald-400 mb-2">
-          <ShieldCheck size={14} className="text-emerald-400" />
+      <div className="text-center mb-5 relative z-10">
+        <div className="inline-flex items-center gap-2 bg-[#0B1F45] border border-[#F5A623]/40 px-3.5 py-1 rounded-full text-[11px] font-black text-[#F5A623] mb-2">
+          <ShieldCheck size={14} className="text-[#F5A623]" />
           <span>
             {isRtl 
               ? 'ضمان النقاء والجودة العالمية 100%' 
@@ -238,12 +238,12 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
       </div>
 
       {/* Grid of 6 Certification Badges - Exact 6-column layout on md/lg screens */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 relative z-10">
         {certifications.map((cert) => (
           <div
             key={cert.id}
             onClick={() => setSelectedCert(cert)}
-            className="group relative bg-slate-900/90 border border-slate-800 hover:border-emerald-500/60 p-3.5 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-[1.04] hover:shadow-xl cursor-pointer"
+            className="group relative bg-[#071426] border border-[rgba(255,255,255,0.08)] hover:border-[#F5A623]/60 p-3.5 rounded-xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-[1.04] hover:shadow-xl cursor-pointer"
           >
             {/* Top Badge Icon */}
             <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cert.badgeColor} flex items-center justify-center text-white text-lg font-black shadow-md mb-2 group-hover:rotate-6 transition-transform`}>
@@ -256,12 +256,12 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
             </span>
 
             {/* Name */}
-            <span className="text-[10px] font-semibold text-slate-400 leading-tight mt-1 line-clamp-2">
+            <span className="text-[10px] font-semibold text-[#A7B3C4] leading-tight mt-1 line-clamp-2">
               {cert.name}
             </span>
 
             {/* Click to view details prompt */}
-            <div className="mt-2 flex items-center gap-1 text-[9px] font-extrabold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded-full">
+            <div className="mt-2 flex items-center gap-1 text-[9px] font-extrabold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2 py-0.5 rounded-full">
               <Info size={10} />
               <span>{isRtl ? 'عرض الشرح' : 'Details'}</span>
             </div>
@@ -276,18 +276,18 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           onClick={() => setSelectedCert(null)}
         >
           <div 
-            className="relative w-full max-w-xl bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 overflow-hidden my-auto"
+            className="relative w-full max-w-xl bg-[#071426] border border-[rgba(255,255,255,0.08)] rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 overflow-hidden my-auto"
             dir={isRtl ? 'rtl' : 'ltr'}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+            <div className="flex items-start justify-between border-b border-[rgba(255,255,255,0.08)] pb-4">
               <div className="flex items-center gap-3">
                 <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${selectedCert.badgeColor} flex items-center justify-center text-2xl font-black shadow-lg shrink-0`}>
                   <span>{selectedCert.icon}</span>
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-emerald-400 font-mono block">
+                  <span className="text-xs font-bold text-[#F5A623] font-mono block">
                     {selectedCert.details[lang]?.standardCode || selectedCert.details.ar.standardCode}
                   </span>
                   <h3 className="text-lg sm:text-xl font-black text-white leading-tight">
@@ -298,7 +298,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
 
               <button
                 onClick={() => setSelectedCert(null)}
-                className="p-2 rounded-full bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800 transition"
+                className="p-2 rounded-full bg-[#0B1F45] text-[#A7B3C4] hover:text-white hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] transition"
                 aria-label="Close"
               >
                 <X size={18} />
@@ -308,23 +308,23 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
             {/* Modal Content */}
             <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
               {/* Meaning Section */}
-              <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-850 space-y-1.5">
-                <h4 className="text-xs font-black uppercase text-blue-400 tracking-wider flex items-center gap-1.5">
+              <div className="p-4 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] space-y-1.5">
+                <h4 className="text-xs font-black uppercase text-[#F5A623] tracking-wider flex items-center gap-1.5">
                   <Info size={14} />
                   <span>{isRtl ? 'ماذا تعني هذه الشهادة؟' : 'What does this certification mean?'}</span>
                 </h4>
-                <p className="text-xs sm:text-sm font-medium text-slate-200">
+                <p className="text-xs sm:text-sm font-medium text-[#F5F7FA]">
                   {selectedCert.details[lang]?.meaning || selectedCert.details.ar.meaning}
                 </p>
               </div>
 
               {/* MGREFOTS Impact Section */}
-              <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-900/60 space-y-1.5">
-                <h4 className="text-xs font-black uppercase text-emerald-400 tracking-wider flex items-center gap-1.5">
+              <div className="p-4 rounded-2xl bg-[#0B1F45] border border-[#F5A623]/30 space-y-1.5">
+                <h4 className="text-xs font-black uppercase text-[#F5A623] tracking-wider flex items-center gap-1.5">
                   <CheckCircle2 size={14} />
                   <span>{isRtl ? 'تطبيقاتها في منتجات MGREFOTS:' : 'How MGREFOTS Guarantees This Standard:'}</span>
                 </h4>
-                <p className="text-xs sm:text-sm font-medium text-slate-200">
+                <p className="text-xs sm:text-sm font-medium text-[#F5F7FA]">
                   {selectedCert.details[lang]?.mgrefotsImpact || selectedCert.details.ar.mgrefotsImpact}
                 </p>
               </div>
@@ -334,7 +334,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
             <div className="pt-2 flex justify-end">
               <button
                 onClick={() => setSelectedCert(null)}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs uppercase tracking-wider transition"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#0B1F45] hover:bg-[#173A73] text-white font-bold text-xs uppercase tracking-wider transition"
               >
                 {isRtl ? 'إغلاق النافذة' : 'Close Window'}
               </button>

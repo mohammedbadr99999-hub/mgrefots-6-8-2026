@@ -87,29 +87,29 @@ export const SupplementsEncyclopedia: React.FC<SupplementsEncyclopediaProps> = (
   };
 
   const renderNutrientChatBox = (sectionTitle: string) => (
-    <div className="mt-8 p-6 bg-slate-950/80 rounded-2xl border border-slate-800">
+    <div className="mt-8 p-6 bg-[#071426] rounded-2xl border border-[rgba(255,255,255,0.08)]">
       <h5 className="font-black text-white mb-3 flex items-center gap-2 text-sm">
-        <MessageCircle size={18} className="text-blue-400" />
+        <MessageCircle size={18} className="text-[#F5A623]" />
         <span>{t.nutrient_chat_title}</span>
       </h5>
       <textarea
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         rows={3}
-        className="w-full p-4 bg-slate-900 rounded-xl border border-slate-800 focus:border-blue-500 text-slate-200 text-sm font-medium outline-none transition mb-3"
+        className="w-full p-4 bg-[#0E2247] rounded-xl border border-[rgba(255,255,255,0.08)] focus:border-[#F5A623] text-[#F5F7FA] text-sm font-medium outline-none transition mb-3"
         placeholder={t.nutrient_chat_placeholder}
       />
       <button
         onClick={() => handleAskExpert(sectionTitle)}
         disabled={isQuerying || !query.trim()}
-        className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl font-black text-xs uppercase tracking-wider transition disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
+        className="w-full bg-[#0B1F45] hover:bg-[#173A73] text-white py-3 rounded-xl font-black text-xs uppercase tracking-wider transition disabled:opacity-50 flex items-center justify-center gap-2 border border-[#F5A623]/30 shadow-lg"
       >
-        {isQuerying ? <span className="animate-pulse">Thinking...</span> : <><Send size={15}/> {t.nutrient_chat_btn}</>}
+        {isQuerying ? <span className="animate-pulse text-[#F5A623]">Thinking...</span> : <><Send size={15} className="text-[#F5A623]"/> {t.nutrient_chat_btn}</>}
       </button>
 
       {response && !isQuerying && (
-        <div className="mt-4 p-5 bg-slate-900 rounded-xl border border-blue-900/60 text-slate-200 text-sm leading-relaxed">
-          <div className="flex items-center gap-2 mb-2 text-blue-400 font-black text-xs uppercase">
+        <div className="mt-4 p-5 bg-[#0E2247] rounded-xl border border-[#F5A623]/30 text-[#F5F7FA] text-sm leading-relaxed">
+          <div className="flex items-center gap-2 mb-2 text-[#F5A623] font-black text-xs uppercase">
             <Info size={16} /> {isRtl ? 'إجابة الخبير العلمية:' : 'Expert Scientific Answer:'}
           </div>
           {formatText(response)}
@@ -122,30 +122,30 @@ export const SupplementsEncyclopedia: React.FC<SupplementsEncyclopediaProps> = (
     <section className="max-w-7xl mx-auto space-y-12 animate-fade-in" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 bg-blue-950/80 border border-blue-800/80 px-4 py-1.5 rounded-full text-xs font-black text-blue-400">
+        <div className="inline-flex items-center gap-2 bg-[#0B1F45] border border-[#F5A623]/40 px-4 py-1.5 rounded-full text-xs font-black text-[#F5A623]">
           <BookOpen size={16} />
           <span>{labels.allSuppsHeader}</span>
         </div>
         <h2 className="text-3xl sm:text-4xl font-black text-white uppercase">{t.supps_title}</h2>
-        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto">{labels.subtitle}</p>
+        <p className="text-[#A7B3C4] text-sm sm:text-base max-w-2xl mx-auto">{labels.subtitle}</p>
       </div>
 
       {/* Search Input Bar */}
       <div className="relative max-w-xl mx-auto">
-        <Search className={`absolute top-3.5 text-slate-500 ${isRtl ? 'right-4' : 'left-4'}`} size={20} />
+        <Search className={`absolute top-3.5 text-[#A7B3C4] ${isRtl ? 'right-4' : 'left-4'}`} size={20} />
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder={labels.searchPlaceholder}
-          className={`w-full py-3.5 bg-slate-900 border border-slate-800 rounded-2xl text-slate-200 text-sm font-medium outline-none focus:border-blue-500 transition shadow-lg ${
+          className={`w-full py-3.5 bg-[#071426] border border-[rgba(255,255,255,0.08)] rounded-2xl text-[#F5F7FA] text-sm font-medium outline-none focus:border-[#F5A623] transition shadow-lg ${
             isRtl ? 'pr-12 pl-4' : 'pl-12 pr-4'
           }`}
         />
         {searchTerm && (
           <button
             onClick={() => setSearchTerm('')}
-            className={`absolute top-3.5 text-xs text-slate-400 hover:text-white ${isRtl ? 'left-4' : 'right-4'}`}
+            className={`absolute top-3.5 text-xs text-[#A7B3C4] hover:text-white ${isRtl ? 'left-4' : 'right-4'}`}
           >
             ✕
           </button>
@@ -163,29 +163,29 @@ export const SupplementsEncyclopedia: React.FC<SupplementsEncyclopediaProps> = (
             <div
               key={supp.id}
               onClick={() => setSelectedSupplement(supp)}
-              className={`p-5 bg-slate-900 border ${supp.borderColor} rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer group flex flex-col justify-between relative overflow-hidden`}
+              className={`p-5 bg-[#071426] border border-[rgba(255,255,255,0.08)] hover:border-[#F5A623]/60 rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer group flex flex-col justify-between relative overflow-hidden`}
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-3xl group-hover:scale-110 transition-transform">
                     {supp.emoji}
                   </span>
-                  <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border ${supp.badgeColor}`}>
+                  <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border bg-[#0B1F45] text-[#F5A623] border-[#F5A623]/30`}>
                     {category}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className={`font-black text-base text-white group-hover:${supp.textColor} transition-colors line-clamp-1`}>
+                  <h3 className={`font-black text-base text-white group-hover:text-[#F5A623] transition-colors line-clamp-1`}>
                     {name}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium mt-1 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-[#A7B3C4] font-medium mt-1 line-clamp-2 leading-relaxed">
                     {subtitle}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-extrabold text-blue-400 group-hover:text-emerald-400 transition-colors">
+              <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between text-[11px] font-extrabold text-[#F5A623] group-hover:text-[#FF8A00] transition-colors">
                 <span>{labels.clickToView}</span>
                 <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
               </div>
@@ -203,15 +203,15 @@ export const SupplementsEncyclopedia: React.FC<SupplementsEncyclopediaProps> = (
       />
 
       {/* Deep Nutrient Breakdown Accordion */}
-      <div className="space-y-6 bg-slate-900 p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
+      <div className="space-y-6 bg-[#0E2247] p-6 sm:p-10 rounded-3xl border border-[rgba(255,255,255,0.08)] shadow-2xl">
         <div className="text-center space-y-2 mb-8">
           <h3 className="text-2xl font-black text-white uppercase tracking-tight">
             {t.nutrients_title}
           </h3>
-          <div className="flex flex-wrap justify-center gap-4 text-xs font-bold text-slate-400">
-            <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-emerald-500 rounded-full" /> {t.nutrients_legend_essential}</span>
-            <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-blue-500 rounded-full" /> {t.nutrients_legend_non}</span>
-            <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-rose-500 rounded-full" /> {t.nutrients_legend_cond}</span>
+          <div className="flex flex-wrap justify-center gap-4 text-xs font-bold text-[#A7B3C4]">
+            <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-[#F5A623] rounded-full" /> {t.nutrients_legend_essential}</span>
+            <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-[#173A73] rounded-full" /> {t.nutrients_legend_non}</span>
+            <span className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 bg-[#FF8A00] rounded-full" /> {t.nutrients_legend_cond}</span>
           </div>
         </div>
 

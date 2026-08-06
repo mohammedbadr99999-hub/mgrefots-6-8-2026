@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --brand-dark: #071426;
+    --brand-primary: #0B1F45;
+    --brand-primary-hover: #173A73;
+    --brand-section: #0E2247;
+    --accent-gold: #F5A623;
+    --accent-orange: #FF8A00;
+    --text-white: #FFFFFF;
+    --text-light-gray: #F5F7FA;
+    --text-gray: #A7B3C4;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+  }
+
+  body {
+    background-color: #071426;
+    color: #F5F7FA;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom Brand Utilities */
+.bg-brand-dark { background-color: #071426; }
+.bg-brand-primary { background-color: #0B1F45; }
+.bg-brand-primary-hover:hover { background-color: #173A73; }
+.bg-brand-section { background-color: #0E2247; }
+
+.text-brand-gold { color: #F5A623; }
+.text-brand-orange { color: #FF8A00; }
+.text-brand-gray { color: #A7B3C4; }
+.text-brand-light { color: #F5F7FA; }
+
+.border-brand-subtle { border-color: rgba(255, 255, 255, 0.08); }
+.border-brand-gold { border-color: #F5A623; }
+.border-brand-primary { border-color: #0B1F45; }

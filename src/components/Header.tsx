@@ -42,7 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+      <header className="fixed top-0 w-full z-50 bg-[#071426]/90 backdrop-blur-xl border-b border-[rgba(255,255,255,0.08)] shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
           
           {/* Logo & Brand */}
@@ -50,21 +50,21 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => onSelectTab('home')}
             className="flex items-center gap-3 cursor-pointer group"
           >
-            <div className="w-11 h-11 bg-gradient-to-tr from-blue-600 via-indigo-600 to-emerald-500 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-11 h-11 bg-gradient-to-tr from-[#0B1F45] via-[#173A73] to-[#F5A623] border border-[#F5A623]/30 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-[#0B1F45]/40 group-hover:scale-105 transition-transform">
               MG
             </div>
             <div>
-              <span className="text-xl font-black tracking-widest text-white group-hover:text-blue-400 transition-colors" dir="ltr">
+              <span className="text-xl font-black tracking-widest text-white group-hover:text-[#F5A623] transition-colors" dir="ltr">
                 MGREFOTS
               </span>
-              <span className="block text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+              <span className="block text-[10px] font-bold uppercase tracking-widest text-[#F5A623]">
                 Sports Nutrition
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Tabs */}
-          <nav className="hidden lg:flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800">
+          <nav className="hidden lg:flex items-center gap-1.5 bg-[#0E2247] p-1.5 rounded-2xl border border-[rgba(255,255,255,0.08)]">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentTab === item.id;
@@ -74,11 +74,11 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => onSelectTab(item.id)}
                   className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
                     isActive
-                      ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                      ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40 shadow-lg scale-[1.02]'
+                      : 'text-[#A7B3C4] hover:text-white hover:bg-[#173A73]/50'
                   }`}
                 >
-                  <Icon size={18} className={isActive ? 'text-white' : 'text-slate-400'} />
+                  <Icon size={18} className={isActive ? 'text-[#F5A623]' : 'text-[#A7B3C4]'} />
                   <span>{item.label}</span>
                 </button>
               );
@@ -88,15 +88,15 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Language Switcher & User Status */}
           <div className="flex items-center gap-3">
             {/* Language Selector */}
-            <div className="flex bg-slate-900 rounded-full p-1 border border-slate-800" dir="ltr">
+            <div className="flex bg-[#0E2247] rounded-full p-1 border border-[rgba(255,255,255,0.08)]" dir="ltr">
               {(['en', 'rw', 'ar'] as Language[]).map((l) => (
                 <button
                   key={l}
                   onClick={() => onSelectLang(l)}
                   className={`px-3 py-1 rounded-full text-[11px] font-black uppercase transition-all ${
                     lang === l
-                      ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] shadow-md'
+                      : 'text-[#A7B3C4] hover:text-white'
                   }`}
                 >
                   {l}
@@ -105,15 +105,15 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* User status tag */}
-            <div className="hidden sm:flex items-center gap-2 bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 px-3.5 py-1.5 rounded-full text-xs font-bold">
-              <ShieldCheck size={14} className="text-emerald-400" />
+            <div className="hidden sm:flex items-center gap-2 bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/30 px-3.5 py-1.5 rounded-full text-xs font-bold">
+              <ShieldCheck size={14} className="text-[#F5A623]" />
               <span>{t.guest_tag}</span>
             </div>
 
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+              className="lg:hidden p-2.5 rounded-xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] text-[#A7B3C4] hover:text-white"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -129,17 +129,17 @@ export const Header: React.FC<HeaderProps> = ({
         />
       )}
 
-      <div className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} h-full w-80 bg-slate-950 z-50 shadow-2xl flex flex-col lg:hidden border-r border-slate-800 transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} h-full w-80 bg-[#071426] z-50 shadow-2xl flex flex-col lg:hidden border-r border-[rgba(255,255,255,0.08)] transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full')
       }`}>
-        <div className="flex items-center justify-between p-6 border-b border-slate-800">
+        <div className="flex items-center justify-between p-6 border-b border-[rgba(255,255,255,0.08)]">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center font-black text-white">MG</div>
+            <div className="w-9 h-9 bg-[#0B1F45] border border-[#F5A623]/40 rounded-lg flex items-center justify-center font-black text-[#F5A623]">MG</div>
             <span className="text-lg font-black text-white tracking-wider" dir="ltr">MGREFOTS</span>
           </div>
           <button
             onClick={() => setIsMobileMenuOpen(false)}
-            className="w-9 h-9 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center justify-center font-black"
+            className="w-9 h-9 rounded-full bg-[#0E2247] border border-[rgba(255,255,255,0.08)] text-[#A7B3C4] hover:text-white flex items-center justify-center font-black"
           >
             ✕
           </button>
@@ -158,8 +158,8 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className={`w-full flex items-center gap-4 p-4 rounded-2xl font-bold text-base transition-all ${
                   isActive
-                    ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white shadow-lg'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-white'
+                    ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40 shadow-lg'
+                    : 'text-[#A7B3C4] hover:bg-[#0E2247] hover:text-white'
                 }`}
               >
                 <Icon size={22} />
@@ -169,8 +169,8 @@ export const Header: React.FC<HeaderProps> = ({
           })}
         </div>
 
-        <div className="p-6 border-t border-slate-900 text-center">
-          <p className="text-xs font-bold text-slate-500" dir="ltr">© 2026 MGREFOTS LTD</p>
+        <div className="p-6 border-t border-[rgba(255,255,255,0.08)] text-center">
+          <p className="text-xs font-bold text-[#A7B3C4]" dir="ltr">© 2026 MGREFOTS LTD</p>
         </div>
       </div>
     </>

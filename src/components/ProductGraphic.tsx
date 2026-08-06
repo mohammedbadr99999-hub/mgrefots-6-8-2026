@@ -18,12 +18,12 @@ export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name,
 
   if (showPhoto) {
     return (
-      <div className="relative w-full h-80 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 p-4 shadow-2xl flex flex-col justify-between group-hover:border-blue-500/50 transition-all duration-300">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-950/40 via-slate-950 to-black pointer-events-none" />
+      <div className="relative w-full h-80 rounded-2xl overflow-hidden bg-[#071426] border border-[rgba(255,255,255,0.08)] p-4 shadow-2xl flex flex-col justify-between group-hover:border-[#F5A623]/50 transition-all duration-300">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#0B1F45]/60 via-[#071426] to-black pointer-events-none" />
         
         {/* Poster Top Banner */}
         <div className="relative z-10 flex flex-col items-center text-center">
-          <div className="flex items-center gap-1 text-[10px] font-black uppercase text-emerald-400 bg-emerald-950/80 border border-emerald-800/80 px-2.5 py-0.5 rounded-full mb-1">
+          <div className="flex items-center gap-1 text-[10px] font-black uppercase text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-0.5 rounded-full mb-1">
             <Sparkles size={12} />
             <span>ORIGINAL MGREFOTS FORMULA</span>
           </div>
@@ -34,7 +34,7 @@ export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name,
 
         {/* Center Product Photo */}
         <div className="relative z-10 my-auto flex items-center justify-center w-full px-2">
-          <div className="relative max-w-[210px] h-48 w-full rounded-2xl overflow-hidden bg-slate-900/90 border border-slate-700/80 shadow-2xl flex items-center justify-center p-2 group-hover:scale-105 transition-transform duration-300">
+          <div className="relative max-w-[210px] h-48 w-full rounded-2xl overflow-hidden bg-[#0E2247] border border-[rgba(255,255,255,0.08)] shadow-2xl flex items-center justify-center p-2 group-hover:scale-105 transition-transform duration-300">
             <img
               src={image}
               alt={name}
@@ -45,8 +45,8 @@ export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name,
               }`}
             />
             {!imgLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-900/90 text-slate-400 text-xs gap-2">
-                <ImageIcon size={18} className="animate-spin text-blue-400" />
+              <div className="absolute inset-0 flex items-center justify-center bg-[#0E2247] text-[#A7B3C4] text-xs gap-2">
+                <ImageIcon size={18} className="animate-spin text-[#F5A623]" />
                 <span>MGREFOTS Product Image</span>
               </div>
             )}
@@ -54,15 +54,15 @@ export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name,
         </div>
 
         {/* Bottom Bar */}
-        <div className="relative z-10 flex items-center justify-between border-t border-slate-800/80 pt-2 text-[10px] text-slate-400 font-mono">
-          <div className="flex items-center gap-1 text-blue-400 font-bold">
+        <div className="relative z-10 flex items-center justify-between border-t border-[rgba(255,255,255,0.08)] pt-2 text-[10px] text-[#A7B3C4] font-mono">
+          <div className="flex items-center gap-1 text-[#F5A623] font-bold">
             <CheckCircle size={12} />
             <span>AUTHENTIC PRODUCT</span>
           </div>
-          <div className="flex items-center gap-2 text-slate-400">
+          <div className="flex items-center gap-2 text-[#A7B3C4]">
             <span>LAB TESTED</span>
             <span>•</span>
-            <span className="text-emerald-400 font-bold">PREMIUM</span>
+            <span className="text-[#FF8A00] font-bold">PREMIUM</span>
           </div>
         </div>
       </div>

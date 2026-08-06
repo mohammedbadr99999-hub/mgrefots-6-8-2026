@@ -74,17 +74,17 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
   return createPortal(
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-fade-in overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto"
       onClick={onClose}
     >
       <div 
-        className="bg-slate-900 border border-slate-800 rounded-3xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-100 my-auto"
+        className="bg-[#071426] border border-[rgba(255,255,255,0.08)] rounded-3xl max-w-3xl w-full p-6 sm:p-10 shadow-2xl relative max-h-[90vh] overflow-y-auto text-[#F5F7FA] my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-800 hover:bg-red-500/20 hover:text-red-400 border border-slate-700 text-slate-400 flex items-center justify-center font-black transition"
+          className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#0B1F45] hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] text-[#A7B3C4] hover:text-white flex items-center justify-center font-black transition"
         >
           <X size={20} />
         </button>
@@ -96,24 +96,24 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             <span className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-md ${
               product.isSoldOut 
                 ? 'bg-red-950 text-red-400 border border-red-800' 
-                : 'bg-emerald-950 text-emerald-400 border border-emerald-800/80'
+                : 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40'
             }`}>
               {product.isSoldOut ? (isRtl ? 'نفدت الكمية' : 'Sold Out') : product.price}
             </span>
 
-            <span className="text-xs font-black uppercase tracking-widest text-blue-400 bg-blue-950/80 border border-blue-800/80 px-3 py-1 rounded-full">
+            <span className="text-xs font-black uppercase tracking-widest text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-3 py-1 rounded-full">
               {product.size} · {product.servings}
             </span>
 
             {/* Rating Pill */}
-            <span className="text-xs font-black text-amber-400 bg-amber-950/80 border border-amber-800/80 px-3 py-1 rounded-full flex items-center gap-1">
+            <span className="text-xs font-black text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-3 py-1 rounded-full flex items-center gap-1">
               <Star size={13} fill="currentColor" />
               <span>{product.rating.toFixed(1)} / 5.0</span>
             </span>
 
             {/* Buyers count */}
-            <span className="text-xs font-extrabold text-blue-300 bg-blue-950/80 border border-blue-800/80 px-3 py-1 rounded-full flex items-center gap-1">
-              <ShoppingCart size={13} />
+            <span className="text-xs font-extrabold text-[#F5F7FA] bg-[#0B1F45] border border-[rgba(255,255,255,0.08)] px-3 py-1 rounded-full flex items-center gap-1">
+              <ShoppingCart size={13} className="text-[#F5A623]" />
               <span>{product.buyersCount.toLocaleString()} {isRtl ? 'مشتري' : 'buyers'}</span>
             </span>
           </div>
@@ -121,20 +121,20 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           <h2 className="text-2xl sm:text-3xl font-black text-white mb-2">
             {name}
           </h2>
-          <p className="text-sm font-semibold text-slate-400 leading-relaxed">
+          <p className="text-sm font-semibold text-[#A7B3C4] leading-relaxed">
             {subtitle}
           </p>
         </div>
 
         {/* Customer Interactive Rating (1 to 10) */}
-        <div className="bg-slate-950 p-4 rounded-2xl border border-slate-800 mb-6">
+        <div className="bg-[#0E2247] p-4 rounded-2xl border border-[rgba(255,255,255,0.08)] mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-black text-slate-200 flex items-center gap-1.5">
-              <ThumbsUp size={15} className="text-amber-400" />
+            <span className="text-xs font-black text-[#F5F7FA] flex items-center gap-1.5">
+              <ThumbsUp size={15} className="text-[#F5A623]" />
               <span>{isRtl ? 'قيم هذا المنتج (من 1 إلى 10):' : 'Rate this product (1-10):'}</span>
             </span>
             {modalUserRating && (
-              <span className="text-xs font-extrabold text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-800">
+              <span className="text-xs font-extrabold text-[#071426] bg-[#F5A623] px-2.5 py-0.5 rounded-full">
                 {modalUserRating}/10 ⭐
               </span>
             )}
@@ -149,8 +149,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   onClick={() => handleRateProduct(num)}
                   className={`py-2 rounded-xl font-black text-xs transition-all ${
                     isSelected
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-lg scale-110 ring-2 ring-amber-400'
-                      : 'bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-slate-800'
+                      ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] shadow-lg scale-110 ring-2 ring-[#F5A623]'
+                      : 'bg-[#0B1F45] text-[#A7B3C4] hover:bg-[#173A73] hover:text-white border border-[rgba(255,255,255,0.08)]'
                   }`}
                 >
                   {num}
@@ -160,7 +160,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
 
           {showFeedback && (
-            <div className="mt-2.5 text-xs font-bold text-emerald-400 bg-emerald-950 border border-emerald-800 p-2.5 rounded-xl text-center animate-fade-in">
+            <div className="mt-2.5 text-xs font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/40 p-2.5 rounded-xl text-center animate-fade-in">
               {isRtl
                 ? `شغف ورأيك يهمنا! تم تسجيل تقييمك (${modalUserRating}/10) بنجاح.`
                 : `Thank you! Your rating of (${modalUserRating}/10) was submitted successfully.`}
@@ -171,16 +171,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         {/* Product Details Grid */}
         <div className="space-y-6 mb-8">
           {/* Description Box */}
-          <div className="bg-slate-950/60 p-5 rounded-2xl border border-slate-800/80">
-            <p className="text-sm text-slate-300 leading-relaxed font-medium">
+          <div className="bg-[#0E2247] p-5 rounded-2xl border border-[rgba(255,255,255,0.08)]">
+            <p className="text-sm text-[#F5F7FA] leading-relaxed font-medium">
               {description}
             </p>
 
             {/* Claims tags if any */}
             {product.claims && product.claims.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-slate-800/80">
+              <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-[rgba(255,255,255,0.08)]">
                 {product.claims.map((claim, idx) => (
-                  <span key={idx} className="bg-purple-950/80 border border-purple-800/60 text-purple-300 text-xs font-black px-3 py-1 rounded-full">
+                  <span key={idx} className="bg-[#0B1F45] border border-[#F5A623]/30 text-[#F5A623] text-xs font-black px-3 py-1 rounded-full">
                     ✓ {claim}
                   </span>
                 ))}
@@ -190,16 +190,16 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
           {/* Supplement Facts Table (If present e.g. B-Complex) */}
           {product.supplementFacts && product.supplementFacts.length > 0 && (
-            <div className="bg-slate-950 p-5 rounded-2xl border border-purple-900/40">
-              <h4 className="font-black text-purple-300 text-sm mb-3 uppercase tracking-wider flex items-center gap-2">
-                <ListCheck size={18} className="text-purple-400" />
+            <div className="bg-[#0E2247] p-5 rounded-2xl border border-[#F5A623]/30">
+              <h4 className="font-black text-[#F5A623] text-sm mb-3 uppercase tracking-wider flex items-center gap-2">
+                <ListCheck size={18} className="text-[#F5A623]" />
                 <span>{isRtl ? 'جدول القيمة الغذائية التفصيلية (Supplement Facts)' : 'Supplement Facts'}</span>
               </h4>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs text-slate-300 font-medium">
+                <table className="w-full text-left text-xs text-[#F5F7FA] font-medium">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase text-[10px]">
+                    <tr className="border-b border-[rgba(255,255,255,0.08)] text-[#A7B3C4] font-bold uppercase text-[10px]">
                       <th className="py-2 px-3">{isRtl ? 'المكون' : 'Ingredient'}</th>
                       <th className="py-2 px-3">{isRtl ? 'الكمية/الجرعة' : 'Amount / Serving'}</th>
                       <th className="py-2 px-3">{isRtl ? 'النسبة اليومية (%DV)' : '% Daily Value'}</th>
@@ -207,10 +207,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </thead>
                   <tbody>
                     {product.supplementFacts.map((fact, idx) => (
-                      <tr key={idx} className="border-b border-slate-900 hover:bg-slate-900/60 transition">
+                      <tr key={idx} className="border-b border-[rgba(255,255,255,0.04)] hover:bg-[#0B1F45]/60 transition">
                         <td className="py-2 px-3 font-semibold text-white">{fact.ingredient}</td>
-                        <td className="py-2 px-3 font-mono text-emerald-400">{fact.amount}</td>
-                        <td className="py-2 px-3 font-mono text-amber-400">{fact.dv}</td>
+                        <td className="py-2 px-3 font-mono text-[#F5A623]">{fact.amount}</td>
+                        <td className="py-2 px-3 font-mono text-[#FF8A00]">{fact.dv}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -220,39 +220,39 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           )}
 
           {/* Dosage & Timing */}
-          <div className="bg-blue-950/40 p-5 rounded-2xl border border-blue-900/40 flex items-start gap-4">
-            <div className="p-3 bg-blue-900/60 rounded-xl text-blue-400 shrink-0">
+          <div className="bg-[#0E2247] p-5 rounded-2xl border border-[rgba(255,255,255,0.08)] flex items-start gap-4">
+            <div className="p-3 bg-[#0B1F45] rounded-xl text-[#F5A623] shrink-0 border border-[#F5A623]/30">
               <Clock size={22} />
             </div>
             <div>
-              <h4 className="font-black text-blue-300 text-sm mb-1 uppercase tracking-wider">
+              <h4 className="font-black text-[#F5A623] text-sm mb-1 uppercase tracking-wider">
                 {t.modal_usage}
               </h4>
-              <p className="text-sm text-slate-300 font-medium leading-relaxed">
+              <p className="text-sm text-[#F5F7FA] font-medium leading-relaxed">
                 {usage}
               </p>
             </div>
           </div>
 
           {/* Key Ingredients */}
-          <div className="bg-emerald-950/40 p-5 rounded-2xl border border-emerald-900/40 flex items-start gap-4">
-            <div className="p-3 bg-emerald-900/60 rounded-xl text-emerald-400 shrink-0">
+          <div className="bg-[#0E2247] p-5 rounded-2xl border border-[rgba(255,255,255,0.08)] flex items-start gap-4">
+            <div className="p-3 bg-[#0B1F45] rounded-xl text-[#F5A623] shrink-0 border border-[#F5A623]/30">
               <Beaker size={22} />
             </div>
             <div>
-              <h4 className="font-black text-emerald-300 text-sm mb-1 uppercase tracking-wider">
+              <h4 className="font-black text-[#F5A623] text-sm mb-1 uppercase tracking-wider">
                 {t.modal_ingredients}
               </h4>
-              <p className="text-sm text-slate-300 font-medium leading-relaxed">
+              <p className="text-sm text-[#F5F7FA] font-medium leading-relaxed">
                 {ingredients}
               </p>
 
               {otherIngredients && (
-                <div className="mt-3 pt-3 border-t border-emerald-900/60">
-                  <span className="block text-xs font-bold text-slate-400 mb-1">
+                <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.08)]">
+                  <span className="block text-xs font-bold text-[#A7B3C4] mb-1">
                     {isRtl ? 'المكونات الأخرى:' : 'Other Ingredients:'}
                   </span>
-                  <p className="text-xs text-slate-400 font-normal leading-relaxed">
+                  <p className="text-xs text-[#A7B3C4] font-normal leading-relaxed">
                     {otherIngredients}
                   </p>
                 </div>
@@ -261,15 +261,15 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
 
           {/* NASM Science Note */}
-          <div className="bg-slate-950 p-5 rounded-2xl border border-amber-500/30 flex items-start gap-4">
-            <div className="p-3 bg-amber-500/20 rounded-xl text-amber-400 shrink-0">
+          <div className="bg-[#0E2247] p-5 rounded-2xl border border-[#F5A623]/30 flex items-start gap-4">
+            <div className="p-3 bg-[#0B1F45] rounded-xl text-[#F5A623] shrink-0 border border-[#F5A623]/30">
               <FileText size={22} />
             </div>
             <div>
-              <h4 className="font-black text-amber-300 text-sm mb-1 uppercase tracking-wider">
+              <h4 className="font-black text-[#F5A623] text-sm mb-1 uppercase tracking-wider">
                 {t.modal_science}
               </h4>
-              <p className="text-xs text-slate-300 font-medium leading-relaxed">
+              <p className="text-xs text-[#F5F7FA] font-medium leading-relaxed">
                 {science}
               </p>
             </div>
@@ -277,9 +277,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* AI Query Box inside Modal */}
-        <div className="p-6 bg-slate-950/90 rounded-2xl border border-slate-800 mb-8">
+        <div className="p-6 bg-[#0E2247] rounded-2xl border border-[rgba(255,255,255,0.08)] mb-8">
           <h4 className="font-black text-sm text-white mb-3 flex items-center gap-2">
-            <Sparkles size={18} className="text-amber-400" />
+            <Sparkles size={18} className="text-[#F5A623]" />
             <span>{t.modal_ask_ai_title}</span>
           </h4>
 
@@ -289,18 +289,18 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               onChange={(e) => setAiQuestion(e.target.value)}
               placeholder={t.modal_ai_placeholder}
               rows={2}
-              className="w-full p-4 bg-slate-900 rounded-xl border border-slate-800 focus:border-blue-500 text-slate-200 text-sm font-medium outline-none transition"
+              className="w-full p-4 bg-[#071426] rounded-xl border border-[rgba(255,255,255,0.08)] focus:border-[#F5A623] text-[#F5F7FA] text-sm font-medium outline-none transition"
             />
             <button
               type="submit"
               disabled={isLoadingAI || !aiQuestion.trim()}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-wider rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20"
+              className="w-full py-3 bg-[#0B1F45] hover:bg-[#173A73] text-white font-black text-xs uppercase tracking-wider rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2 border border-[rgba(255,255,255,0.08)] shadow-lg"
             >
               {isLoadingAI ? (
-                <span className="animate-pulse">Consulting AI...</span>
+                <span className="animate-pulse text-[#F5A623]">Consulting AI...</span>
               ) : (
                 <>
-                  <Send size={15} />
+                  <Send size={15} className="text-[#F5A623]" />
                   <span>{t.modal_ai_btn}</span>
                 </>
               )}
@@ -308,7 +308,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </form>
 
           {aiResponse && (
-            <div className="mt-4 p-4 bg-blue-950/60 rounded-xl border border-blue-800/60 text-xs text-slate-200 leading-relaxed font-medium animate-fade-in">
+            <div className="mt-4 p-4 bg-[#071426] rounded-xl border border-[#F5A623]/30 text-xs text-[#F5F7FA] leading-relaxed font-medium animate-fade-in">
               {aiResponse}
             </div>
           )}
@@ -319,9 +319,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-2xl font-black text-base shadow-xl shadow-emerald-600/25 flex items-center justify-center gap-3 transition hover:scale-[1.01]"
+          className="w-full py-4 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#071426] rounded-2xl font-black text-base shadow-xl flex items-center justify-center gap-3 transition hover:scale-[1.01]"
         >
-          <MessageSquare size={20} />
+          <MessageSquare size={20} className="text-[#071426]" />
           <span>{t.btn_order_whatsapp}</span>
         </a>
       </div>

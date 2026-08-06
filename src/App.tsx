@@ -98,7 +98,7 @@ export default function App() {
   ];
 
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen bg-[#071426] text-[#F5F7FA] ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         .font-arabic { font-family: 'Tajawal', sans-serif; }
@@ -120,14 +120,14 @@ export default function App() {
 
         {/* Limited Free Banner */}
         <div className="mb-10 animate-fade-in">
-          <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-emerald-900 border border-blue-500/30 text-white px-6 py-3.5 rounded-2xl flex flex-wrap items-center justify-between shadow-xl gap-4">
+          <div className="bg-gradient-to-r from-[#0B1F45] via-[#0E2247] to-[#173A73] border border-[rgba(255,255,255,0.08)] text-white px-6 py-3.5 rounded-2xl flex flex-wrap items-center justify-between shadow-xl gap-4">
             <span className="font-bold text-xs sm:text-sm flex items-center gap-2">
-              <Sparkles size={16} className="text-amber-400 shrink-0 animate-pulse" />
+              <Sparkles size={16} className="text-[#F5A623] shrink-0 animate-pulse" />
               <span>{t.free_banner}</span>
             </span>
             <button
               onClick={() => setActiveTab('chat')}
-              className="bg-white hover:bg-slate-100 text-slate-950 px-4 py-1.5 rounded-xl font-black text-xs transition shrink-0 hover:scale-105"
+              className="bg-[#F5A623] hover:bg-[#FF8A00] text-[#071426] px-4 py-1.5 rounded-xl font-black text-xs transition shrink-0 hover:scale-105 shadow-md"
             >
               {isRtl ? 'استشر الخبير مجاناً' : 'Ask Expert Free'}
             </button>
@@ -152,8 +152,8 @@ export default function App() {
                   onClick={() => setCategoryFilter(btn.id)}
                   className={`px-5 py-2.5 rounded-2xl font-black text-xs whitespace-nowrap transition-all duration-200 border ${
                     categoryFilter === btn.id
-                      ? 'bg-gradient-to-r from-blue-600 to-emerald-600 text-white border-transparent shadow-lg shadow-blue-600/20 scale-[1.02]'
-                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:bg-slate-850'
+                      ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] border-transparent shadow-lg shadow-[#F5A623]/20 scale-[1.02]'
+                      : 'bg-[#0E2247] text-[#A7B3C4] border-[rgba(255,255,255,0.08)] hover:text-white hover:bg-[#0B1F45]'
                   }`}
                 >
                   {btn.label}
@@ -175,39 +175,39 @@ export default function App() {
             </div>
 
             {/* Brand Value Propositions */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-slate-900">
-              <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 text-center space-y-2">
-                <div className="w-12 h-12 bg-blue-950 border border-blue-800/60 rounded-xl flex items-center justify-center text-blue-400 mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-[rgba(255,255,255,0.08)]">
+              <div className="bg-[#0E2247] p-6 rounded-2xl border border-[rgba(255,255,255,0.08)] text-center space-y-2">
+                <div className="w-12 h-12 bg-[#0B1F45] border border-[#173A73] rounded-xl flex items-center justify-center text-[#F5A623] mx-auto">
                   <Award size={24} />
                 </div>
                 <h4 className="font-black text-white text-base">
                   {isRtl ? 'أسس علمية موثوقة' : 'Science-Backed Formulations'}
                 </h4>
-                <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                <p className="text-xs font-medium text-[#A7B3C4] leading-relaxed">
                   {isRtl ? 'مكونات نقية بجرعات سريرية مثبتة علمياً لضمان النتائج.' : 'Clinical dosages engineered to force progressive muscle adaptation.'}
                 </p>
               </div>
 
-              <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 text-center space-y-2">
-                <div className="w-12 h-12 bg-emerald-950 border border-emerald-800/60 rounded-xl flex items-center justify-center text-emerald-400 mx-auto">
+              <div className="bg-[#0E2247] p-6 rounded-2xl border border-[rgba(255,255,255,0.08)] text-center space-y-2">
+                <div className="w-12 h-12 bg-[#0B1F45] border border-[#173A73] rounded-xl flex items-center justify-center text-[#F5A623] mx-auto">
                   <ShieldCheck size={24} />
                 </div>
                 <h4 className="font-black text-white text-base">
                   {isRtl ? 'خالٍ من المواد الحافظة' : 'Zero Fillers & 100% Pure'}
                 </h4>
-                <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                <p className="text-xs font-medium text-[#A7B3C4] leading-relaxed">
                   {isRtl ? 'منتجات عالية الجودة بدون سكريات مضافة أو مكونات ضارة.' : 'Highest pharmaceutical grade ingredients without hidden additives.'}
                 </p>
               </div>
 
-              <div className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800 text-center space-y-2">
-                <div className="w-12 h-12 bg-amber-950 border border-amber-800/60 rounded-xl flex items-center justify-center text-amber-400 mx-auto">
+              <div className="bg-[#0E2247] p-6 rounded-2xl border border-[rgba(255,255,255,0.08)] text-center space-y-2">
+                <div className="w-12 h-12 bg-[#0B1F45] border border-[#173A73] rounded-xl flex items-center justify-center text-[#F5A623] mx-auto">
                   <Sparkles size={24} />
                 </div>
                 <h4 className="font-black text-white text-base">
                   {isRtl ? 'دعم الذكاء الاصطناعي' : '24/7 AI Expert Guidance'}
                 </h4>
-                <p className="text-xs font-medium text-slate-400 leading-relaxed">
+                <p className="text-xs font-medium text-[#A7B3C4] leading-relaxed">
                   {isRtl ? 'مساعد ذكي يوجهك لكيفية استخدام المنتجات وفقاً لهدفك.' : 'Get instant tailored advice on how to structure your supplements.'}
                 </p>
               </div>
@@ -255,7 +255,7 @@ export default function App() {
       <Footer lang={lang} />
 
       {/* Mobile Sticky Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 w-full bg-slate-950/95 border-t border-slate-800 backdrop-blur-xl flex justify-around items-center p-2.5 sm:hidden z-50">
+      <div className="fixed bottom-0 left-0 w-full bg-[#071426]/95 border-t border-[rgba(255,255,255,0.08)] backdrop-blur-xl flex justify-around items-center p-2.5 sm:hidden z-50">
         {[
           { id: 'home', label: t.nav_home, icon: ShoppingBag },
           { id: 'analysis', label: t.nav_analysis, icon: Activity },
@@ -269,7 +269,7 @@ export default function App() {
               key={item.id}
               onClick={() => setActiveTab(item.id as NavigationTab)}
               className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all ${
-                isActive ? 'text-blue-400 font-bold scale-105' : 'text-slate-500 hover:text-slate-300'
+                isActive ? 'text-[#F5A623] font-bold scale-105' : 'text-[#A7B3C4] hover:text-white'
               }`}
             >
               <Icon size={20} />
