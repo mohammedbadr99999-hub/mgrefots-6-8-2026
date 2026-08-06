@@ -19,6 +19,8 @@ export interface Product {
   accentColor: string;
   iconName: string;
   price: string;
+  isSoldOut?: boolean;
+  image?: string;
   servings: string;
   size: string;
   rating: number; // e.g. 5.0, 4.8
