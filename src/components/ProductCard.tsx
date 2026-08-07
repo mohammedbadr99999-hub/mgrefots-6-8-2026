@@ -91,6 +91,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </span>
         </div>
 
+        {/* ALWAYS VISIBLE: Star Ratings & Buyers Count */}
+        <div className="flex items-center justify-between bg-[#071426] p-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] mb-3">
+          {/* Star Rating & Review count */}
+          <div className="flex items-center gap-1.5">
+            <div className="flex items-center text-[#F5A623]">
+              <Star size={15} fill="currentColor" />
+            </div>
+            <span className="text-xs font-black text-[#F5A623]">
+              {product.rating.toFixed(1)}
+            </span>
+            <span className="text-[10px] font-bold text-[#A7B3C4]">
+              ({product.reviewsCount} {isRtl ? 'تقييم' : 'reviews'})
+            </span>
+          </div>
+
+          {/* Buyers count */}
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-1 rounded-lg">
+            <ShoppingCart size={13} className="text-[#F5A623]" />
+            <span>{product.buyersCount.toLocaleString()} {isRtl ? 'مشتري' : 'buyers'}</span>
+          </div>
+        </div>
+
         {/* More Details Toggle Button */}
         <button
           onClick={() => setShowMoreDetails(!showMoreDetails)}
@@ -107,28 +129,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Collapsible Additional Details */}
       {showMoreDetails && (
         <div className="flex-1 space-y-4 mb-4 animate-fade-in pt-3 border-t border-[rgba(255,255,255,0.08)]">
-          {/* Buyers & Ratings Bar */}
-          <div className="flex items-center justify-between bg-[#071426] p-2.5 rounded-xl border border-[rgba(255,255,255,0.08)]">
-            {/* Star Rating & Review count */}
-            <div className="flex items-center gap-1.5">
-              <div className="flex items-center text-[#F5A623]">
-                <Star size={15} fill="currentColor" />
-              </div>
-              <span className="text-xs font-black text-[#F5A623]">
-                {product.rating.toFixed(1)}
-              </span>
-              <span className="text-[10px] font-bold text-[#A7B3C4]">
-                ({product.reviewsCount} {isRtl ? 'تقييم' : 'reviews'})
-              </span>
-            </div>
-
-            {/* Buyers count */}
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-1 rounded-lg">
-              <ShoppingCart size={13} className="text-[#F5A623]" />
-              <span>{product.buyersCount.toLocaleString()} {isRtl ? 'اشتروا المنتج' : 'buyers'}</span>
-            </div>
-          </div>
-
           <div>
             <p className="text-xs font-semibold text-[#A7B3C4] leading-relaxed mb-2">
               {subtitle}

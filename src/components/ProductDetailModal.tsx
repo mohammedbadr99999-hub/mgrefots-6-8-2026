@@ -17,6 +17,12 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   onClose,
   onQueryAI
 }) => {
+  const [aiQuestion, setAiQuestion] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [modalUserRating, setModalUserRating] = useState<number | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+
   useEffect(() => {
     if (product) {
       document.body.style.overflow = 'hidden';
@@ -27,12 +33,6 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   }, [product]);
 
   if (!product) return null;
-
-  const [aiQuestion, setAiQuestion] = useState('');
-  const [aiResponse, setAiResponse] = useState('');
-  const [isLoadingAI, setIsLoadingAI] = useState(false);
-  const [modalUserRating, setModalUserRating] = useState<number | null>(null);
-  const [showFeedback, setShowFeedback] = useState(false);
 
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
