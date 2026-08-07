@@ -14,7 +14,7 @@ import { Language, NavigationTab, Product, UserState } from './types';
 import { Zap, ShieldCheck, Dumbbell, Award, Flame, Activity, Sparkles, MessageCircle, ShoppingBag } from 'lucide-react';
 
 export default function App() {
-  const [lang, setLang] = useState<Language>('ar');
+  const [lang, setLang] = useState<Language>('en');
   const [activeTab, setActiveTab] = useState<NavigationTab>('home');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
