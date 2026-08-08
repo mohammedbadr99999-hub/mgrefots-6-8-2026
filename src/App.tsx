@@ -6,18 +6,26 @@ import { CertificationsBanner } from './components/CertificationsBanner';
 import { EgyptianOfferBanner } from './components/EgyptianOfferBanner';
 import { InBodyAnalysis } from './components/InBodyAnalysis';
 import { SupplementsEncyclopedia } from './components/SupplementsEncyclopedia';
+import { KnowledgeCenter } from './components/KnowledgeCenter';
 import { ExpertChat } from './components/ExpertChat';
 import { Footer } from './components/Footer';
 import { PRODUCTS } from './data/products';
 import { TRANSLATIONS } from './data/translations';
 import { Language, NavigationTab, Product, UserState } from './types';
-import { Zap, ShieldCheck, Dumbbell, Award, Flame, Activity, Sparkles, MessageCircle, ShoppingBag } from 'lucide-react';
+import { Zap, ShieldCheck, Dumbbell, Award, Flame, Activity, Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
 
 export default function App() {
   const [lang, setLang] = useState<Language>('en');
   const [activeTab, setActiveTab] = useState<NavigationTab>('home');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedKnowledgeGuideId, setSelectedKnowledgeGuideId] = useState<string | null>(null);
+
+  const handleOpenMarriedMenGuide = () => {
+    setSelectedKnowledgeGuideId('married-men-health-guide');
+    setActiveTab('knowledge');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   
   const [user] = useState<UserState>({
     id: 'guest',
@@ -98,13 +106,17 @@ export default function App() {
   ];
 
   return (
-    <div className={`min-h-screen bg-[#071426] text-[#F5F7FA] ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen bg-[#030914] text-[#F5F7FA] relative overflow-x-hidden ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         .font-arabic { font-family: 'Tajawal', sans-serif; }
-        @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
       `}</style>
+
+      {/* Ambient Radial Background Glows */}
+      <div className="fixed top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#0B1F45]/30 to-[#173A73]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-tl from-[#F5A623]/10 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
 
       {/* Navigation Header */}
       <Header
@@ -113,21 +125,28 @@ export default function App() {
         lang={lang}
         onSelectLang={setLang}
         user={user}
+        onOpenMarriedMenGuide={handleOpenMarriedMenGuide}
       />
+
+      {/* Small Scroll Indicator on side at top of page */}
+      <div className={`fixed top-24 ${isRtl ? 'left-2 sm:left-4' : 'right-2 sm:right-4'} z-40 bg-[#091833]/90 text-[#F5A623] border border-[#F5A623]/40 px-3 py-1.5 rounded-full text-[10px] font-black shadow-2xl backdrop-blur-md flex items-center gap-1.5 animate-bounce pointer-events-none`}>
+        <span>📜</span>
+        <span>{isRtl ? 'سكرول للاسفل لترى المزيد' : 'scroll down to see more'}</span>
+      </div>
 
       {/* Main Content Area */}
       <main className="pt-28 pb-24 max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Limited Free Banner */}
-        <div className="mb-10 animate-fade-in">
-          <div className="bg-gradient-to-r from-[#0B1F45] via-[#0E2247] to-[#173A73] border border-[rgba(255,255,255,0.08)] text-white px-6 py-3.5 rounded-2xl flex flex-wrap items-center justify-between shadow-xl gap-4">
-            <span className="font-bold text-xs sm:text-sm flex items-center gap-2">
-              <Sparkles size={16} className="text-[#F5A623] shrink-0 animate-pulse" />
+        <div className="mb-8 animate-fade-in">
+          <div className="bg-gradient-to-r from-[#0B1F45]/90 via-[#091833]/90 to-[#173A73]/90 border border-[rgba(255,255,255,0.12)] text-white px-6 py-4 rounded-3xl flex flex-wrap items-center justify-between shadow-2xl backdrop-blur-xl gap-4">
+            <span className="font-extrabold text-xs sm:text-sm flex items-center gap-2.5">
+              <Sparkles size={18} className="text-[#F5A623] shrink-0 animate-pulse" />
               <span>{t.free_banner}</span>
             </span>
             <button
               onClick={() => setActiveTab('chat')}
-              className="bg-[#F5A623] hover:bg-[#FF8A00] text-[#071426] px-4 py-1.5 rounded-xl font-black text-xs transition shrink-0 hover:scale-105 shadow-md"
+              className="bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#030914] px-5 py-2 rounded-2xl font-black text-xs transition-all shrink-0 hover:scale-105 shadow-lg shadow-[#F5A623]/20"
             >
               {isRtl ? 'استشر الخبير مجاناً' : 'Ask Expert Free'}
             </button>
@@ -136,8 +155,22 @@ export default function App() {
 
         {/* TAB 1: HOME (PRODUCT CATALOG PAGE) */}
         {activeTab === 'home' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-10 animate-fade-in">
             
+            {/* Brand Hero Heading (SEO & AEO Focused) */}
+            <div className="text-center space-y-4 max-w-4xl mx-auto py-2">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0B1F45] border border-[#F5A623]/40 text-[#F5A623] text-xs font-black tracking-wider uppercase shadow-lg">
+                <Sparkles size={14} className="text-[#F5A623]" />
+                <span>MGREFOTS Ltd. — Sports Nutrition Brand</span>
+              </div>
+              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                {t.hero_products_title}
+              </h1>
+              <p className="text-sm sm:text-base text-[#94A3B8] font-medium leading-relaxed max-w-3xl mx-auto">
+                {t.hero_products_sub}
+              </p>
+            </div>
+
             {/* Egyptian Special Offer Banner (Always in Arabic) */}
             <EgyptianOfferBanner />
 
@@ -145,20 +178,22 @@ export default function App() {
             <CertificationsBanner lang={lang} />
 
             {/* Product Category Filter Chips */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" dir={isRtl ? 'rtl' : 'ltr'}>
-              {filterButtons.map((btn) => (
-                <button
-                  key={btn.id}
-                  onClick={() => setCategoryFilter(btn.id)}
-                  className={`px-5 py-2.5 rounded-2xl font-black text-xs whitespace-nowrap transition-all duration-200 border ${
-                    categoryFilter === btn.id
-                      ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] border-transparent shadow-lg shadow-[#F5A623]/20 scale-[1.02]'
-                      : 'bg-[#0E2247] text-[#A7B3C4] border-[rgba(255,255,255,0.08)] hover:text-white hover:bg-[#0B1F45]'
-                  }`}
-                >
-                  {btn.label}
-                </button>
-              ))}
+            <div className="bg-[#091833]/60 backdrop-blur-md p-2 rounded-3xl border border-[rgba(255,255,255,0.08)]">
+              <div className="flex items-center gap-2 overflow-x-auto scrollbar-none" dir={isRtl ? 'rtl' : 'ltr'}>
+                {filterButtons.map((btn) => (
+                  <button
+                    key={btn.id}
+                    onClick={() => setCategoryFilter(btn.id)}
+                    className={`px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-300 border ${
+                      categoryFilter === btn.id
+                        ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] border-transparent shadow-xl shadow-[#F5A623]/25 scale-[1.02]'
+                        : 'bg-[#0B1F45]/50 text-[#94A3B8] border-transparent hover:text-white hover:bg-[#0B1F45]'
+                    }`}
+                  >
+                    {btn.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Products Modern Grid */}
@@ -176,39 +211,39 @@ export default function App() {
 
             {/* Brand Value Propositions */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-[rgba(255,255,255,0.08)]">
-              <div className="bg-[#0E2247] p-6 rounded-2xl border border-[rgba(255,255,255,0.08)] text-center space-y-2">
-                <div className="w-12 h-12 bg-[#0B1F45] border border-[#173A73] rounded-xl flex items-center justify-center text-[#F5A623] mx-auto">
-                  <Award size={24} />
+              <div className="glass-card glass-card-hover p-7 rounded-3xl text-center space-y-3">
+                <div className="w-14 h-14 bg-gradient-to-br from-[#0B1F45] to-[#173A73] border border-[#F5A623]/40 rounded-2xl flex items-center justify-center text-[#F5A623] mx-auto shadow-xl">
+                  <Award size={28} />
                 </div>
-                <h4 className="font-black text-white text-base">
+                <h4 className="font-black text-white text-base sm:text-lg">
                   {isRtl ? 'أسس علمية موثوقة' : 'Science-Backed Formulations'}
                 </h4>
-                <p className="text-xs font-medium text-[#A7B3C4] leading-relaxed">
+                <p className="text-xs font-semibold text-[#94A3B8] leading-relaxed">
                   {isRtl ? 'مكونات نقية بجرعات سريرية مثبتة علمياً لضمان النتائج.' : 'Clinical dosages engineered to force progressive muscle adaptation.'}
                 </p>
               </div>
 
-              <div className="bg-[#0E2247] p-6 rounded-2xl border border-[rgba(255,255,255,0.08)] text-center space-y-2">
-                <div className="w-12 h-12 bg-[#0B1F45] border border-[#173A73] rounded-xl flex items-center justify-center text-[#F5A623] mx-auto">
-                  <ShieldCheck size={24} />
+              <div className="glass-card glass-card-hover p-7 rounded-3xl text-center space-y-3">
+                <div className="w-14 h-14 bg-gradient-to-br from-[#0B1F45] to-[#173A73] border border-[#F5A623]/40 rounded-2xl flex items-center justify-center text-[#F5A623] mx-auto shadow-xl">
+                  <ShieldCheck size={28} />
                 </div>
-                <h4 className="font-black text-white text-base">
+                <h4 className="font-black text-white text-base sm:text-lg">
                   {isRtl ? 'خالٍ من المواد الحافظة' : 'Zero Fillers & 100% Pure'}
                 </h4>
-                <p className="text-xs font-medium text-[#A7B3C4] leading-relaxed">
+                <p className="text-xs font-semibold text-[#94A3B8] leading-relaxed">
                   {isRtl ? 'منتجات عالية الجودة بدون سكريات مضافة أو مكونات ضارة.' : 'Highest pharmaceutical grade ingredients without hidden additives.'}
                 </p>
               </div>
 
-              <div className="bg-[#0E2247] p-6 rounded-2xl border border-[rgba(255,255,255,0.08)] text-center space-y-2">
-                <div className="w-12 h-12 bg-[#0B1F45] border border-[#173A73] rounded-xl flex items-center justify-center text-[#F5A623] mx-auto">
-                  <Sparkles size={24} />
+              <div className="glass-card glass-card-hover p-7 rounded-3xl text-center space-y-3">
+                <div className="w-14 h-14 bg-gradient-to-br from-[#0B1F45] to-[#173A73] border border-[#F5A623]/40 rounded-2xl flex items-center justify-center text-[#F5A623] mx-auto shadow-xl">
+                  <Sparkles size={28} />
                 </div>
-                <h4 className="font-black text-white text-base">
-                  {isRtl ? 'دعم الذكاء الاصطناعي' : '24/7 AI Expert Guidance'}
+                <h4 className="font-black text-white text-base sm:text-lg">
+                  {isRtl ? 'استشارات كابتن محمد زينة' : 'Coach Mohamed Zeina Guidance'}
                 </h4>
-                <p className="text-xs font-medium text-[#A7B3C4] leading-relaxed">
-                  {isRtl ? 'مساعد ذكي يوجهك لكيفية استخدام المنتجات وفقاً لهدفك.' : 'Get instant tailored advice on how to structure your supplements.'}
+                <p className="text-xs font-semibold text-[#94A3B8] leading-relaxed">
+                  {isRtl ? 'توجيهات واستشارات مباشرة لكيفية استخدام المنتجات وفقاً لهدفك.' : 'Get direct tailored advice from Coach Mohamed Zeina on structuring your supplements.'}
                 </p>
               </div>
             </div>
@@ -233,7 +268,18 @@ export default function App() {
           />
         )}
 
-        {/* TAB 4: TALK TO EXPERT */}
+        {/* TAB 4: KNOWLEDGE CENTER */}
+        {activeTab === 'knowledge' && (
+          <KnowledgeCenter
+            lang={lang}
+            onSelectProductModal={(p) => setSelectedProduct(p)}
+            onNavigateToChat={() => setActiveTab('chat')}
+            initialGuideId={selectedKnowledgeGuideId}
+            onClearInitialGuide={() => setSelectedKnowledgeGuideId(null)}
+          />
+        )}
+
+        {/* TAB 5: TALK TO EXPERT */}
         {activeTab === 'chat' && (
           <ExpertChat
             lang={lang}
@@ -260,6 +306,7 @@ export default function App() {
           { id: 'home', label: t.nav_home, icon: ShoppingBag },
           { id: 'analysis', label: t.nav_analysis, icon: Activity },
           { id: 'supps', label: t.nav_supps, icon: Zap },
+          { id: 'knowledge', label: t.nav_knowledge || 'Knowledge', icon: BookOpen },
           { id: 'chat', label: t.nav_chat, icon: MessageCircle },
         ].map((item) => {
           const Icon = item.icon;
@@ -272,8 +319,8 @@ export default function App() {
                 isActive ? 'text-[#F5A623] font-bold scale-105' : 'text-[#A7B3C4] hover:text-white'
               }`}
             >
-              <Icon size={20} />
-              <span className="text-[10px] mt-1">{item.label}</span>
+              <Icon size={18} />
+              <span className="text-[9px] mt-1 truncate max-w-[60px]">{item.label}</span>
             </button>
           );
         })}

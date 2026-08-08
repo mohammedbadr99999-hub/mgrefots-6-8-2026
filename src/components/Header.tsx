@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Activity, ShoppingBag, MessageCircle, Menu, X, Globe, ShieldCheck } from 'lucide-react';
+import { Zap, Activity, ShoppingBag, MessageCircle, Menu, X, Globe, ShieldCheck, BookOpen } from 'lucide-react';
 import { Language, NavigationTab, UserState } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 
@@ -9,6 +9,7 @@ interface HeaderProps {
   lang: Language;
   onSelectLang: (lang: Language) => void;
   user: UserState | null;
+  onOpenMarriedMenGuide?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,7 +17,8 @@ export const Header: React.FC<HeaderProps> = ({
   onSelectTab,
   lang,
   onSelectLang,
-  user
+  user,
+  onOpenMarriedMenGuide
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = TRANSLATIONS[lang];
@@ -37,34 +39,38 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'home', label: t.nav_home, icon: ShoppingBag },
     { id: 'analysis', label: t.nav_analysis, icon: Activity },
     { id: 'supps', label: t.nav_supps, icon: Zap },
+    { id: 'knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen },
     { id: 'chat', label: t.nav_chat, icon: MessageCircle },
   ];
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-[#071426]/90 backdrop-blur-xl border-b border-[rgba(255,255,255,0.08)] shadow-2xl">
+      <header className="fixed top-0 w-full z-50 bg-[#030914]/80 backdrop-blur-2xl border-b border-[rgba(255,255,255,0.08)] shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
           
           {/* Logo & Brand */}
           <div 
             onClick={() => onSelectTab('home')}
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-3.5 cursor-pointer group"
           >
-            <div className="w-11 h-11 bg-gradient-to-tr from-[#0B1F45] via-[#173A73] to-[#F5A623] border border-[#F5A623]/30 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-[#0B1F45]/40 group-hover:scale-105 transition-transform">
-              MG
+            <div className="relative">
+              <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] opacity-40 group-hover:opacity-100 blur-sm transition duration-300"></div>
+              <div className="relative w-11 h-11 bg-[#091833] border border-[#F5A623]/50 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-xl group-hover:scale-105 transition-transform">
+                <span className="bg-gradient-to-br from-[#F5A623] to-[#FF8A00] bg-clip-text text-transparent">MG</span>
+              </div>
             </div>
             <div>
               <span className="text-xl font-black tracking-widest text-white group-hover:text-[#F5A623] transition-colors" dir="ltr">
                 MGREFOTS
               </span>
-              <span className="block text-[10px] font-bold uppercase tracking-widest text-[#F5A623]">
+              <span className="block text-[10px] font-extrabold uppercase tracking-widest text-[#F5A623]/90">
                 Sports Nutrition
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Tabs */}
-          <nav className="hidden lg:flex items-center gap-1.5 bg-[#0E2247] p-1.5 rounded-2xl border border-[rgba(255,255,255,0.08)]">
+          <nav className="hidden lg:flex items-center gap-1 bg-[#091833]/80 p-1.5 rounded-2xl border border-[rgba(255,255,255,0.08)] shadow-inner">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentTab === item.id;
@@ -72,13 +78,13 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={item.id}
                   onClick={() => onSelectTab(item.id)}
-                  className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+                  className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 relative ${
                     isActive
-                      ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40 shadow-lg scale-[1.02]'
-                      : 'text-[#A7B3C4] hover:text-white hover:bg-[#173A73]/50'
+                      ? 'bg-gradient-to-r from-[#0B1F45] to-[#173A73] text-[#F5A623] border border-[#F5A623]/40 shadow-lg shadow-[#0B1F45]/60 scale-[1.02]'
+                      : 'text-[#94A3B8] hover:text-white hover:bg-[#173A73]/30'
                   }`}
                 >
-                  <Icon size={18} className={isActive ? 'text-[#F5A623]' : 'text-[#A7B3C4]'} />
+                  <Icon size={16} className={isActive ? 'text-[#F5A623]' : 'text-[#94A3B8]'} />
                   <span>{item.label}</span>
                 </button>
               );
@@ -86,17 +92,33 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Language Switcher & User Status */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            {/* Married Man Button */}
+            <button
+              onClick={() => {
+                if (onOpenMarriedMenGuide) {
+                  onOpenMarriedMenGuide();
+                }
+              }}
+              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 border border-amber-300/80 shrink-0 cursor-pointer animate-pulse"
+              title={lang === 'ar' ? 'دليل صحة الرجال المتزوجين' : lang === 'rw' ? 'Inyoborabuhanga y\'abagabo bashatse' : 'Married Men\'s Health Guide'}
+            >
+              <span className="text-sm">💍</span>
+              <span className="whitespace-nowrap font-extrabold">
+                {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
+              </span>
+            </button>
+
             {/* Language Selector */}
-            <div className="flex bg-[#0E2247] rounded-full p-1 border border-[rgba(255,255,255,0.08)]" dir="ltr">
+            <div className="flex bg-[#091833] rounded-full p-1 border border-[rgba(255,255,255,0.08)] shadow-inner" dir="ltr">
               {(['en', 'rw', 'ar'] as Language[]).map((l) => (
                 <button
                   key={l}
                   onClick={() => onSelectLang(l)}
-                  className={`px-3 py-1 rounded-full text-[11px] font-black uppercase transition-all ${
+                  className={`px-3 py-1 rounded-full text-[11px] font-black uppercase transition-all duration-200 ${
                     lang === l
-                      ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] shadow-md'
-                      : 'text-[#A7B3C4] hover:text-white'
+                      ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] shadow-md shadow-[#F5A623]/20 font-black'
+                      : 'text-[#94A3B8] hover:text-white'
                   }`}
                 >
                   {l}
@@ -105,7 +127,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* User status tag */}
-            <div className="hidden sm:flex items-center gap-2 bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/30 px-3.5 py-1.5 rounded-full text-xs font-bold">
+            <div className="hidden sm:flex items-center gap-2 bg-[#091833] text-[#F5A623] border border-[#F5A623]/30 px-3.5 py-1.5 rounded-full text-xs font-black shadow-md">
               <ShieldCheck size={14} className="text-[#F5A623]" />
               <span>{t.guest_tag}</span>
             </div>
@@ -113,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] text-[#A7B3C4] hover:text-white"
+              className="lg:hidden p-2.5 rounded-2xl bg-[#091833] border border-[rgba(255,255,255,0.08)] text-[#94A3B8] hover:text-white transition-colors"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -145,7 +167,23 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        <div className="flex flex-col p-4 gap-2 flex-1">
+        <div className="flex flex-col p-4 gap-3 flex-1 overflow-y-auto">
+          {/* Married Men Mobile Button */}
+          <button
+            onClick={() => {
+              if (onOpenMarriedMenGuide) {
+                onOpenMarriedMenGuide();
+              }
+              setIsMobileMenuOpen(false);
+            }}
+            className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-lg border border-amber-300 transition-all hover:scale-[1.02] cursor-pointer"
+          >
+            <span className="text-lg">💍</span>
+            <span>
+              {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
+            </span>
+          </button>
+
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;

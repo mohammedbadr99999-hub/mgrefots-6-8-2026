@@ -50,7 +50,7 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
       bestForTitle: 'الفئات المستهدفة والرياضيون',
       synergiesTitle: 'المكملات المتوافقة لخلطة تآزرية (Synergistic Stack)',
       safetyTitle: 'ملاحظة الأمان وتوصيات سلامة الاستخدام',
-      askAiBtn: 'اسأل خبير الذكاء الاصطناعي تفاصيل أكثر عن هذا المكمل',
+      askAiBtn: 'اسأل الكابتن Mohamed Zeina عن هذا المكمل',
       closeBtn: 'إغلاق'
     },
     en: {
@@ -60,7 +60,7 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
       bestForTitle: 'Target Athletes & Best Suited For',
       synergiesTitle: 'Synergistic Stacks & Combinations',
       safetyTitle: 'Safety Guidelines & Research Notes',
-      askAiBtn: 'Ask AI Expert Further Custom Questions',
+      askAiBtn: 'Ask Coach Mohamed Zeina About This Supplement',
       closeBtn: 'Close'
     },
     rw: {
@@ -70,7 +70,7 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
       bestForTitle: "Abantu Bateganijwe Gukoresha",
       synergiesTitle: "Mvange na Ibindi Bikorana Neza",
       safetyTitle: "Amabwiriza y'Ubuziranenge n'Umutekano",
-      askAiBtn: "Baza AI Expert Ibibazo Byo Gukoresha",
+      askAiBtn: "Baza Coach Mohamed Zeina",
       closeBtn: "Funga"
     }
   }[lang] || {
@@ -80,7 +80,7 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
     bestForTitle: 'Target Athletes',
     synergiesTitle: 'Synergistic Stacks',
     safetyTitle: 'Safety Guidelines',
-    askAiBtn: 'Ask AI Expert',
+    askAiBtn: 'Ask Coach Mohamed Zeina',
     closeBtn: 'Close'
   };
 
@@ -212,16 +212,15 @@ export const SupplementInfoModal: React.FC<SupplementInfoModalProps> = ({
 
         {/* Modal Footer Actions */}
         <div className="p-5 bg-[#0E2247] border-t border-[rgba(255,255,255,0.08)] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <button
-            onClick={() => {
-              onClose();
-              onAskAI(name);
-            }}
+          <a
+            href={`https://wa.me/250792294432?text=${encodeURIComponent(`مرحبا coach Mohamed Zeina معك اريد الاستفسار عن مكمل ${name}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#071426] font-black text-xs uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg"
           >
             <MessageSquare size={16} />
             <span>{labels.askAiBtn}</span>
-          </button>
+          </a>
 
           <button
             onClick={onClose}

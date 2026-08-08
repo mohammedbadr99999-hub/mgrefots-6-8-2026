@@ -66,43 +66,30 @@ export const ExpertChat: React.FC<ExpertChatProps> = ({ lang, onSendChatMessage 
           {t.chat_desc}
         </p>
 
-        {/* Social Direct Links */}
-        <div className="p-5 bg-slate-950/80 rounded-2xl border border-slate-800 text-center mb-8">
-          <h4 className="text-sm font-black text-white mb-2">
-            {t.contact_expert_direct}
+        {/* Direct WhatsApp Call to Action to Coach Mohamed Zeina */}
+        <div className="p-6 bg-[#071426] rounded-2xl border border-[#F5A623]/30 text-center mb-8">
+          <h4 className="text-base font-black text-white mb-2">
+            {isRtl ? 'تحدث مباشرة مع كابتن محمد زينة' : 'Chat Directly with Coach Mohamed Zeina'}
           </h4>
-          <p className="text-xs text-slate-400 font-medium mb-4">
-            {isRtl ? 'للحصول على استشارة شخصية مباشرة عبر منصات التواصل:' : 'Connect directly on your favorite platform:'}
+          <p className="text-xs text-[#94A3B8] font-medium mb-4">
+            {isRtl 
+              ? 'اضغط هنا للتحويل الفوري إلى محادثة الواتساب مع الكابتن مباشرة' 
+              : 'Click below for instant direct WhatsApp messaging with Coach Mohamed Zeina'}
           </p>
-          <div className="flex justify-center gap-4">
-            <a 
-              href="https://www.instagram.com/mobadr2026/?hl=ar" 
-              target="_blank" 
-              rel="noreferrer"
-              className="p-3 rounded-xl bg-slate-900 text-pink-500 hover:bg-pink-600 hover:text-white border border-slate-800 shadow-md hover:scale-110 transition flex items-center gap-2 text-xs font-bold"
-            >
-              <Instagram size={18} />
-              <span>Instagram</span>
-            </a>
-            <a 
-              href="https://www.facebook.com/profile.php?id=61580765596064" 
-              target="_blank" 
-              rel="noreferrer"
-              className="p-3 rounded-xl bg-slate-900 text-blue-400 hover:bg-blue-600 hover:text-white border border-slate-800 shadow-md hover:scale-110 transition flex items-center gap-2 text-xs font-bold"
-            >
-              <Facebook size={18} />
-              <span>Facebook</span>
-            </a>
-            <a 
-              href="https://wa.me/250792294432" 
-              target="_blank" 
-              rel="noreferrer"
-              className="p-3 rounded-xl bg-slate-900 text-emerald-400 hover:bg-emerald-600 hover:text-white border border-slate-800 shadow-md hover:scale-110 transition flex items-center gap-2 text-xs font-bold"
-            >
-              <MessageCircle size={18} />
-              <span>WhatsApp</span>
-            </a>
-          </div>
+          <a
+            href={`https://wa.me/250792294432?text=${encodeURIComponent('مرحبا coach Mohamed Zeina معك ما هو هدفك الذي تريد ان تصل اليه في جسدك و عقلك')}`}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#071426] font-black text-sm transition shadow-xl flex flex-col items-center justify-center gap-0.5"
+          >
+            <span className="flex items-center gap-2 text-base font-black">
+              <MessageCircle size={20} />
+              <span>{t.btn_ask_coach || 'Ask Coach'}</span>
+            </span>
+            <span className="text-xs font-bold text-[#071426]">
+              Mohamed Zeina
+            </span>
+          </a>
         </div>
 
         {/* AI Input Box */}

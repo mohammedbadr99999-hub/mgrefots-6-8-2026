@@ -66,15 +66,15 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
         <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
           {t.analysis_title}
         </h2>
-        <p className="text-[#A7B3C4] text-sm sm:text-base max-w-2xl mx-auto">
+        <p className="text-[#94A3B8] text-sm sm:text-base max-w-2xl mx-auto">
           {t.analysis_subtitle}
         </p>
       </div>
 
-      <div className="bg-[#0E2247] p-6 sm:p-12 rounded-3xl border border-[rgba(255,255,255,0.08)] shadow-2xl space-y-8">
+      <div className="glass-card p-6 sm:p-12 rounded-3xl border border-[rgba(255,255,255,0.08)] shadow-2xl space-y-8">
         
         {/* Direct Coach Contact Banner */}
-        <div className="p-6 bg-[#071426] rounded-2xl border border-[#F5A623]/30 text-center">
+        <div className="p-6 bg-[#030914]/80 rounded-2xl border border-[#F5A623]/30 text-center shadow-inner">
           <p className="font-bold text-[#F5A623] text-sm sm:text-base leading-relaxed mb-4">
             {lang === 'ar' 
               ? 'للتعرف بشكل أوسع على النظام التدريبي والنظام الغذائي يرجى التواصل مع كابتن Mohamed Zeina'
@@ -87,7 +87,7 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
               href="https://www.instagram.com/mobadr2026/?hl=ar" 
               target="_blank" 
               rel="noreferrer"
-              className="p-3 rounded-xl bg-[#0B1F45] text-pink-500 hover:text-white hover:bg-pink-600 border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
+              className="p-3 rounded-xl bg-[#091833] text-pink-500 hover:text-white hover:bg-pink-600 border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
               title="Instagram"
             >
               <Instagram size={20} />
@@ -96,19 +96,20 @@ export const InBodyAnalysis: React.FC<InBodyAnalysisProps> = ({ lang, onRunAnaly
               href="https://www.facebook.com/profile.php?id=61580765596064" 
               target="_blank" 
               rel="noreferrer"
-              className="p-3 rounded-xl bg-[#0B1F45] text-[#F5A623] hover:text-white hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
+              className="p-3 rounded-xl bg-[#091833] text-[#F5A623] hover:text-white hover:bg-[#173A73] border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
               title="Facebook"
             >
               <Facebook size={20} />
             </a>
             <a 
-              href="https://wa.me/250792294432" 
+              href={`https://wa.me/250792294432?text=${encodeURIComponent('مرحبا coach Mohamed Zeina معك ما هو هدفك الذي تريد ان تصل اليه في جسدك و عقلك')}`} 
               target="_blank" 
               rel="noreferrer"
-              className="p-3 rounded-xl bg-[#0B1F45] text-emerald-400 hover:text-white hover:bg-emerald-600 border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition"
+              className="p-3 rounded-xl bg-[#0B1F45] text-emerald-400 hover:text-white hover:bg-emerald-600 border border-[rgba(255,255,255,0.08)] shadow-md hover:scale-110 transition flex items-center gap-2 text-xs font-bold"
               title="WhatsApp"
             >
               <MessageCircle size={20} />
+              <span>WhatsApp Coach</span>
             </a>
           </div>
         </div>

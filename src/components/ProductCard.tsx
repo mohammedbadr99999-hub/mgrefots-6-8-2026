@@ -32,6 +32,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const whatsappMsg = product.whatsappText[lang] || product.whatsappText.en;
 
   const whatsappUrl = `https://wa.me/250792294432?text=${encodeURIComponent(whatsappMsg)}`;
+  const coachWhatsappUrl = `https://wa.me/250792294432?text=${encodeURIComponent('مرحبا coach Mohamed Zeina معك ما هو هدفك الذي تريد ان تصل اليه في جسدك و عقلك')}`;
 
   const handleRateProduct = (score: number) => {
     setUserRating(score);
@@ -48,8 +49,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   }[lang] || { more: 'More Details', less: 'Hide Details' };
 
   return (
-    <div className="group bg-[#0E2247] rounded-3xl border border-[rgba(255,255,255,0.08)] hover:border-[#F5A623]/60 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-[#0B1F45]/50 hover:-translate-y-1 relative overflow-hidden">
+    <div className="group relative bg-[#091833]/70 backdrop-blur-xl rounded-3xl border border-[rgba(255,255,255,0.08)] hover:border-[#F5A623]/60 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(245,166,35,0.15)] hover:-translate-y-1.5 overflow-hidden">
       
+      {/* Background Subtle Gradient Glow */}
+      <div className="absolute -top-24 -right-24 w-48 h-48 bg-[#F5A623]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#F5A623]/20 transition-all duration-500" />
+      <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-[#0B1F45]/40 rounded-full blur-3xl pointer-events-none" />
+
       {/* Top Graphic Banner */}
       <div className="relative mb-4">
         <ProductGraphic
@@ -61,22 +66,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         />
         
         {/* Floating Category Badge */}
-        <div className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} ${product.badgeColor} text-xs font-black uppercase px-3 py-1 rounded-full shadow-lg backdrop-blur-md`}>
+        <div className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} ${product.badgeColor} text-[11px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-xl backdrop-blur-md border border-white/20`}>
           {badgeText}
         </div>
       </div>
 
       {/* Product Header: Name right under Graphic Box */}
-      <div className="mb-3">
-        <div className="flex items-start justify-between gap-2 mb-1">
+      <div className="mb-3 relative z-10">
+        <div className="flex items-start justify-between gap-2 mb-1.5">
           <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-[#F5A623] transition-colors leading-snug">
             {name}
           </h3>
           {/* Price Badge */}
-          <span className={`shrink-0 px-3 py-1 rounded-full text-xs font-black shadow-lg ${
+          <span className={`shrink-0 px-3.5 py-1 rounded-full text-xs font-black shadow-xl ${
             product.isSoldOut
-              ? 'bg-red-950/90 text-red-400 border border-red-800'
-              : 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40'
+              ? 'bg-red-950/90 text-red-400 border border-red-800/80'
+              : 'bg-gradient-to-r from-[#0B1F45] to-[#173A73] text-[#F5A623] border border-[#F5A623]/40 shadow-lg'
           }`}>
             {product.isSoldOut
               ? (isRtl ? 'نفدت الكمية' : 'Sold Out')
@@ -85,14 +90,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-bold text-[#A7B3C4] uppercase tracking-widest">{product.size}</span>
-          <span className="text-xs font-extrabold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-0.5 rounded-full">
+          <span className="text-xs font-bold text-[#94A3B8] uppercase tracking-widest">{product.size}</span>
+          <span className="text-xs font-black text-[#F5A623] bg-[#030914]/80 border border-[#F5A623]/30 px-3 py-0.5 rounded-full shadow-inner">
             {product.servings}
           </span>
         </div>
 
         {/* ALWAYS VISIBLE: Star Ratings & Buyers Count */}
-        <div className="flex items-center justify-between bg-[#071426] p-2.5 rounded-xl border border-[rgba(255,255,255,0.08)] mb-3">
+        <div className="flex items-center justify-between bg-[#030914]/80 p-3 rounded-2xl border border-[rgba(255,255,255,0.08)] mb-3 shadow-inner">
           {/* Star Rating & Review count */}
           <div className="flex items-center gap-1.5">
             <div className="flex items-center text-[#F5A623]">
@@ -101,13 +106,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span className="text-xs font-black text-[#F5A623]">
               {product.rating.toFixed(1)}
             </span>
-            <span className="text-[10px] font-bold text-[#A7B3C4]">
+            <span className="text-[10px] font-bold text-[#94A3B8]">
               ({product.reviewsCount} {isRtl ? 'تقييم' : 'reviews'})
             </span>
           </div>
 
           {/* Buyers count */}
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-1 rounded-lg">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-1 rounded-xl shadow-md">
             <ShoppingCart size={13} className="text-[#F5A623]" />
             <span>{product.buyersCount.toLocaleString()} {isRtl ? 'مشتري' : 'buyers'}</span>
           </div>
@@ -116,10 +121,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* More Details Toggle Button */}
         <button
           onClick={() => setShowMoreDetails(!showMoreDetails)}
-          className="w-full py-2.5 px-4 rounded-xl bg-[#0B1F45] hover:bg-[#173A73] text-[#F5A623] hover:text-white text-xs font-black uppercase tracking-wider border border-[#F5A623]/30 flex items-center justify-between transition shadow-md group/btn"
+          className="w-full py-2.5 px-4 rounded-2xl bg-[#0B1F45]/90 hover:bg-[#173A73] text-[#F5A623] hover:text-white text-xs font-black uppercase tracking-wider border border-[#F5A623]/30 flex items-center justify-between transition-all duration-200 shadow-lg group/btn"
         >
           <span className="flex items-center gap-2">
-            <Sparkles size={14} className="text-[#F5A623]" />
+            <Sparkles size={14} className="text-[#F5A623] animate-pulse" />
             <span>{showMoreDetails ? moreBtnLabel.less : moreBtnLabel.more}</span>
           </span>
           <ChevronDown size={16} className={`transition-transform duration-300 ${showMoreDetails ? 'rotate-180' : ''}`} />
@@ -220,13 +225,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <span className="truncate">{t.btn_view_specs}</span>
           </button>
 
-          <button
-            onClick={() => onAskAIProduct(product)}
-            className="w-full min-h-[44px] py-2.5 bg-[#0B1F45] hover:bg-[#173A73] text-white rounded-xl font-bold text-xs transition border border-[rgba(255,255,255,0.08)] flex items-center justify-center gap-1.5"
+          <a
+            href={coachWhatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full min-h-[44px] py-1.5 bg-[#0B1F45] hover:bg-[#173A73] text-white rounded-xl font-bold transition border border-[rgba(255,255,255,0.08)] flex flex-col items-center justify-center text-center px-1"
           >
-            <Sparkles size={15} className="text-[#F5A623]" />
-            <span className="truncate">{t.btn_ask_ai}</span>
-          </button>
+            <span className="text-xs font-black text-white flex items-center gap-1">
+              <Sparkles size={13} className="text-[#F5A623]" />
+              <span>{t.btn_ask_coach || 'Ask Coach'}</span>
+            </span>
+            <span className="text-[10px] font-bold text-[#F5A623]">
+              Mohamed Zeina
+            </span>
+          </a>
         </div>
       </div>
     </div>

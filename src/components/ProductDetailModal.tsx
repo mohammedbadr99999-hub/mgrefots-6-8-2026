@@ -276,42 +276,32 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           </div>
         </div>
 
-        {/* AI Query Box inside Modal */}
+        {/* Direct Ask Coach Mohamed Zeina Box */}
         <div className="p-6 bg-[#0E2247] rounded-2xl border border-[rgba(255,255,255,0.08)] mb-8">
-          <h4 className="font-black text-sm text-white mb-3 flex items-center gap-2">
+          <h4 className="font-black text-sm text-white mb-2 flex items-center gap-2">
             <Sparkles size={18} className="text-[#F5A623]" />
-            <span>{t.modal_ask_ai_title}</span>
+            <span>{t.modal_ask_ai_title || 'Consult Coach Mohamed Zeina'}</span>
           </h4>
+          <p className="text-xs text-[#94A3B8] font-medium mb-4">
+            {isRtl 
+              ? 'تحدث مباشرة مع كابتن محمد زينة عبر الواتساب للحصول على استشارة احترافية وخطة مكملات متكاملة.' 
+              : 'Chat directly with Coach Mohamed Zeina on WhatsApp for personalized supplement guidance.'}
+          </p>
 
-          <form onSubmit={handleSendAiQuestion} className="space-y-3">
-            <textarea
-              value={aiQuestion}
-              onChange={(e) => setAiQuestion(e.target.value)}
-              placeholder={t.modal_ai_placeholder}
-              rows={2}
-              className="w-full p-4 bg-[#071426] rounded-xl border border-[rgba(255,255,255,0.08)] focus:border-[#F5A623] text-[#F5F7FA] text-sm font-medium outline-none transition"
-            />
-            <button
-              type="submit"
-              disabled={isLoadingAI || !aiQuestion.trim()}
-              className="w-full py-3 bg-[#0B1F45] hover:bg-[#173A73] text-white font-black text-xs uppercase tracking-wider rounded-xl transition disabled:opacity-50 flex items-center justify-center gap-2 border border-[rgba(255,255,255,0.08)] shadow-lg"
-            >
-              {isLoadingAI ? (
-                <span className="animate-pulse text-[#F5A623]">Consulting AI...</span>
-              ) : (
-                <>
-                  <Send size={15} className="text-[#F5A623]" />
-                  <span>{t.modal_ai_btn}</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          {aiResponse && (
-            <div className="mt-4 p-4 bg-[#071426] rounded-xl border border-[#F5A623]/30 text-xs text-[#F5F7FA] leading-relaxed font-medium animate-fade-in">
-              {aiResponse}
-            </div>
-          )}
+          <a
+            href={`https://wa.me/250792294432?text=${encodeURIComponent('مرحبا coach Mohamed Zeina معك ما هو هدفك الذي تريد ان تصل اليه في جسدك و عقلك')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3.5 bg-[#0B1F45] hover:bg-[#173A73] text-white font-black text-xs uppercase tracking-wider rounded-xl transition flex flex-col items-center justify-center gap-0.5 border border-[#F5A623]/30 shadow-lg text-center"
+          >
+            <span className="flex items-center gap-2 text-sm text-white font-black">
+              <MessageSquare size={16} className="text-[#F5A623]" />
+              <span>{t.btn_ask_coach || 'Ask Coach'}</span>
+            </span>
+            <span className="text-[11px] font-bold text-[#F5A623]">
+              Mohamed Zeina
+            </span>
+          </a>
         </div>
 
         {/* Order WhatsApp CTA */}
