@@ -1,28 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Zap, Activity, ShoppingBag, MessageCircle, Menu, X, Globe, ShieldCheck, BookOpen } from 'lucide-react';
-import { Language, NavigationTab, UserState } from '../types';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Zap, Activity, ShoppingBag, MessageCircle, Menu, X, ShieldCheck, BookOpen, Info, HelpCircle, ChevronDown } from 'lucide-react';
+import { Language, UserState } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 
 interface HeaderProps {
-  currentTab: NavigationTab;
-  onSelectTab: (tab: NavigationTab) => void;
   lang: Language;
   onSelectLang: (lang: Language) => void;
   user: UserState | null;
-  onOpenMarriedMenGuide?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  currentTab,
-  onSelectTab,
   lang,
   onSelectLang,
-  user,
-  onOpenMarriedMenGuide
+  user
 }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -35,23 +45,32 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, [isMobileMenuOpen]);
 
-  const navItems: { id: NavigationTab; label: string; icon: React.ComponentType<{ size?: number; className?: string }> }[] = [
-    { id: 'home', label: t.nav_home, icon: ShoppingBag },
-    { id: 'analysis', label: t.nav_analysis, icon: Activity },
-    { id: 'supps', label: t.nav_supps, icon: Zap },
-    { id: 'knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen },
-    { id: 'chat', label: t.nav_chat, icon: MessageCircle },
+  const mainCategoryItems = [
+    { path: '/products', label: isRtl ? 'المنتجات' : 'Products', icon: ShoppingBag, badge: isRtl ? 'المكملات' : 'Catalog' },
+    { path: '/analysis', label: t.nav_analysis, icon: Activity, badge: 'InBody' },
+    { path: '/supplements', label: t.nav_supps, icon: Zap, badge: isRtl ? 'موسوعة' : 'Guide' },
+    { path: '/knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen, badge: isRtl ? 'المكتبة' : 'Library' },
   ];
+
+  const otherNavItems = [
+    { path: '/', label: t.nav_home, icon: ShoppingBag },
+    { path: '/about', label: isRtl ? 'عن الشركة' : 'About', icon: Info },
+    { path: '/contact', label: isRtl ? 'اتصل بنا' : 'Contact', icon: MessageCircle },
+    { path: '/faq', label: isRtl ? 'الأسئلة الشائعة' : 'FAQ', icon: HelpCircle },
+    { path: '/chat', label: t.nav_chat, icon: MessageCircle },
+  ];
+
+  const allNavItems = [...mainCategoryItems, ...otherNavItems];
 
   return (
     <>
-      <header className="fixed top-0 w-full z-50 bg-[#030914]/80 backdrop-blur-2xl border-b border-[rgba(255,255,255,0.08)] shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <header className="fixed top-0 w-full z-50 bg-[#030914]/85 backdrop-blur-2xl border-b border-[rgba(255,255,255,0.08)] shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
           
           {/* Logo & Brand */}
-          <div 
-            onClick={() => onSelectTab('home')}
-            className="flex items-center gap-3.5 cursor-pointer group"
+          <Link 
+            to="/"
+            className="flex items-center gap-3 cursor-pointer group shrink-0"
           >
             <div className="relative">
               <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] opacity-40 group-hover:opacity-100 blur-sm transition duration-300"></div>
@@ -67,47 +86,132 @@ export const Header: React.FC<HeaderProps> = ({
                 Sports Nutrition
               </span>
             </div>
+          </Link>
+
+          {/* Desktop & Main Dropdown Menu Button ("قائمة منسدلة" with 3 lines) */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              to="/"
+              className={`px-4 py-2.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all border ${
+                location.pathname === '/'
+                  ? 'bg-[#0B1F45] text-[#F5A623] border-[#F5A623]/40 shadow-md'
+                  : 'bg-[#091833]/60 text-[#94A3B8] border-[rgba(255,255,255,0.08)] hover:text-white'
+              }`}
+            >
+              {t.nav_home}
+            </Link>
+
+            {/* 3-Lines Dropdown Menu ("قائمة منسدلة") */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#091833] to-[#0B1F45] hover:from-[#0B1F45] hover:to-[#173A73] text-white border border-[#F5A623]/50 shadow-xl transition-all duration-300 font-black text-xs uppercase tracking-wider group cursor-pointer"
+              >
+                {/* 3 lines / hamburger icon with animation */}
+                <div className="flex flex-col gap-1 w-4 shrink-0">
+                  <span className={`h-0.5 w-full bg-[#F5A623] rounded-full transition-all duration-300 ${isDropdownOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
+                  <span className={`h-0.5 w-full bg-[#F5A623] rounded-full transition-all duration-300 ${isDropdownOpen ? 'opacity-0' : ''}`} />
+                  <span className={`h-0.5 w-full bg-[#F5A623] rounded-full transition-all duration-300 ${isDropdownOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
+                </div>
+
+                <span className="text-[#F5A623] font-black tracking-wide text-xs">
+                  {isRtl ? 'قائمة منسدلة' : 'Dropdown Menu'}
+                </span>
+
+                <ChevronDown size={15} className={`text-[#F5A623] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown Card */}
+              {isDropdownOpen && (
+                <div className={`absolute top-full mt-3 ${isRtl ? 'right-0' : 'left-0'} w-80 bg-[#071426]/95 backdrop-blur-2xl border border-[rgba(255,255,255,0.15)] rounded-3xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 animate-fade-in space-y-2`}>
+                  <div className="px-3 py-2 text-[11px] font-black uppercase tracking-wider text-[#F5A623] border-b border-[rgba(255,255,255,0.08)] flex items-center justify-between">
+                    <span className="flex items-center gap-2">
+                      <span className="text-base">☰</span>
+                      <span>{isRtl ? 'قائمة منسدلة - أقسام الموقع' : 'Dropdown Menu - Navigation'}</span>
+                    </span>
+                    <span className="text-[10px] bg-[#0B1F45] text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30">MGREFOTS</span>
+                  </div>
+
+                  {/* Main Sections (المنتجات, تحليل InBody, موسوعة المكملات, المكتبة المعرفية) */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] font-extrabold text-[#94A3B8] px-3 pt-1 uppercase tracking-widest">
+                      {isRtl ? 'الأقسام الرئيسية' : 'Main Sections'}
+                    </div>
+                    {mainCategoryItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = location.pathname.startsWith(item.path);
+
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          onClick={() => setIsDropdownOpen(false)}
+                          className={`flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-2xl font-bold text-xs transition-all ${
+                            isActive
+                              ? 'bg-gradient-to-r from-[#0B1F45] to-[#173A73] text-[#F5A623] border border-[#F5A623]/40 shadow-md font-black scale-[1.01]'
+                              : 'text-[#F5F7FA] hover:bg-[#0B1F45]/60 hover:text-[#F5A623]'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isActive ? 'bg-[#F5A623] text-[#030914]' : 'bg-[#091833] text-[#F5A623] border border-[rgba(255,255,255,0.08)]'}`}>
+                              <Icon size={16} />
+                            </div>
+                            <span>{item.label}</span>
+                          </div>
+                          <span className="text-[10px] font-extrabold text-[#94A3B8] bg-[#030914] px-2 py-0.5 rounded-lg border border-[rgba(255,255,255,0.06)]">
+                            {item.badge}
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  {/* Other Pages */}
+                  <div className="border-t border-[rgba(255,255,255,0.08)] pt-2 space-y-1">
+                    <div className="text-[10px] font-extrabold text-[#94A3B8] px-3 uppercase tracking-widest">
+                      {isRtl ? 'صفحات أخرى' : 'Other Pages'}
+                    </div>
+                    {otherNavItems.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = item.path === '/' 
+                        ? location.pathname === '/' 
+                        : location.pathname.startsWith(item.path);
+
+                      return (
+                        <Link
+                          key={item.path}
+                          to={item.path}
+                          onClick={() => setIsDropdownOpen(false)}
+                          className={`flex items-center gap-3 px-3.5 py-2 rounded-xl font-bold text-xs transition-all ${
+                            isActive
+                              ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/30'
+                              : 'text-[#A7B3C4] hover:bg-[#0B1F45]/40 hover:text-white'
+                          }`}
+                        >
+                          <Icon size={15} className={isActive ? 'text-[#F5A623]' : 'text-[#94A3B8]'} />
+                          <span>{item.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Desktop Navigation Tabs */}
-          <nav className="hidden lg:flex items-center gap-1 bg-[#091833]/80 p-1.5 rounded-2xl border border-[rgba(255,255,255,0.08)] shadow-inner">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onSelectTab(item.id)}
-                  className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all duration-300 relative ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#0B1F45] to-[#173A73] text-[#F5A623] border border-[#F5A623]/40 shadow-lg shadow-[#0B1F45]/60 scale-[1.02]'
-                      : 'text-[#94A3B8] hover:text-white hover:bg-[#173A73]/30'
-                  }`}
-                >
-                  <Icon size={16} className={isActive ? 'text-[#F5A623]' : 'text-[#94A3B8]'} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Language Switcher & User Status */}
+          {/* Language Switcher & Married Men Button */}
           <div className="flex items-center gap-2.5">
             {/* Married Man Button */}
-            <button
-              onClick={() => {
-                if (onOpenMarriedMenGuide) {
-                  onOpenMarriedMenGuide();
-                }
-              }}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 border border-amber-300/80 shrink-0 cursor-pointer animate-pulse"
+            <Link
+              to="/knowledge/guides/married-men-health-guide"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 border border-amber-300/80 shrink-0 cursor-pointer animate-pulse"
               title={lang === 'ar' ? 'دليل صحة الرجال المتزوجين' : lang === 'rw' ? 'Inyoborabuhanga y\'abagabo bashatse' : 'Married Men\'s Health Guide'}
             >
               <span className="text-sm">💍</span>
-              <span className="whitespace-nowrap font-extrabold">
+              <span className="whitespace-nowrap font-extrabold text-[11px]">
                 {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
               </span>
-            </button>
+            </Link>
 
             {/* Language Selector */}
             <div className="flex bg-[#091833] rounded-full p-1 border border-[rgba(255,255,255,0.08)] shadow-inner" dir="ltr">
@@ -126,16 +230,10 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </div>
 
-            {/* User status tag */}
-            <div className="hidden sm:flex items-center gap-2 bg-[#091833] text-[#F5A623] border border-[#F5A623]/30 px-3.5 py-1.5 rounded-full text-xs font-black shadow-md">
-              <ShieldCheck size={14} className="text-[#F5A623]" />
-              <span>{t.guest_tag}</span>
-            </div>
-
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-2xl bg-[#091833] border border-[rgba(255,255,255,0.08)] text-[#94A3B8] hover:text-white transition-colors"
+              className="md:hidden p-2.5 rounded-2xl bg-[#091833] border border-[rgba(255,255,255,0.08)] text-[#94A3B8] hover:text-white transition-colors"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -146,12 +244,12 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/70 backdrop-blur-md z-40 lg:hidden"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md z-40 md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
-      <div className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} h-full w-80 bg-[#071426] z-50 shadow-2xl flex flex-col lg:hidden border-r border-[rgba(255,255,255,0.08)] transition-transform duration-300 ease-in-out ${
+      <div className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} h-full w-80 bg-[#071426] z-50 shadow-2xl flex flex-col md:hidden border-r border-[rgba(255,255,255,0.08)] transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full')
       }`}>
         <div className="flex items-center justify-between p-6 border-b border-[rgba(255,255,255,0.08)]">
@@ -167,42 +265,42 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
 
-        <div className="flex flex-col p-4 gap-3 flex-1 overflow-y-auto">
+        <div className="flex flex-col p-4 gap-2 flex-1 overflow-y-auto">
           {/* Married Men Mobile Button */}
-          <button
-            onClick={() => {
-              if (onOpenMarriedMenGuide) {
-                onOpenMarriedMenGuide();
-              }
-              setIsMobileMenuOpen(false);
-            }}
-            className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-lg border border-amber-300 transition-all hover:scale-[1.02] cursor-pointer"
+          <Link
+            to="/knowledge/guides/married-men-health-guide"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-lg border border-amber-300 transition-all hover:scale-[1.02] cursor-pointer mb-2"
           >
             <span className="text-lg">💍</span>
             <span>
               {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
             </span>
-          </button>
+          </Link>
 
-          {navItems.map((item) => {
+          <div className="text-[10px] font-extrabold text-[#F5A623] uppercase tracking-widest px-2 pt-2">
+            {isRtl ? 'قائمة منسدلة (الأقسام الرئيسية)' : 'Dropdown Menu (Main)'}
+          </div>
+
+          {allNavItems.map((item) => {
             const Icon = item.icon;
-            const isActive = currentTab === item.id;
+            const isActive = item.path === '/' 
+              ? location.pathname === '/' 
+              : location.pathname.startsWith(item.path);
             return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  onSelectTab(item.id);
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`w-full flex items-center gap-4 p-4 rounded-2xl font-bold text-base transition-all ${
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`w-full flex items-center gap-4 p-3.5 rounded-2xl font-bold text-sm transition-all ${
                   isActive
                     ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40 shadow-lg'
                     : 'text-[#A7B3C4] hover:bg-[#0E2247] hover:text-white'
                 }`}
               >
-                <Icon size={22} />
+                <Icon size={20} />
                 <span>{item.label}</span>
-              </button>
+              </Link>
             );
           })}
         </div>
