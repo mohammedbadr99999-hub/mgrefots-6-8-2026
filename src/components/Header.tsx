@@ -44,18 +44,18 @@ export const Header: React.FC<HeaderProps> = ({
   }, [isMobileMenuOpen]);
 
   const mainCategoryItems = [
-    { path: '/products', label: isRtl ? 'المنتجات' : 'Products', icon: ShoppingBag, badge: isRtl ? 'المكملات' : 'Catalog' },
-    { path: '/articles', label: isRtl ? 'المقالات' : lang === 'rw' ? 'Inyandiko' : 'Articles', icon: Newspaper, badge: isRtl ? 'جديد' : 'Research' },
+    { path: '/products', label: isRtl ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products', icon: ShoppingBag, badge: isRtl ? 'المكملات' : lang === 'rw' ? 'Urutonde' : 'Catalog' },
+    { path: '/articles', label: isRtl ? 'المقالات' : lang === 'rw' ? 'Inyandiko' : 'Articles', icon: Newspaper, badge: isRtl ? 'جديد' : lang === 'rw' ? 'Ubushakashatsi' : 'Research' },
     { path: '/analysis', label: t.nav_analysis, icon: Activity, badge: 'InBody' },
-    { path: '/supplements', label: t.nav_supps, icon: Zap, badge: isRtl ? 'موسوعة' : 'Guide' },
-    { path: '/knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen, badge: isRtl ? 'المكتبة' : 'Library' },
+    { path: '/supplements', label: t.nav_supps, icon: Zap, badge: isRtl ? 'موسوعة' : lang === 'rw' ? 'Inyoborabuhanga' : 'Guide' },
+    { path: '/knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen, badge: isRtl ? 'المكتبة' : lang === 'rw' ? 'Isomero' : 'Library' },
   ];
 
   const otherNavItems = [
     { path: '/', label: t.nav_home, icon: ShoppingBag },
-    { path: '/about', label: isRtl ? 'عن الشركة' : 'About', icon: Info },
-    { path: '/contact', label: isRtl ? 'اتصل بنا' : 'Contact', icon: MessageCircle },
-    { path: '/faq', label: isRtl ? 'الأسئلة الشائعة' : 'FAQ', icon: HelpCircle },
+    { path: '/about', label: isRtl ? 'عن الشركة' : lang === 'rw' ? 'Ibyerekeye' : 'About', icon: Info },
+    { path: '/contact', label: isRtl ? 'اتصل بنا' : lang === 'rw' ? 'Twandikire' : 'Contact', icon: MessageCircle },
+    { path: '/faq', label: isRtl ? 'الأسئلة الشائعة' : lang === 'rw' ? 'Ibibazo' : 'FAQ', icon: HelpCircle },
     { path: '/chat', label: t.nav_chat, icon: MessageCircle },
   ];
 
@@ -110,7 +110,7 @@ export const Header: React.FC<HeaderProps> = ({
                 aria-expanded={isDropdownOpen}
                 aria-haspopup="true"
                 aria-controls="desktop-navigation-menu"
-                aria-label={isRtl ? 'فتح قائمة الموقع' : 'Open site navigation'}
+                aria-label={isRtl ? 'فتح قائمة الموقع' : lang === 'rw' ? 'Fungura ibice by’urubuga' : 'Open site navigation'}
                 className="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#091833] to-[#0B1F45] hover:from-[#0B1F45] hover:to-[#173A73] text-white border border-[#F5A623]/50 shadow-xl transition-all duration-300 font-black text-xs uppercase tracking-wider group cursor-pointer"
               >
                 {/* 3 lines / hamburger icon with animation */}
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 <span className="text-[#F5A623] font-black tracking-wide text-xs">
-                  {isRtl ? 'قائمة منسدلة' : 'Dropdown Menu'}
+                  {isRtl ? 'أقسام الموقع' : lang === 'rw' ? 'Ibice by’urubuga' : 'Site Menu'}
                 </span>
 
                 <ChevronDown size={15} className={`text-[#F5A623] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -133,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="px-3 py-2 text-[11px] font-black uppercase tracking-wider text-[#F5A623] border-b border-[rgba(255,255,255,0.08)] flex items-center justify-between">
                     <span className="flex items-center gap-2">
                       <span className="text-base">☰</span>
-                      <span>{isRtl ? 'قائمة منسدلة - أقسام الموقع' : 'Dropdown Menu - Navigation'}</span>
+                      <span>{isRtl ? 'أقسام الموقع' : lang === 'rw' ? 'Ibice by’urubuga' : 'Site Navigation'}</span>
                     </span>
                     <span className="text-[10px] bg-[#0B1F45] text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30">MGREFOTS</span>
                   </div>
@@ -141,7 +141,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Main Sections (المنتجات, تحليل InBody, موسوعة المكملات, المكتبة المعرفية) */}
                   <div className="space-y-1">
                     <div className="text-[10px] font-extrabold text-[#94A3B8] px-3 pt-1 uppercase tracking-widest">
-                      {isRtl ? 'الأقسام الرئيسية' : 'Main Sections'}
+                      {isRtl ? 'الأقسام الرئيسية' : lang === 'rw' ? 'Ibice by’ingenzi' : 'Main Sections'}
                     </div>
                     {mainCategoryItems.map((item) => {
                       const Icon = item.icon;
@@ -176,7 +176,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Other Pages */}
                   <div className="border-t border-[rgba(255,255,255,0.08)] pt-2 space-y-1">
                     <div className="text-[10px] font-extrabold text-[#94A3B8] px-3 uppercase tracking-widest">
-                      {isRtl ? 'صفحات أخرى' : 'Other Pages'}
+                      {isRtl ? 'صفحات أخرى' : lang === 'rw' ? 'Izindi paji' : 'Other Pages'}
                     </div>
                     {otherNavItems.map((item) => {
                       const Icon = item.icon;
@@ -247,7 +247,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="button"
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation-menu"
-              aria-label={isMobileMenuOpen ? (isRtl ? 'إغلاق القائمة' : 'Close navigation') : (isRtl ? 'فتح القائمة' : 'Open navigation')}
+              aria-label={isMobileMenuOpen ? (isRtl ? 'إغلاق القائمة' : lang === 'rw' ? 'Funga ibice' : 'Close navigation') : (isRtl ? 'فتح القائمة' : lang === 'rw' ? 'Fungura ibice' : 'Open navigation')}
               className="md:hidden p-2.5 rounded-2xl bg-[#091833] border border-[rgba(255,255,255,0.08)] text-[#94A3B8] hover:text-white transition-colors"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -276,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setIsMobileMenuOpen(false)}
             type="button"
-            aria-label={isRtl ? 'إغلاق القائمة' : 'Close navigation'}
+            aria-label={isRtl ? 'إغلاق القائمة' : lang === 'rw' ? 'Funga ibice' : 'Close navigation'}
             className="w-9 h-9 rounded-full bg-[#0E2247] border border-[rgba(255,255,255,0.08)] text-[#A7B3C4] hover:text-white flex items-center justify-center font-black"
           >
             ✕
@@ -297,7 +297,7 @@ export const Header: React.FC<HeaderProps> = ({
           </Link>
 
           <div className="text-[10px] font-extrabold text-[#F5A623] uppercase tracking-widest px-2 pt-2">
-            {isRtl ? 'قائمة منسدلة (الأقسام الرئيسية)' : 'Dropdown Menu (Main)'}
+            {isRtl ? 'الأقسام الرئيسية' : lang === 'rw' ? 'Ibice by’ingenzi' : 'Main Sections'}
           </div>
 
           {allNavItems.map((item) => {

@@ -43,7 +43,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
     {
       id: 'iso9001',
       code: 'ISO 9001',
-      name: isRtl ? 'إدارة الجودة الشاملة' : 'Quality Management System',
+      name: isRtl ? 'إدارة الجودة الشاملة' : lang === 'rw' ? 'Imicungire y’ubuziranenge' : 'Quality Management System',
       badgeColor: 'from-blue-600 to-indigo-700',
       icon: '🏛️',
       details: {
@@ -70,7 +70,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
     {
       id: 'iso22000',
       code: 'ISO 22000',
-      name: isRtl ? 'سلامة الأغذية والتصنيع' : 'Food Safety Management',
+      name: isRtl ? 'سلامة الأغذية والتصنيع' : lang === 'rw' ? 'Imicungire y’umutekano w’ibiribwa' : 'Food Safety Management',
       badgeColor: 'from-emerald-600 to-teal-700',
       icon: '🛡️',
       details: {
@@ -97,7 +97,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
     {
       id: 'fssc22000',
       code: 'FSSC 22000',
-      name: isRtl ? 'اعتماد سلامة المنتجات' : 'Food Safety Certification',
+      name: isRtl ? 'اعتماد سلامة المنتجات' : lang === 'rw' ? 'Icyemezo cy’umutekano w’ibiribwa' : 'Food Safety Certification',
       badgeColor: 'from-cyan-600 to-blue-800',
       icon: '🔬',
       details: {
@@ -124,7 +124,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
     {
       id: 'halal',
       code: 'HALAL',
-      name: isRtl ? 'شهادة الحلال الإسلامية' : 'Halal Certified Quality',
+      name: isRtl ? 'شهادة الحلال الإسلامية' : lang === 'rw' ? 'Ubuziranenge bwa Halal' : 'Halal Certified Quality',
       badgeColor: 'from-amber-600 to-yellow-700',
       icon: '🌙',
       details: {
@@ -151,7 +151,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
     {
       id: 'eu_organic',
       code: 'EU Organic',
-      name: isRtl ? 'شهادة العضوية الأوروبية' : 'EU Certified Organic',
+      name: isRtl ? 'شهادة العضوية الأوروبية' : lang === 'rw' ? 'Organic yemewe n’Ubumwe bw’u Burayi' : 'EU Certified Organic',
       badgeColor: 'from-green-600 to-emerald-800',
       icon: '🌿',
       details: {
@@ -178,7 +178,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
     {
       id: 'usda_organic',
       code: 'USDA Organic',
-      name: isRtl ? 'شهادة العضوية الأمريكية' : 'USDA Certified Organic',
+      name: isRtl ? 'شهادة العضوية الأمريكية' : lang === 'rw' ? 'Organic yemewe na USDA' : 'USDA Certified Organic',
       badgeColor: 'from-lime-600 to-green-700',
       icon: '🌱',
       details: {
@@ -226,14 +226,14 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           <span>
             {isRtl 
               ? 'ضمان النقاء والجودة العالمية 100%' 
-              : '100% Certified Raw Material Purity'}
+              : lang === 'rw' ? 'Ubuziranenge bw’ibikoresho fatizo bwemejwe 100%' : '100% Certified Raw Material Purity'}
           </span>
         </div>
 
         <h2 className="text-sm sm:text-base font-black text-white leading-snug">
           {isRtl 
             ? 'جميع المواد الخام المُصنَّع منها منتجات شركة MGREFOTS حاصلة على الشهادات التالية (انقر على أي شهادة للتفاصيل):'
-            : 'All raw materials used in MGREFOTS products are certified by international quality standards (Click any badge for details):'}
+            : lang === 'rw' ? 'Ibikoresho fatizo bya MGREFOTS bikurikiza ibipimo mpuzamahanga by’ubuziranenge (kanda ku cyemezo ubone ibisobanuro):' : 'All raw materials used in MGREFOTS products are certified by international quality standards (Click any badge for details):'}
         </h2>
       </div>
 
@@ -263,7 +263,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
             {/* Click to view details prompt */}
             <div className="mt-2 flex items-center gap-1 text-[9px] font-extrabold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2 py-0.5 rounded-full">
               <Info size={10} />
-              <span>{isRtl ? 'عرض الشرح' : 'Details'}</span>
+              <span>{isRtl ? 'عرض الشرح' : lang === 'rw' ? 'Ibisobanuro' : 'Details'}</span>
             </div>
           </div>
         ))}
@@ -311,7 +311,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
               <div className="p-4 rounded-2xl bg-[#0E2247] border border-[rgba(255,255,255,0.08)] space-y-1.5">
                 <h4 className="text-xs font-black uppercase text-[#F5A623] tracking-wider flex items-center gap-1.5">
                   <Info size={14} />
-                  <span>{isRtl ? 'ماذا تعني هذه الشهادة؟' : 'What does this certification mean?'}</span>
+                  <span>{isRtl ? 'ماذا تعني هذه الشهادة؟' : lang === 'rw' ? 'Iki cyemezo gisobanura iki?' : 'What does this certification mean?'}</span>
                 </h4>
                 <p className="text-xs sm:text-sm font-medium text-[#F5F7FA]">
                   {selectedCert.details[lang]?.meaning || selectedCert.details.ar.meaning}
@@ -322,7 +322,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
               <div className="p-4 rounded-2xl bg-[#0B1F45] border border-[#F5A623]/30 space-y-1.5">
                 <h4 className="text-xs font-black uppercase text-[#F5A623] tracking-wider flex items-center gap-1.5">
                   <CheckCircle2 size={14} />
-                  <span>{isRtl ? 'تطبيقاتها في منتجات MGREFOTS:' : 'How MGREFOTS Guarantees This Standard:'}</span>
+                  <span>{isRtl ? 'تطبيقاتها في منتجات MGREFOTS:' : lang === 'rw' ? 'Uko MGREFOTS yubahiriza iki gipimo:' : 'How MGREFOTS Guarantees This Standard:'}</span>
                 </h4>
                 <p className="text-xs sm:text-sm font-medium text-[#F5F7FA]">
                   {selectedCert.details[lang]?.mgrefotsImpact || selectedCert.details.ar.mgrefotsImpact}
@@ -338,7 +338,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] font-black text-xs uppercase tracking-wider hover:opacity-95 transition text-center shadow-md flex items-center justify-center gap-1.5"
               >
-                <span>{isRtl ? 'التحقق من الاعتماد الدولي الرسمي' : 'Verify Official Standard Portal'}</span>
+                <span>{isRtl ? 'التحقق من الاعتماد الدولي الرسمي' : lang === 'rw' ? 'Reba ku rubuga rwemewe' : 'Verify Official Standard Portal'}</span>
                 <span className="text-sm">↗</span>
               </a>
 
@@ -346,7 +346,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
                 onClick={() => setSelectedCert(null)}
                 className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#0B1F45] hover:bg-[#173A73] text-white font-bold text-xs uppercase tracking-wider transition"
               >
-                {isRtl ? 'إغلاق النافذة' : 'Close Window'}
+                {isRtl ? 'إغلاق النافذة' : lang === 'rw' ? 'Funga' : 'Close Window'}
               </button>
             </div>
           </div>

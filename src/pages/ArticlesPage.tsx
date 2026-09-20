@@ -11,20 +11,25 @@ interface ArticlesPageProps {
 export const ArticlesPage: React.FC<ArticlesPageProps> = ({ lang }) => {
   const [query, setQuery] = React.useState('');
   const isRtl = lang === 'ar';
+  const ui = {
+    en: { pageTitle: 'Sports Nutrition Articles & Research | MGREFOTS Rwanda', description: 'Evidence-based creatine, protein, fitness, and supplement articles for athletes and active adults in Rwanda and East Africa.', preview: 'Preview', minutes: 'min read', updated: 'Updated', category: 'Creatine' },
+    rw: { pageTitle: 'Inyandiko n’Ubushakashatsi ku Mirire ya Siporo | MGREFOTS Rwanda', description: 'Inyandiko zishingiye ku bushakashatsi ku birebana na creatine, protein, imyitozo n’inyongeramirire muri Rwanda no muri Afurika y’Iburasirazuba.', preview: 'Ibanza', minutes: 'min yo gusoma', updated: 'Byavuguruwe', category: 'Creatine' },
+    ar: { pageTitle: 'مقالات وأبحاث التغذية الرياضية | MGREFOTS رواندا', description: 'مقالات مبنية على الأدلة حول الكرياتين والبروتين واللياقة والمكملات للرياضيين في رواندا وشرق أفريقيا.', preview: 'معاينة', minutes: 'دقائق قراءة', updated: 'آخر تحديث', category: 'الكرياتين' }
+  }[lang];
 
   React.useEffect(() => {
     const previousTitle = document.title;
     const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     const previousDescription = description?.content;
 
-    document.title = 'Sports Nutrition Articles & Research | MGREFOTS Rwanda';
-    description?.setAttribute('content', 'Evidence-based creatine, protein, fitness, and supplement articles for athletes and active adults in Rwanda and East Africa.');
+    document.title = ui.pageTitle;
+    description?.setAttribute('content', ui.description);
 
     return () => {
       document.title = previousTitle;
       if (previousDescription) description?.setAttribute('content', previousDescription);
     };
-  }, []);
+  }, [ui.description, ui.pageTitle]);
 
   const articles = React.useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -80,18 +85,18 @@ export const ArticlesPage: React.FC<ArticlesPageProps> = ({ lang }) => {
             <div className="space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-3 text-[11px] font-bold text-[#94A3B8]">
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-[#0B1F45] px-3 py-1 font-black uppercase text-[#F5A623]">{article.category}</span>
+                  <span className="rounded-full bg-[#0B1F45] px-3 py-1 font-black uppercase text-[#F5A623]">{article.category === 'Creatine' ? ui.category : article.category}</span>
                   {article.status !== 'published' && (
-                    <span className="rounded-full border border-sky-400/30 bg-sky-400/10 px-2 py-1 font-black uppercase text-sky-300">Preview</span>
+                    <span className="rounded-full border border-sky-400/30 bg-sky-400/10 px-2 py-1 font-black uppercase text-sky-300">{ui.preview}</span>
                   )}
                 </div>
-                <span className="flex items-center gap-1.5"><Calendar size={13} />{article.lastUpdated}</span>
+                <span className="flex items-center gap-1.5"><Calendar size={13} />{ui.updated}: {article.updatedAt ? new Intl.DateTimeFormat(lang === 'rw' ? 'rw-RW' : lang === 'ar' ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${article.updatedAt}T00:00:00Z`)) : article.lastUpdated}</span>
               </div>
               <h2 className="text-xl font-black leading-snug text-white">{article.title[lang] || article.title.en}</h2>
               <p className="text-sm font-medium leading-relaxed text-[#94A3B8]">{article.excerpt[lang] || article.excerpt.en}</p>
             </div>
             <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
-              <span className="flex items-center gap-1.5 text-xs font-bold text-[#94A3B8]"><Clock size={13} />{article.readingTime}</span>
+              <span className="flex items-center gap-1.5 text-xs font-bold text-[#94A3B8]"><Clock size={13} />{article.readingTime.replace(/ min read$/i, '')} {ui.minutes}</span>
               <Link
                 to={`/articles/${article.slug}`}
                 className="flex items-center gap-1.5 text-xs font-black text-[#F5A623] transition hover:translate-x-1"

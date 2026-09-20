@@ -54,7 +54,7 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
             to="/products"
             className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] font-black text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
-            <span>{isRtl ? 'عرض كل المكملات' : 'Explore All Products'}</span>
+            <span>{isRtl ? 'عرض كل المكملات' : lang === 'rw' ? 'Reba ibicuruzwa byose' : 'Explore All Products'}</span>
             <ArrowRight size={14} className={isRtl ? 'rotate-180' : ''} />
           </Link>
 
@@ -63,7 +63,7 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
             className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition flex items-center gap-2"
           >
             <span>💍</span>
-            <span>{isRtl ? 'دليل الرجال المتزوجين' : 'Married Men\'s Guide'}</span>
+            <span>{isRtl ? 'دليل الرجال المتزوجين' : lang === 'rw' ? 'Inyoborabuhanga y’abagabo bashatse' : 'Married Men\'s Guide'}</span>
           </Link>
 
           <Link
@@ -85,7 +85,7 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
       </div>
 
       {/* Egyptian Special Offer Banner */}
-      <EgyptianOfferBanner />
+      <EgyptianOfferBanner lang={lang} />
 
       {/* Quality Certifications Banner */}
       <CertificationsBanner lang={lang} />
@@ -135,10 +135,10 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
             <Award size={28} />
           </div>
           <h4 className="font-black text-white text-base sm:text-lg">
-            {isRtl ? 'أسس علمية موثوقة' : 'Science-Backed Formulations'}
+            {isRtl ? 'أسس علمية موثوقة' : lang === 'rw' ? 'Imiterere ishingiye kuri siyansi' : 'Science-Backed Formulations'}
           </h4>
           <p className="text-xs font-semibold text-[#94A3B8] leading-relaxed">
-            {isRtl ? 'مكونات نقية بجرعات سريرية مثبتة علمياً لضمان النتائج.' : 'Clinical dosages engineered to force progressive muscle adaptation.'}
+            {isRtl ? 'مكونات نقية بجرعات مدروسة علمياً لدعم التقدم الرياضي.' : lang === 'rw' ? 'Ingano zizewe na siyansi zigenewe gushyigikira iterambere mu myitozo.' : 'Evidence-based dosages designed to support progressive training adaptation.'}
           </p>
         </div>
 
@@ -147,10 +147,10 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
             <ShieldCheck size={28} />
           </div>
           <h4 className="font-black text-white text-base sm:text-lg">
-            {isRtl ? 'خالٍ من المواد الحافظة' : 'Zero Fillers & 100% Pure'}
+            {isRtl ? 'خالٍ من الحشوات ونقي 100%' : lang === 'rw' ? 'Nta byongerwamo kandi isukuye 100%' : 'Zero Fillers & 100% Pure'}
           </h4>
           <p className="text-xs font-semibold text-[#94A3B8] leading-relaxed">
-            {isRtl ? 'منتجات عالية الجودة بدون سكريات مضافة أو مكونات ضارة.' : 'Highest pharmaceutical grade ingredients without hidden additives.'}
+            {isRtl ? 'مكونات عالية الجودة بدون إضافات مخفية.' : lang === 'rw' ? 'Ibikoresho byiza cyane, nta byongerwamo bihishwe.' : 'High-quality ingredients without hidden additives.'}
           </p>
         </div>
 
@@ -159,10 +159,10 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
             <Sparkles size={28} />
           </div>
           <h4 className="font-black text-white text-base sm:text-lg">
-            {isRtl ? 'استشارات كابتن محمد زينة' : 'Coach Mohamed Zeina Guidance'}
+            {isRtl ? 'إرشادات الكابتن محمد زينة' : lang === 'rw' ? 'Ubuyobozi bwa Coach Mohamed Zeina' : 'Coach Mohamed Zeina Guidance'}
           </h4>
           <p className="text-xs font-semibold text-[#94A3B8] leading-relaxed">
-            {isRtl ? 'توجيهات واستشارات مباشرة لكيفية استخدام المنتجات وفقاً لهدفك.' : 'Get direct tailored advice from Coach Mohamed Zeina on structuring your supplements.'}
+            {isRtl ? 'إرشادات مباشرة لاستخدام المنتجات وفقاً لهدفك.' : lang === 'rw' ? 'Habwa inama zihariye zijyanye n’intego yawe n’imikoreshereze y’inyongeramirire.' : 'Get direct, goal-specific guidance on structuring your supplements.'}
           </p>
         </div>
       </div>

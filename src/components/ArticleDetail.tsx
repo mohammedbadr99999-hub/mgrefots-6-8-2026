@@ -23,6 +23,11 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
   const [copied, setCopied] = useState(false);
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
+  const ui = {
+    en: { category: 'Creatine', minutes: 'min read', updated: 'Updated', copied: 'Article link copied', copy: 'Copy article link', related: 'Related Scientific Supplement', source: 'Source' },
+    rw: { category: 'Creatine', minutes: 'min yo gusoma', updated: 'Byavuguruwe', copied: 'Link y’inyandiko yakoporowe', copy: 'Koporora link y’inyandiko', related: 'Inyongeramirire ijyanye n’ubushakashatsi', source: 'Inkomoko' },
+    ar: { category: 'الكرياتين', minutes: 'دقائق قراءة', updated: 'آخر تحديث', copied: 'تم نسخ رابط المقال', copy: 'نسخ رابط المقال', related: 'المنتج المرتبط بالبحث العلمي', source: 'المصدر' }
+  }[lang];
 
   const relatedProduct = PRODUCTS.find((p) => p.id === article.relatedProductId);
 
@@ -117,30 +122,30 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
           <span>{isRtl ? 'العودة للمقالات' : lang === 'rw' ? 'Subira ku nyandiko' : 'Back to Articles'}</span>
         </button>
         <span>/</span>
-        <span className="text-[#F5A623]">{article.category}</span>
+        <span className="text-[#F5A623]">{article.category === 'Creatine' ? ui.category : article.category}</span>
       </nav>
 
       {/* Main Header Card */}
       <div className="p-6 sm:p-10 rounded-3xl bg-[#071426] border border-[rgba(255,255,255,0.08)] space-y-6 shadow-2xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="px-3 py-1 rounded-full bg-[#0B1F45] text-[#F5A623] text-xs font-black uppercase tracking-wider border border-[#F5A623]/30">
-            {article.category}
+            {article.category === 'Creatine' ? ui.category : article.category}
           </span>
           <div className="flex items-center gap-3 text-xs text-[#94A3B8] font-bold">
             <span className="flex items-center gap-1">
               <Clock size={13} className="text-[#F5A623]" />
-              {article.readingTime}
+              {article.readingTime.replace(/ min read$/i, '')} {ui.minutes}
             </span>
             <span>•</span>
             <span className="flex items-center gap-1">
               <Calendar size={13} className="text-[#F5A623]" />
-              {article.lastUpdated}
+              {ui.updated}: {article.updatedAt ? new Intl.DateTimeFormat(lang === 'rw' ? 'rw-RW' : lang === 'ar' ? 'ar-EG' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${article.updatedAt}T00:00:00Z`)) : article.lastUpdated}
             </span>
             <button
               onClick={handleShare}
               type="button"
-              aria-label={copied ? 'Article link copied' : 'Copy article link'}
-              title={copied ? 'Link copied' : 'Copy article link'}
+              aria-label={copied ? ui.copied : ui.copy}
+              title={copied ? ui.copied : ui.copy}
               className="p-1.5 rounded-lg bg-[#091833] border border-[rgba(255,255,255,0.1)] hover:border-[#F5A623] text-white text-xs transition"
             >
               <Share2 size={14} className="text-[#F5A623]" />
@@ -229,7 +234,7 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
                   {reference.authors} {reference.journal} ({reference.year}).{' '}
                   {reference.doiOrUrl && (
                     <a href={reference.doiOrUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-bold text-[#F5A623] hover:underline">
-                      Source <ExternalLink size={12} />
+                      {ui.source} <ExternalLink size={12} />
                     </a>
                   )}
                 </li>
@@ -243,7 +248,7 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
           <div className="p-6 rounded-3xl bg-gradient-to-r from-[#0B1F45] to-[#173A73] border border-[#F5A623]/40 shadow-xl space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase text-[#F5A623]">
-                {isRtl ? 'المنتج المرتبط بالبحث العلمي' : 'Related Scientific Supplement'}
+                {ui.related}
               </span>
               <span className="text-sm font-black text-white">{relatedProduct.price}</span>
             </div>

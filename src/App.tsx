@@ -25,7 +25,7 @@ const SUPPORTED_LANGUAGES: Language[] = ['en', 'rw', 'ar'];
 function getInitialLanguage(): Language {
   const savedLanguage = window.localStorage.getItem('mgrefots-language') as Language | null;
   if (savedLanguage && SUPPORTED_LANGUAGES.includes(savedLanguage)) return savedLanguage;
-  return navigator.language.toLowerCase().startsWith('ar') ? 'ar' : 'en';
+  return 'en';
 }
 
 function PageLoading({ lang }: { lang: Language }) {
@@ -74,7 +74,7 @@ function MobileBottomNav({ lang }: { lang: Language }) {
 
   const items = [
     { path: '/', label: t.nav_home, icon: ShoppingBag },
-    { path: '/products', label: lang === 'ar' ? 'المنتجات' : 'Products', icon: ShoppingBag },
+    { path: '/products', label: lang === 'ar' ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products', icon: ShoppingBag },
     { path: '/analysis', label: t.nav_analysis, icon: Activity },
     { path: '/knowledge', label: t.nav_knowledge || 'Knowledge', icon: BookOpen },
     { path: '/chat', label: t.nav_chat, icon: MessageCircle },
@@ -197,7 +197,7 @@ export default function App() {
         {/* Small Scroll Indicator on side */}
         <div className={`fixed top-24 ${isRtl ? 'left-2 sm:left-4' : 'right-2 sm:right-4'} z-40 bg-[#091833]/90 text-[#F5A623] border border-[#F5A623]/40 px-3 py-1.5 rounded-full text-[10px] font-black shadow-2xl backdrop-blur-md flex items-center gap-1.5 animate-bounce pointer-events-none`}>
           <span>📜</span>
-          <span>{isRtl ? 'سكرول للاسفل لترى المزيد' : 'scroll down to see more'}</span>
+          <span>{isRtl ? 'مرّر لأسفل لرؤية المزيد' : lang === 'rw' ? 'Manuka hasi urebe ibindi' : 'Scroll down to see more'}</span>
         </div>
 
         {/* Main Routed Content Container */}
@@ -214,7 +214,7 @@ export default function App() {
                 to="/chat"
                 className="bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#030914] px-5 py-2 rounded-2xl font-black text-xs transition-all shrink-0 hover:scale-105 shadow-lg shadow-[#F5A623]/20"
               >
-                {isRtl ? 'استشر الخبير مجاناً' : 'Ask Expert Free'}
+                {isRtl ? 'استشر الخبير مجاناً' : lang === 'rw' ? 'Baza impuguke ku buntu' : 'Ask an Expert Free'}
               </Link>
             </div>
           </div>
