@@ -68,6 +68,25 @@ Private MGREFOTS nutrition library rules:
 
 const MAX_PROMPT_LENGTH = 12_000;
 const MAX_TASK_CONTEXT_LENGTH = 1_500;
+const KNOWLEDGE_STORE_DISPLAY_NAME = 'MGREFOTS Nutrition Knowledge';
+
+let cachedKnowledgeStoreName: string | undefined;
+
+const resolveKnowledgeStore = async (ai: GoogleGenAI): Promise<string | undefined> => {
+  const configuredStore = process.env.GEMINI_FILE_SEARCH_STORE?.trim();
+  if (configuredStore) return configuredStore;
+  if (cachedKnowledgeStoreName) return cachedKnowledgeStoreName;
+
+  const stores = await ai.fileSearchStores.list({ config: { pageSize: 100 } });
+  for await (const store of stores) {
+    if (store.displayName === KNOWLEDGE_STORE_DISPLAY_NAME && store.name) {
+      cachedKnowledgeStoreName = store.name;
+      return store.name;
+    }
+  }
+
+  return undefined;
+};
 
 type KnowledgeSource = {
   name: string;
@@ -172,7 +191,7 @@ export default {
       const ai = new GoogleGenAI({ apiKey });
       const expertInstruction = buildExpertSystemPrompt(lang, taskContext);
 
-      const fileSearchStore = process.env.GEMINI_FILE_SEARCH_STORE?.trim();
+      const fileSearchStore = await resolveKnowledgeStore(ai);
       if (fileSearchStore) {
         const interaction = await ai.interactions.create({
           model: process.env.GEMINI_FILE_SEARCH_MODEL?.trim() || 'gemini-3.8-flash',
