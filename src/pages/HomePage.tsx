@@ -36,7 +36,6 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
   const heroCopy = {
     en: {
       eyebrow: 'Science-led sports nutrition for Rwanda & East Africa',
-      title: 'Train Stronger. Recover Smarter.',
       body: 'Purpose-built supplements, evidence-based guidance, and direct local support for athletes who want measurable progress.',
       primary: 'Shop Performance Supplements',
       secondary: 'See the Science',
@@ -49,7 +48,6 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
     },
     rw: {
       eyebrow: 'Imirire ya siporo ishingiye kuri siyansi mu Rwanda no muri Afurika y’Iburasirazuba',
-      title: 'Kora Imyitozo Ikomeye. Garura Imbaraga Neza.',
       body: 'Inyunganiramirire zifite intego, ubuyobozi bushingiye ku bushakashatsi n’ubufasha bwo mu Rwanda ku bashaka iterambere ripimika.',
       primary: 'Reba Inyunganiramirire',
       secondary: 'Reba Ubushakashatsi',
@@ -62,7 +60,6 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
     },
     ar: {
       eyebrow: 'تغذية رياضية قائمة على العلم لرواندا وشرق أفريقيا',
-      title: 'تدرّب بقوة أكبر. واستشفِ بذكاء.',
       body: 'مكملات مصممة لهدف واضح، وإرشادات مبنية على الأدلة، ودعم محلي مباشر للرياضيين الباحثين عن تقدم قابل للقياس.',
       primary: 'تصفح مكملات الأداء',
       secondary: 'اطّلع على الأساس العلمي',
@@ -86,9 +83,6 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
           <Sparkles size={14} className="text-[#F5A623]" />
           <span>{heroCopy.eyebrow}</span>
         </div>
-        <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.05]">
-          {heroCopy.title}
-        </h1>
         <p className="text-base sm:text-lg text-[#CBD5E1] font-medium leading-relaxed max-w-2xl mx-auto">
           {heroCopy.body}
         </p>
