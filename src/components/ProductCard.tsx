@@ -32,7 +32,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const whatsappMsg = product.whatsappText[lang] || product.whatsappText.en;
 
   const whatsappUrl = `https://wa.me/250792294432?text=${encodeURIComponent(whatsappMsg)}`;
-  const coachWhatsappUrl = `https://wa.me/250792294432?text=${encodeURIComponent('مرحبا coach Mohamed Zeina معك ما هو هدفك الذي تريد ان تصل اليه في جسدك و عقلك')}`;
+  const coachMessage = lang === 'ar'
+    ? 'مرحباً كابتن محمد زينة، أحتاج مساعدتك في اختيار المكمل المناسب لهدفي.'
+    : lang === 'rw'
+      ? 'Muraho Coach Mohamed Zeina, nkeneye ubufasha bwo guhitamo inyunganiramirire ijyanye n’intego yanjye.'
+      : 'Hello Coach Mohamed Zeina, I need help choosing the right supplement for my goal.';
+  const coachWhatsappUrl = `https://wa.me/250792294432?text=${encodeURIComponent(coachMessage)}`;
 
   const handleRateProduct = (score: number) => {
     setUserRating(score);
@@ -43,10 +48,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   const moreBtnLabel = {
-    ar: { more: 'المزيد (عرض جميع التفاصيل والمعلومات)', less: 'إخفاء التفاصيل' },
-    en: { more: 'More (View All Details & Specs)', less: 'Hide Details' },
-    rw: { more: 'Ibindi (Soma Ibisobanuro Byose)', less: 'Hisha Ibisobanuro' }
+    ar: { more: 'التفاصيل والمكونات', less: 'إخفاء التفاصيل' },
+    en: { more: 'Details & ingredients', less: 'Hide details' },
+    rw: { more: 'Ibisobanuro n’ibigize', less: 'Hisha ibisobanuro' }
   }[lang] || { more: 'More Details', less: 'Hide Details' };
+
+  const ui = {
+    ar: { soldOut: 'نفدت الكمية', reviews: 'تقييم', buyers: 'مشتري', rate: 'قيّم المنتج (من 1 إلى 10):', thanks: 'شكرًا! تم تسجيل تقييمك بنجاح.' },
+    en: { soldOut: 'Sold out', reviews: 'reviews', buyers: 'buyers', rate: 'Rate this product (1–10):', thanks: 'Thank you! Your rating was submitted.' },
+    rw: { soldOut: 'Yarashize', reviews: 'ibitekerezo', buyers: 'abaguzi', rate: 'Tanga amanota (1–10):', thanks: 'Murakoze! Amanota yawe yakiriwe.' }
+  }[lang];
 
   return (
     <div className="group relative bg-[#091833]/70 backdrop-blur-xl rounded-3xl border border-[rgba(255,255,255,0.08)] hover:border-[#F5A623]/60 p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(245,166,35,0.15)] hover:-translate-y-1.5 overflow-hidden">
@@ -84,7 +95,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               : 'bg-gradient-to-r from-[#0B1F45] to-[#173A73] text-[#F5A623] border border-[#F5A623]/40 shadow-lg'
           }`}>
             {product.isSoldOut
-              ? (isRtl ? 'نفدت الكمية' : 'Sold Out')
+              ? ui.soldOut
               : product.price}
           </span>
         </div>
@@ -107,16 +118,35 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               {product.rating.toFixed(1)}
             </span>
             <span className="text-[10px] font-bold text-[#94A3B8]">
-              ({product.reviewsCount} {isRtl ? 'تقييم' : 'reviews'})
+              ({product.reviewsCount} {ui.reviews})
             </span>
           </div>
 
           {/* Buyers count */}
           <div className="flex items-center gap-1.5 text-xs font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/30 px-2.5 py-1 rounded-xl shadow-md">
             <ShoppingCart size={13} className="text-[#F5A623]" />
-            <span>{product.buyersCount.toLocaleString()} {isRtl ? 'مشتري' : 'buyers'}</span>
+            <span>{product.buyersCount.toLocaleString(lang === 'ar' ? 'ar-EG' : lang === 'rw' ? 'rw-RW' : 'en-US')} {ui.buyers}</span>
           </div>
         </div>
+
+        <div className="space-y-2 mb-4" aria-label={lang === 'ar' ? 'أهم الفوائد' : lang === 'rw' ? 'Inyungu z’ingenzi' : 'Key benefits'}>
+          {highlights.slice(0, 2).map((highlight, index) => (
+            <div key={`${product.id}-benefit-${index}`} className="flex items-start gap-2 text-sm text-[#E2E8F0]">
+              <CheckCircle2 size={16} className="text-[#F5A623] shrink-0 mt-0.5" />
+              <span className="leading-snug">{highlight}</span>
+            </div>
+          ))}
+        </div>
+
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full min-h-[48px] mb-2.5 py-3.5 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:brightness-110 text-[#071426] rounded-2xl font-black text-sm transition-all shadow-lg shadow-[#F5A623]/20 flex items-center justify-center gap-2.5"
+        >
+          <MessageSquare size={18} className="text-[#071426]" />
+          <span>{t.btn_order_whatsapp}</span>
+        </a>
 
         {/* More Details Toggle Button */}
         <button
@@ -124,7 +154,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           className="w-full py-2.5 px-4 rounded-2xl bg-[#0B1F45]/90 hover:bg-[#173A73] text-[#F5A623] hover:text-white text-xs font-black uppercase tracking-wider border border-[#F5A623]/30 flex items-center justify-between transition-all duration-200 shadow-lg group/btn"
         >
           <span className="flex items-center gap-2">
-            <Sparkles size={14} className="text-[#F5A623] animate-pulse" />
+            <Info size={14} className="text-[#F5A623]" />
             <span>{showMoreDetails ? moreBtnLabel.less : moreBtnLabel.more}</span>
           </span>
           <ChevronDown size={16} className={`transition-transform duration-300 ${showMoreDetails ? 'rotate-180' : ''}`} />
@@ -161,7 +191,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-black text-[#F5F7FA] flex items-center gap-1.5">
                 <ThumbsUp size={13} className="text-[#F5A623]" />
-                <span>{isRtl ? 'قيم هذا المنتج (من 1 إلى 10):' : 'Rate this product (1-10):'}</span>
+                <span>{ui.rate}</span>
               </span>
               {userRating && (
                 <span className="text-[11px] font-extrabold text-[#071426] bg-[#F5A623] px-2 py-0.5 rounded-full">
@@ -193,9 +223,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
             {showFeedback && (
               <div className="mt-2 text-[10px] font-bold text-[#F5A623] bg-[#0B1F45] border border-[#F5A623]/40 p-2 rounded-xl text-center animate-fade-in">
-                {isRtl
-                  ? `شغف ورأيك يهمنا! تم تسجيل تقييمك (${userRating}/10) بنجاح.`
-                  : `Thank you! Your rating of (${userRating}/10) was submitted successfully.`}
+                {ui.thanks} ({userRating}/10)
               </div>
             )}
           </div>
@@ -204,17 +232,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* Action Buttons */}
       <div className="space-y-2.5 pt-3 border-t border-[rgba(255,255,255,0.08)]">
-        {/* Primary Action: Order via WhatsApp */}
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full min-h-[44px] py-3.5 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#071426] rounded-2xl font-black text-sm transition-all shadow-lg shadow-[#F5A623]/20 flex items-center justify-center gap-2.5 group-hover:scale-[1.01]"
-        >
-          <MessageSquare size={18} className="text-[#071426]" />
-          <span>{t.btn_order_whatsapp}</span>
-        </a>
-
         {/* Secondary Actions Grid */}
         <div className="grid grid-cols-2 gap-2">
           <button

@@ -6,7 +6,7 @@ import { EgyptianOfferBanner } from '../components/EgyptianOfferBanner';
 import { PRODUCTS } from '../data/products';
 import { TRANSLATIONS } from '../data/translations';
 import { Language, Product } from '../types';
-import { Sparkles, Award, ShieldCheck, ArrowRight, BookOpen, Activity, Zap, MessageCircle } from 'lucide-react';
+import { Sparkles, Award, ShieldCheck, ArrowRight, BookOpen, Activity, MessageCircle, Factory, FlaskConical } from 'lucide-react';
 
 interface HomePageProps {
   lang: Language;
@@ -33,62 +33,100 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
     { id: 'immunity', label: t.filter_immunity },
   ];
 
+  const heroCopy = {
+    en: {
+      eyebrow: 'Science-led sports nutrition for Rwanda & East Africa',
+      title: 'Train Stronger. Recover Smarter.',
+      body: 'Purpose-built supplements, evidence-based guidance, and direct local support for athletes who want measurable progress.',
+      primary: 'Shop Performance Supplements',
+      secondary: 'See the Science',
+      productsTitle: 'Choose the support that fits your goal',
+      productsBody: 'Compare benefits, servings, proof, and price without the clutter.',
+      trust: ['Certified manufacturing facilities', 'Evidence-based formulations', 'Direct support in Rwanda'],
+      guideTitle: 'Specialized health guidance, when you need it',
+      guideBody: 'Explore the dedicated married men’s health guide without interrupting the main shopping journey.',
+      guideCta: 'Open the guide'
+    },
+    rw: {
+      eyebrow: 'Imirire ya siporo ishingiye kuri siyansi mu Rwanda no muri Afurika y’Iburasirazuba',
+      title: 'Kora Imyitozo Ikomeye. Garura Imbaraga Neza.',
+      body: 'Inyunganiramirire zifite intego, ubuyobozi bushingiye ku bushakashatsi n’ubufasha bwo mu Rwanda ku bashaka iterambere ripimika.',
+      primary: 'Reba Inyunganiramirire',
+      secondary: 'Reba Ubushakashatsi',
+      productsTitle: 'Hitamo igufasha kugera ku ntego yawe',
+      productsBody: 'Gereranya inyungu, ingano, ibimenyetso n’igiciro mu buryo bworoshye.',
+      trust: ['Inganda zemewe', 'Imiterere ishingiye kuri siyansi', 'Ubufasha butaziguye mu Rwanda'],
+      guideTitle: 'Ubuyobozi bwihariye ku buzima igihe ubukeneye',
+      guideBody: 'Soma inyoborabuhanga y’ubuzima bw’abagabo bashatse utabangamiwe mu guhitamo ibicuruzwa.',
+      guideCta: 'Fungura inyoborabuhanga'
+    },
+    ar: {
+      eyebrow: 'تغذية رياضية قائمة على العلم لرواندا وشرق أفريقيا',
+      title: 'تدرّب بقوة أكبر. واستشفِ بذكاء.',
+      body: 'مكملات مصممة لهدف واضح، وإرشادات مبنية على الأدلة، ودعم محلي مباشر للرياضيين الباحثين عن تقدم قابل للقياس.',
+      primary: 'تصفح مكملات الأداء',
+      secondary: 'اطّلع على الأساس العلمي',
+      productsTitle: 'اختر الدعم المناسب لهدفك',
+      productsBody: 'قارن الفوائد وعدد الجرعات والدليل والسعر بسهولة ومن دون تشتيت.',
+      trust: ['تصنيع داخل منشآت معتمدة', 'تركيبات قائمة على الأدلة', 'دعم مباشر داخل رواندا'],
+      guideTitle: 'إرشادات صحية متخصصة عند الحاجة',
+      guideBody: 'اطّلع على دليل صحة الرجال المتزوجين في قسم مخصص من دون تشتيت رحلة شراء المنتجات.',
+      guideCta: 'افتح الدليل'
+    }
+  }[lang];
+
   return (
-    <div className="space-y-12 animate-fade-in">
+    <div className="space-y-14 animate-fade-in">
       {/* Brand Hero Heading */}
-      <div className="text-center space-y-4 max-w-4xl mx-auto py-2">
+      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#0B1F45] via-[#071426] to-[#030914] px-5 py-10 sm:px-10 sm:py-14 shadow-2xl">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#F5A623]/10 blur-3xl" />
+        <div className="absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="relative z-10 text-center space-y-5 max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0B1F45] border border-[#F5A623]/40 text-[#F5A623] text-xs font-black tracking-wider uppercase shadow-lg">
           <Sparkles size={14} className="text-[#F5A623]" />
-          <span>MGREFOTS Ltd. — Sports Nutrition Brand</span>
+          <span>{heroCopy.eyebrow}</span>
         </div>
-        <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-          {t.hero_products_title}
+        <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.05]">
+          {heroCopy.title}
         </h1>
-        <p className="text-sm sm:text-base text-[#94A3B8] font-medium leading-relaxed max-w-3xl mx-auto">
-          {t.hero_products_sub}
+        <p className="text-base sm:text-lg text-[#CBD5E1] font-medium leading-relaxed max-w-2xl mx-auto">
+          {heroCopy.body}
         </p>
 
-        {/* Quick Route Nav Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 pt-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-2">
           <Link
             to="/products"
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] font-black text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition flex items-center gap-2"
+            className="min-h-[50px] px-6 py-3 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] font-black text-sm shadow-lg shadow-[#F5A623]/20 hover:brightness-110 transition flex items-center justify-center gap-2"
           >
-            <span>{isRtl ? 'عرض كل المكملات' : lang === 'rw' ? 'Reba ibicuruzwa byose' : 'Explore All Products'}</span>
+            <span>{heroCopy.primary}</span>
             <ArrowRight size={14} className={isRtl ? 'rotate-180' : ''} />
           </Link>
 
           <Link
-            to="/knowledge/guides/married-men-health-guide"
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition flex items-center gap-2"
+            to="/knowledge"
+            className="min-h-[50px] px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-white border border-white/15 font-black text-sm transition flex items-center justify-center gap-2"
           >
-            <span>💍</span>
-            <span>{isRtl ? 'دليل الرجال المتزوجين' : lang === 'rw' ? 'Inyoborabuhanga y’abagabo bashatse' : 'Married Men\'s Guide'}</span>
-          </Link>
-
-          <Link
-            to="/analysis"
-            className="px-4 py-2.5 rounded-2xl bg-[#091833] hover:bg-[#0B1F45] text-white border border-[rgba(255,255,255,0.12)] font-bold text-xs transition flex items-center gap-1.5"
-          >
-            <Activity size={15} className="text-[#F5A623]" />
-            <span>{t.nav_analysis}</span>
-          </Link>
-
-          <Link
-            to="/supplements"
-            className="px-4 py-2.5 rounded-2xl bg-[#091833] hover:bg-[#0B1F45] text-white border border-[rgba(255,255,255,0.12)] font-bold text-xs transition flex items-center gap-1.5"
-          >
-            <Zap size={15} className="text-[#F5A623]" />
-            <span>{t.nav_supps}</span>
+            <BookOpen size={17} className="text-[#F5A623]" />
+            <span>{heroCopy.secondary}</span>
           </Link>
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-5 max-w-3xl mx-auto">
+          {[Factory, FlaskConical, MessageCircle].map((Icon, index) => (
+            <div key={heroCopy.trust[index]} className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-black/15 px-3 py-2.5 text-xs font-bold text-[#CBD5E1]">
+              <Icon size={15} className="shrink-0 text-[#F5A623]" />
+              <span>{heroCopy.trust[index]}</span>
+            </div>
+          ))}
+        </div>
       </div>
+      </section>
 
-      {/* Egyptian Special Offer Banner */}
-      <EgyptianOfferBanner lang={lang} />
-
-      {/* Quality Certifications Banner */}
-      <CertificationsBanner lang={lang} />
+      <section className="space-y-5" aria-labelledby="products-heading">
+        <div className="text-center space-y-2 max-w-2xl mx-auto">
+          <h2 id="products-heading" className="text-2xl sm:text-3xl font-black text-white">{heroCopy.productsTitle}</h2>
+          <p className="text-sm sm:text-base text-[#A7B3C4]">{heroCopy.productsBody}</p>
+        </div>
 
       {/* Product Category Filter Chips */}
       <div className="bg-[#091833]/60 backdrop-blur-md p-2 rounded-3xl border border-[rgba(255,255,255,0.08)]">
@@ -127,6 +165,7 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
           />
         ))}
       </div>
+      </section>
 
       {/* Brand Value Propositions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-12 border-t border-[rgba(255,255,255,0.08)]">
@@ -166,6 +205,27 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
           </p>
         </div>
       </div>
+
+      <section className="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-center gap-5 rounded-3xl border border-white/10 bg-[#091833]/70 p-6 sm:p-8">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-[#F5A623] font-black text-xs uppercase tracking-wider">
+            <Activity size={16} />
+            <span>{isRtl ? 'دليل متخصص' : lang === 'rw' ? 'Inyoborabuhanga yihariye' : 'Specialized guide'}</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black text-white">{heroCopy.guideTitle}</h2>
+          <p className="text-sm text-[#A7B3C4] leading-relaxed max-w-3xl">{heroCopy.guideBody}</p>
+        </div>
+        <Link to="/knowledge/guides/married-men-health-guide" className="min-h-[46px] rounded-2xl border border-[#F5A623]/40 bg-[#0B1F45] px-5 py-3 text-sm font-black text-[#F5A623] hover:bg-[#173A73] transition flex items-center justify-center gap-2">
+          <span>💍</span>
+          <span>{heroCopy.guideCta}</span>
+        </Link>
+      </section>
+
+      {/* Market offer follows the core product journey instead of interrupting it. */}
+      <EgyptianOfferBanner lang={lang} />
+
+      {/* Detailed manufacturing trust proof sits after products and brand value. */}
+      <CertificationsBanner lang={lang} />
     </div>
   );
 };

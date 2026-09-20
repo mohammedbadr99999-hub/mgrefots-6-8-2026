@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Award, ShieldCheck, CheckCircle2, X, Sparkles, Info } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, X, Info } from 'lucide-react';
 import { Language } from '../types';
 
 interface CertificationsBannerProps {
@@ -51,19 +51,19 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           title: 'ISO 9001 - نظام إدارة الجودة الشاملة',
           standardCode: 'الاعتماد الدولي لإدارة ضبط الجودة',
           meaning: 'المعيار العالمي الأول الذي يثبت التزام المنشأة بأعلى معايير ضبط وضمان الجودة الموحدة والتطوير المستمر في جميع العمليات التشغيلية.',
-          mgrefotsImpact: 'يضمن أن كل شحنة مواد خام تُورد لمصانع MGREFOTS تخضع لمعايرة دقيقة وفحوصات معملية تضمن التطابق والنقاء التام لنسبة الـ 99.8% للمكونات الفعالة.'
+          mgrefotsImpact: 'تُصنّع منتجات MGREFOTS من خلال منشأة شريكة تطبق نظام إدارة جودة حاصلًا على ISO 9001، بما يدعم ثبات العمليات والتوثيق والرقابة على الجودة.'
         },
         en: {
           title: 'ISO 9001 - Quality Management System',
           standardCode: 'International Quality Management Standard',
           meaning: 'The world’s recognized benchmark for quality management systems, continuous process control, and product consistency.',
-          mgrefotsImpact: 'Guarantees that every raw material batch supplied for MGREFOTS formulations is strictly audited to ensure 100% component purity and exact clinical dosage.'
+          mgrefotsImpact: 'MGREFOTS products are made through a manufacturing partner operating an ISO 9001-certified quality management system, supporting consistent processes, documentation, and quality control.'
         },
         rw: {
           title: 'ISO 9001 - Ubuziranenge n\'Icuruzwa',
           standardCode: 'Standard Mpuzamahanga y\'Ubuziranenge',
           meaning: 'Standard mpuzamahanga yemewe ku isi hose mu kugenzura ubuziranenge n\'uburyo ibicuruzwa bikorwamo.',
-          mgrefotsImpact: 'Yemeza ko ibikoresho byose bifashishwa na MGREFOTS binyura mu kugenzurwa birambuye mu labo kugira ngo bibe bifite ubuziranenge.'
+          mgrefotsImpact: 'Ibicuruzwa bya MGREFOTS bikorerwa mu ruganda rw’umufatanyabikorwa rufite ISO 9001, bigafasha guhorana uburyo buhamye bwo gukora no kugenzura ubuziranenge.'
         }
       }
     },
@@ -78,19 +78,19 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           title: 'ISO 22000 - نظام إدارة سلامة الأغذية والتصنيع',
           standardCode: 'المعيار الدولي لمعايير أمان وتداول الأغذية والمكملات',
           meaning: 'نظام عالمي صارم يحدد متطلبات سلامة الأغذية ومنع أخطار التلوث البكتيري أو الكيميائي في كل خطوة من خطوات التصنيع والتعبئة.',
-          mgrefotsImpact: 'يؤكد أن مساحيق وكبسولات MGREFOTS تُحضر وتُعبأ في بيئات معقمة تماماً وتخلو من أي ملوثات أو جراثيم قد تؤثر على سلامة الرياضيين.'
+          mgrefotsImpact: 'تتم عمليات التصنيع لدى شريك MGREFOTS داخل نظام إدارة سلامة غذاء حاصل على ISO 22000 للسيطرة المنهجية على مخاطر السلامة أثناء الإنتاج والتعبئة.'
         },
         en: {
           title: 'ISO 22000 - Food Safety Management',
           standardCode: 'Global Food Safety & Hygiene Standard',
           meaning: 'A rigorous international framework designed to eliminate biological, chemical, and physical hazards across food and supplement production.',
-          mgrefotsImpact: 'Confirms that all MGREFOTS raw powders and capsules are processed in sterile cleanrooms, totally free from microbial contamination.'
+          mgrefotsImpact: 'MGREFOTS manufacturing is performed by a partner operating an ISO 22000-certified food-safety system for structured hazard control throughout production and packing.'
         },
         rw: {
           title: 'ISO 22000 - Umutekano w\'Ibyo Kurya',
           standardCode: 'Standard Mpuzamahanga y\'Ubuziranenge bw\'Ibyo Kurya',
           meaning: 'Standard ikensera ko ibyo kurya n\'inyunganiramatsiko biba bifite umutekano ku buzima.',
-          mgrefotsImpact: 'Kurinda ibikoresho bya MGREFOTS ko byanduzwa n\'imiti mibi cyangwa microbi mu gihe cyo kuzipfunyika.'
+          mgrefotsImpact: 'Umufatanyabikorwa ukora ibicuruzwa bya MGREFOTS akoresha uburyo bwemewe bwa ISO 22000 mu kugenzura ibyago by’umutekano mu gukora no gupakira.'
         }
       }
     },
@@ -105,19 +105,19 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           title: 'FSSC 22000 - الاعتماد الأعلى عالمياً لسلامة المنتجات',
           standardCode: 'اعتماد المبادرة العالمية لسلامة الأغذية (GFSI)',
           meaning: 'الاعتماد الدولي الأرفع مستوى المعتمد من منظمات GFSI العالمية للتحقق من أمان سلاسل التوريد والوقاية من الغش والتحديث التكنولوجي.',
-          mgrefotsImpact: 'يوفر ضماناً حاسماً بأن خامات المنتجات مستوردة من مصادر أصلية وموثوقة ولا تحوي أي مكونات مغشوشة أو غير مطابقة للمواصفات.'
+          mgrefotsImpact: 'يعمل شريك التصنيع وفق منظومة FSSC 22000 المعتمدة، ما يعزز رقابة سلامة الغذاء وتتبع سلسلة التوريد وإدارة مخاطر التصنيع.'
         },
         en: {
           title: 'FSSC 22000 - Food Safety System Certification',
           standardCode: 'GFSI Benchmarked World-Class Accreditation',
           meaning: 'The highest global standard recognized by GFSI for comprehensive food defense, supply-chain transparency, and authenticity.',
-          mgrefotsImpact: 'Ensures absolute anti-fraud verification, authentic raw ingredient sourcing, and premium pharmaceutical-grade execution.'
+          mgrefotsImpact: 'Our manufacturing partner operates an FSSC 22000-certified system, strengthening food-safety controls, supply-chain traceability, and production risk management.'
         },
         rw: {
           title: 'FSSC 22000 - Icyemezo cyo ku Rwego rwo Hejuru rwa GFSI',
           standardCode: 'GFSI Benchmarked Global Standard',
           meaning: 'Icyemezo cyo ku rwego rwo hejuru k\'ubuziranenge bw\'ibiribwa gishimwa ku isi hose.',
-          mgrefotsImpact: 'Yemeza ko ntabicuruzwa by\'ibihimbano bifashishwa mu gukora inyunganiramatsiko za MGREFOTS.'
+          mgrefotsImpact: 'Umufatanyabikorwa wacu akoresha FSSC 22000 mu gukomeza umutekano w’ibiribwa, gukurikirana ibikoresho no kugenzura ibyago byo mu ruganda.'
         }
       }
     },
@@ -132,19 +132,19 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           title: 'HALAL - شهادة المطابقة للأحكام الإسلامية',
           standardCode: 'شهادة الاعتماد والمطابقة الحلال 100%',
           meaning: 'شهادة رسمية تثبت مطابقة المكونات وعمليات التصنيع للشريعة الإسلامية وأخلاقيات التغذية السليمة.',
-          mgrefotsImpact: 'تضمن أن جميع الأحماض الأمينية والكبسولات والمكونات المستخدمة نابعة من مصادر حلال 100% وخالية تماماً من مشتقات الخنزير والمواد الكحولية.'
+          mgrefotsImpact: 'تُنتج التركيبات المؤهلة لدى منشأة تصنيع شريكة حاصلة على اعتماد حلال، مع تطبيق متطلبات الفصل والتعامل مع المكونات وفق نطاق الشهادة.'
         },
         en: {
           title: 'HALAL - Certified Ethical & Pure Quality',
           standardCode: '100% Halal Compliant Ingredient Certification',
           meaning: 'Official accreditation verifying that all raw ingredients and processing comply strictly with Islamic dietary guidelines.',
-          mgrefotsImpact: 'Guarantees zero porcine derivatives, 100% alcohol-free formulations, and ethically sourced vegan/plant amino acids.'
+          mgrefotsImpact: 'Eligible formulations are produced through a Halal-certified manufacturing partner, with ingredient handling and segregation managed within the certificate’s scope.'
         },
         rw: {
           title: 'HALAL - Icyemezo cya Halal',
           standardCode: 'Halal 100% Compliant Standard',
           meaning: 'Icyemezo cyo gukurikiza amategeko n\'amabwiriza ya Halal mu idini rya Islam.',
-          mgrefotsImpact: 'Yemeza ko nta bintu by\'ingurube cyangwa inzoga birimo mu ibikoresho bya MGREFOTS.'
+          mgrefotsImpact: 'Imiterere yujuje ibisabwa ikorerwa mu ruganda rw’umufatanyabikorwa rwemewe na Halal, hakurikijwe ibyo icyemezo gikubiyemo.'
         }
       }
     },
@@ -159,19 +159,19 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           title: 'EU Organic - شهادة العضوية الأوروبية',
           standardCode: 'معيار الزراعة العضوية للاتحاد الأوروبي',
           meaning: 'شهادة العضوية الأوروبية التي تحظر استخدام المبيدات الحشرية والأسمدة الكيميائية والتعديل الوراثي في المحاصيل الزراعية.',
-          mgrefotsImpact: 'تضمن أن البروتينات النباتية (البسلة والأرز) مستخرجة من زراعات عضوية نضرة غير معدلة وراثياً وخالية من السموم الزراعية.'
+          mgrefotsImpact: 'يمتلك شريك التصنيع اعتماد EU Organic للمواد وخطوط الإنتاج المؤهلة ضمن نطاق شهادته، وتُستخدم الصفة العضوية للمنتج فقط عندما يغطيها الاعتماد الخاص به.'
         },
         en: {
           title: 'EU Certified Organic Standard',
           standardCode: 'European Union Agriculture Organic Certification',
           meaning: 'Strict European standard banning synthetic pesticides, artificial fertilizers, and GMOs in crop cultivation.',
-          mgrefotsImpact: 'Ensures our plant protein blends (Pea & Rice) originate from 100% certified organic non-GMO crops without agro-chemical residues.'
+          mgrefotsImpact: 'Our manufacturing partner holds EU Organic certification for eligible materials and production lines within its certified scope. Product-level organic status is used only where specifically covered.'
         },
         rw: {
           title: 'EU Organic - Ubuziranenge bw\'Burayi',
           standardCode: 'EU Agriculture Organic Standard',
           meaning: 'Standard y\'Uburayi y\'ibimera bibazwe mu buryo bwa Organic ntamiti mibi.',
-          mgrefotsImpact: 'Yemeza ko poroteyine y\'ibimera ifite isuku ntamiti mibi cyangwa ibinyabuzima byahinduwe birimo.'
+          mgrefotsImpact: 'Umufatanyabikorwa wacu afite EU Organic ku bikoresho n’imirongo yujuje ibisabwa; ijambo Organic rikoreshwa ku gicuruzwa gusa iyo icyemezo cyacyo kibyemera.'
         }
       }
     },
@@ -186,19 +186,19 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           title: 'USDA Organic - شهادة العضوية الأمريكية الفيدرالية',
           standardCode: 'اعتماد وزارة الزراعة الأمريكية للمنتجات العضوية',
           meaning: 'المعيار الفيدرالي بالولايات المتحدة الأمريكية الذي يضمن الالتزام بالزراعة والتجهيز العضوي الخالي من الكيماويات والمواد الحافظة.',
-          mgrefotsImpact: 'تؤكد الخلو التام من الإشعاع المؤين، المواد الكيميائية الضارة، والملوثات المضافة خلال عمليات استخلاص مساحيق المكملات.'
+          mgrefotsImpact: 'يحمل شريك التصنيع اعتماد USDA Organic للعمليات والمواد المؤهلة الواقعة ضمن نطاق الشهادة، مع الحفاظ على التتبع والفصل المطلوبين للإنتاج العضوي.'
         },
         en: {
           title: 'USDA Organic - Official US Certification',
           standardCode: 'United States Department of Agriculture Organic Seal',
           meaning: 'Official US federal certification guaranteeing non-GMO organic farming, zero chemical additives, and environmental stewardship.',
-          mgrefotsImpact: 'Verifies that no ionizing radiation, bio-engineered synthetic additives, or toxic processing chemicals were utilized.'
+          mgrefotsImpact: 'Our manufacturing partner holds USDA Organic certification for eligible operations and materials within the certificate’s scope, including required traceability and segregation controls.'
         },
         rw: {
           title: 'USDA Organic - Ubuziranenge bwa Amerika',
           standardCode: 'USDA Organic Seal Standard',
           meaning: 'Icyemezo cya leta ya Amerika mu kugenzura ubuziranenge bwa Organic.',
-          mgrefotsImpact: 'Yemeza ko ibikoresho bidafite imiti mibi n\'ibinyabuzima byahinduwe kuko biba bifite isuku 100%.'
+          mgrefotsImpact: 'Umufatanyabikorwa wacu afite USDA Organic ku bikorwa n’ibikoresho biri mu cyemezo, harimo gukurikirana no gutandukanya umusaruro wa Organic.'
         }
       }
     }
@@ -225,15 +225,15 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
           <ShieldCheck size={14} className="text-[#F5A623]" />
           <span>
             {isRtl 
-              ? 'ضمان النقاء والجودة العالمية 100%' 
-              : lang === 'rw' ? 'Ubuziranenge bw’ibikoresho fatizo bwemejwe 100%' : '100% Certified Raw Material Purity'}
+              ? 'تصنيع داخل منشآت حاصلة على اعتمادات دولية'
+              : lang === 'rw' ? 'Bikorerwa mu nganda zemewe ku rwego mpuzamahanga' : 'Manufactured in internationally certified facilities'}
           </span>
         </div>
 
         <h2 className="text-sm sm:text-base font-black text-white leading-snug">
           {isRtl 
-            ? 'جميع المواد الخام المُصنَّع منها منتجات شركة MGREFOTS حاصلة على الشهادات التالية (انقر على أي شهادة للتفاصيل):'
-            : lang === 'rw' ? 'Ibikoresho fatizo bya MGREFOTS bikurikiza ibipimo mpuzamahanga by’ubuziranenge (kanda ku cyemezo ubone ibisobanuro):' : 'All raw materials used in MGREFOTS products are certified by international quality standards (Click any badge for details):'}
+            ? 'تعمل MGREFOTS مع مصنع شريك حاصل على الاعتمادات التالية؛ اضغط على أي اعتماد لمعرفة نطاقه ودوره في التصنيع:'
+            : lang === 'rw' ? 'MGREFOTS ikorana n’uruganda rw’umufatanyabikorwa rufite ibi byemezo; kanda kuri buri kimwe urebe uko gikoreshwa:' : 'MGREFOTS works with a manufacturing partner holding the following certifications. Select a badge to see its scope and role in production:'}
         </h2>
       </div>
 
@@ -322,7 +322,7 @@ export const CertificationsBanner: React.FC<CertificationsBannerProps> = ({ lang
               <div className="p-4 rounded-2xl bg-[#0B1F45] border border-[#F5A623]/30 space-y-1.5">
                 <h4 className="text-xs font-black uppercase text-[#F5A623] tracking-wider flex items-center gap-1.5">
                   <CheckCircle2 size={14} />
-                  <span>{isRtl ? 'تطبيقاتها في منتجات MGREFOTS:' : lang === 'rw' ? 'Uko MGREFOTS yubahiriza iki gipimo:' : 'How MGREFOTS Guarantees This Standard:'}</span>
+                  <span>{isRtl ? 'دورها في تصنيع منتجات MGREFOTS:' : lang === 'rw' ? 'Uruhare rwacyo mu gukora ibicuruzwa bya MGREFOTS:' : 'How it supports MGREFOTS manufacturing:'}</span>
                 </h4>
                 <p className="text-xs sm:text-sm font-medium text-[#F5F7FA]">
                   {selectedCert.details[lang]?.mgrefotsImpact || selectedCert.details.ar.mgrefotsImpact}

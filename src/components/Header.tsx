@@ -207,20 +207,8 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Language Switcher & Married Men Button */}
+          {/* Language switcher stays visually dominant; specialist guides live in the page journey. */}
           <div className="flex items-center gap-2.5">
-            {/* Married Man Button */}
-            <Link
-              to="/knowledge/guides/married-men-health-guide"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 border border-amber-300/80 shrink-0 cursor-pointer animate-pulse"
-              title={lang === 'ar' ? 'دليل صحة الرجال المتزوجين' : lang === 'rw' ? 'Inyoborabuhanga y\'abagabo bashatse' : 'Married Men\'s Health Guide'}
-            >
-              <span className="text-sm">💍</span>
-              <span className="whitespace-nowrap font-extrabold text-[11px]">
-                {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
-              </span>
-            </Link>
-
             {/* Language Selector */}
             <div className="flex bg-[#091833] rounded-full p-1 border border-[rgba(255,255,255,0.08)] shadow-inner" dir="ltr" role="group" aria-label="Language">
               {(['en', 'rw', 'ar'] as Language[]).map((l) => (
@@ -284,18 +272,6 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex flex-col p-4 gap-2 flex-1 overflow-y-auto">
-          {/* Married Men Mobile Button */}
-          <Link
-            to="/knowledge/guides/married-men-health-guide"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-lg border border-amber-300 transition-all hover:scale-[1.02] cursor-pointer mb-2"
-          >
-            <span className="text-lg">💍</span>
-            <span>
-              {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
-            </span>
-          </Link>
-
           <div className="text-[10px] font-extrabold text-[#F5A623] uppercase tracking-widest px-2 pt-2">
             {isRtl ? 'الأقسام الرئيسية' : lang === 'rw' ? 'Ibice by’ingenzi' : 'Main Sections'}
           </div>
