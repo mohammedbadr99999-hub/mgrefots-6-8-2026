@@ -106,9 +106,32 @@ function MobileBottomNav({ lang }: { lang: Language }) {
 export default function App() {
   const [lang, setLang] = useState<Language>(getInitialLanguage);
   const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
+  const [quickQuestion, setQuickQuestion] = useState('');
+  const [quickAnswer, setQuickAnswer] = useState('');
+  const [isQuickAnswering, setIsQuickAnswering] = useState(false);
 
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
+  const quickExpertCopy = {
+    en: {
+      placeholder: 'Put your question here and press ASK to get the answer',
+      label: 'Ask the MGREFOTS AI Expert',
+      loading: 'Preparing your answer…',
+      fullPage: 'Open full expert consultation'
+    },
+    rw: {
+      placeholder: 'Andika ikibazo cyawe hano, ukande ASK ubone igisubizo',
+      label: 'Baza Impuguke ya AI ya MGREFOTS',
+      loading: 'Turimo gutegura igisubizo…',
+      fullPage: 'Fungura urupapuro rw’impuguke'
+    },
+    ar: {
+      placeholder: 'ضع سؤالك هنا واضغط على ASK وستحصل على الإجابة',
+      label: 'اسأل خبير MGREFOTS بالذكاء الاصطناعي',
+      loading: 'جارٍ إعداد الإجابة…',
+      fullPage: 'افتح صفحة الاستشارة الكاملة'
+    }
+  }[lang];
 
   useEffect(() => {
     window.localStorage.setItem('mgrefots-language', lang);
@@ -137,6 +160,21 @@ export default function App() {
       : lang === 'rw'
         ? 'Ntitwashoboye kugera ku nzobere ubu. Ongera ugerageze cyangwa uyivugishe kuri WhatsApp.'
         : 'The AI expert is temporarily unavailable. Please try again or contact the human expert on WhatsApp.';
+  };
+
+  const handleQuickExpertQuestion = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const question = quickQuestion.trim();
+    if (!question || isQuickAnswering) return;
+
+    setIsQuickAnswering(true);
+    setQuickAnswer('');
+    try {
+      const answer = await queryAI(question, 'This question comes from the homepage quick-answer box. Answer directly and concisely while following the approved MGREFOTS expert methodology.');
+      setQuickAnswer(answer);
+    } finally {
+      setIsQuickAnswering(false);
+    }
   };
 
   return (
@@ -170,19 +208,44 @@ export default function App() {
         {/* Main Routed Content Container */}
         <main className="pt-28 pb-24 max-w-7xl mx-auto px-4 sm:px-6">
 
-          {/* Limited Free Banner */}
+          {/* Homepage quick expert question */}
           <div className="mb-8 animate-fade-in">
-            <div className="bg-gradient-to-r from-[#0B1F45]/90 via-[#091833]/90 to-[#173A73]/90 border border-[rgba(255,255,255,0.12)] text-white px-6 py-4 rounded-3xl flex flex-wrap items-center justify-between shadow-2xl backdrop-blur-xl gap-4">
-              <span className="font-extrabold text-xs sm:text-sm flex items-center gap-2.5">
-                <Sparkles size={18} className="text-[#F5A623] shrink-0 animate-pulse" />
-                <span>{t.free_banner}</span>
-              </span>
-              <Link
-                to="/analysis"
-                className="bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#030914] px-5 py-2 rounded-2xl font-black text-xs transition-all shrink-0 hover:scale-105 shadow-lg shadow-[#F5A623]/20"
-              >
-                {isRtl ? 'استشر الخبير مجاناً' : lang === 'rw' ? 'Baza impuguke ku buntu' : 'Ask an Expert Free'}
-              </Link>
+            <div className="bg-gradient-to-r from-[#0B1F45]/90 via-[#091833]/90 to-[#173A73]/90 border border-[rgba(255,255,255,0.12)] text-white px-4 sm:px-6 py-4 rounded-3xl shadow-2xl backdrop-blur-xl">
+              <form onSubmit={handleQuickExpertQuestion} className="flex flex-col sm:flex-row items-stretch gap-3">
+                <label htmlFor="quick-expert-question" className="sr-only">{quickExpertCopy.label}</label>
+                <div className="relative flex-1">
+                  <Sparkles size={17} className={`absolute top-1/2 -translate-y-1/2 text-[#F5A623] ${isRtl ? 'right-4' : 'left-4'}`} aria-hidden="true" />
+                  <input
+                    id="quick-expert-question"
+                    type="text"
+                    value={quickQuestion}
+                    onChange={(event) => setQuickQuestion(event.target.value)}
+                    maxLength={12000}
+                    placeholder={quickExpertCopy.placeholder}
+                    className={`min-h-[48px] w-full rounded-2xl border border-white/10 bg-[#030914]/75 py-3 text-sm font-bold text-white outline-none transition placeholder:text-[#94A3B8] focus:border-[#F5A623]/70 ${isRtl ? 'pr-11 pl-4 text-right' : 'pl-11 pr-4 text-left'}`}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isQuickAnswering || !quickQuestion.trim()}
+                  className="min-h-[48px] rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] px-8 py-3 text-sm font-black text-[#030914] shadow-lg shadow-[#F5A623]/20 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  {isQuickAnswering ? '…' : 'ASK'}
+                </button>
+              </form>
+
+              <div aria-live="polite" aria-busy={isQuickAnswering}>
+                {isQuickAnswering ? (
+                  <p className={`mt-3 animate-pulse text-xs font-bold text-[#F5A623] ${isRtl ? 'text-right' : 'text-left'}`}>{quickExpertCopy.loading}</p>
+                ) : quickAnswer ? (
+                  <div className={`mt-4 rounded-2xl border border-[#F5A623]/25 bg-[#030914]/70 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+                    <p className="whitespace-pre-wrap text-sm font-medium leading-7 text-[#E2E8F0]">{quickAnswer}</p>
+                    <Link to="/analysis" className="mt-3 inline-flex text-xs font-black text-[#F5A623] hover:text-white transition">
+                      {quickExpertCopy.fullPage}
+                    </Link>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
 
