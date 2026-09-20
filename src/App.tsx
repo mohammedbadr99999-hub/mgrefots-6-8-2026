@@ -147,12 +147,29 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, systemInstruction, lang }),
       });
-      if (res.ok) {
-        const data = await res.json();
-        return data.text || 'No response from AI';
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        console.error('AI endpoint returned a non-JSON response', {
+          status: res.status,
+          contentType,
+        });
+        throw new Error('AI_ENDPOINT_INVALID_RESPONSE');
       }
+
+      const data = await res.json() as { text?: string; error?: string; code?: string };
+      if (!res.ok) {
+        console.error('AI endpoint request failed', {
+          status: res.status,
+          code: data.code,
+          error: data.error,
+        });
+        throw new Error(data.code || `AI_HTTP_${res.status}`);
+      }
+
+      return data.text || 'No response from AI';
     } catch (e) {
-      console.warn('Backend API unavailable, using client fallback', e);
+      console.warn('AI query failed', e);
     }
 
     return lang === 'ar'
