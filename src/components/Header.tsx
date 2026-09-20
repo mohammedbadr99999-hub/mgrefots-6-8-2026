@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Zap, Activity, ShoppingBag, MessageCircle, Menu, X, BookOpen, Info, HelpCircle, ChevronDown, Newspaper } from 'lucide-react';
+import { Zap, ShoppingBag, MessageCircle, Menu, X, BookOpen, Info, HelpCircle, ChevronDown, Newspaper } from 'lucide-react';
 import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 
@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
   const mainCategoryItems = [
     { path: '/products', label: isRtl ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products', icon: ShoppingBag, badge: isRtl ? 'المكملات' : lang === 'rw' ? 'Urutonde' : 'Catalog' },
     { path: '/articles', label: isRtl ? 'المقالات' : lang === 'rw' ? 'Inyandiko' : 'Articles', icon: Newspaper, badge: isRtl ? 'جديد' : lang === 'rw' ? 'Ubushakashatsi' : 'Research' },
-    { path: '/analysis', label: t.nav_analysis, icon: Activity, badge: 'InBody' },
+    { path: '/analysis', label: t.nav_analysis, icon: MessageCircle, badge: isRtl ? 'ذكاء اصطناعي' : lang === 'rw' ? 'AI' : 'AI Expert' },
     { path: '/supplements', label: t.nav_supps, icon: Zap, badge: isRtl ? 'موسوعة' : lang === 'rw' ? 'Inyoborabuhanga' : 'Guide' },
     { path: '/knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen, badge: isRtl ? 'المكتبة' : lang === 'rw' ? 'Isomero' : 'Library' },
   ];
@@ -56,7 +56,6 @@ export const Header: React.FC<HeaderProps> = ({
     { path: '/about', label: isRtl ? 'عن الشركة' : lang === 'rw' ? 'Ibyerekeye' : 'About', icon: Info },
     { path: '/contact', label: isRtl ? 'اتصل بنا' : lang === 'rw' ? 'Twandikire' : 'Contact', icon: MessageCircle },
     { path: '/faq', label: isRtl ? 'الأسئلة الشائعة' : lang === 'rw' ? 'Ibibazo' : 'FAQ', icon: HelpCircle },
-    { path: '/chat', label: t.nav_chat, icon: MessageCircle },
   ];
 
   const allNavItems = [...mainCategoryItems, ...otherNavItems];

@@ -3,14 +3,14 @@ import { Language } from '../types';
 export const TRANSLATIONS: Record<Language, any> = {
   en: {
     nav_home: "Products",
-    nav_analysis: "InBody Analysis",
+    nav_analysis: "Ask the Expert",
     nav_supps: "Supplement Encyclopedia",
     nav_knowledge: "Knowledge Center",
     nav_chat: "Talk to Coach",
     
     hero_products_title: "MGREFOTS Ltd. | Premier Sports Nutrition Brand",
     hero_products_sub: "MGREFOTS Ltd. is a specialized sports nutrition brand dedicated to developing, manufacturing, and marketing high-quality, science-backed dietary supplements for Africa and the Middle East (Rwanda & Egypt). Integrated with free body analysis to support your goals.",
-    free_banner: "🌟 All body analyses & expert consultations are free supportive tools by MGREFOTS Ltd.!",
+    free_banner: "🌟 Ask the MGREFOTS AI Expert free, or contact Mohamed Zeina directly on WhatsApp.",
     login_guest_btn: "Enter Store as Guest (Free)",
     guest_tag: "Guest Active",
     
@@ -35,8 +35,8 @@ export const TRANSLATIONS: Record<Language, any> = {
     modal_ai_placeholder: "e.g., How should I combine this with my workout schedule for fast results?",
     modal_ai_btn: "Ask Coach Mohamed Zeina",
     
-    analysis_title: "MGREFOTS InBody Analysis Service",
-    analysis_subtitle: "A value-added feature by MGREFOTS Ltd.: Upload your InBody scan and state your goal. Our NASM-trained system will generate a personalized supplement strategy.",
+    analysis_title: "Ask the MGREFOTS AI Expert",
+    analysis_subtitle: "Ask about nutrition, training, supplements, general health, or any other topic and receive a clear, professional answer.",
     upload_placeholder: "Select InBody file (PDF, JPG, PNG)",
     goal_label: "What is your main fitness goal?",
     btn_analyze: "✨ Generate Custom Plan",
@@ -48,10 +48,10 @@ export const TRANSLATIONS: Record<Language, any> = {
     supps_subtitle: "Click any nutrient or supplement for instant deep scientific analysis.",
     click_to_analyze: "Click for Scientific Analysis",
     
-    chat_title: "Direct Expert Consultation",
-    chat_desc: "Get immediate science-based advice trained on NASM methodology and Coach Mohamed Zeina's 13+ years of fitness experience.",
-    chat_placeholder: "Ask anything about training split, diet macros, supplement timing...",
-    chat_btn: "✨ Send to Coach Mohamed Zeina",
+    chat_title: "Ask the Expert",
+    chat_desc: "Ask about nutrition, training, supplements, healthy lifestyle, or a general topic. The AI answers using the approved MGREFOTS methodology and relevant professional knowledge.",
+    chat_placeholder: "Write your question here…",
+    chat_btn: "✨ Ask the AI Expert",
     contact_expert_direct: "Contact Mohamed Zeina Directly",
     
     nutrients_title: "Nutritional Components Breakdown",
@@ -106,14 +106,14 @@ export const TRANSLATIONS: Record<Language, any> = {
   },
   ar: {
     nav_home: "المنتجات",
-    nav_analysis: "تحليل InBody",
+    nav_analysis: "استشر الخبير",
     nav_supps: "موسوعة المكملات",
     nav_knowledge: "المكتبة المعرفية",
     nav_chat: "تحدث مع الكابتن",
     
     hero_products_title: "شركة MGREFOTS Ltd. | التغذية الرياضية والمكملات الغذائية الاحترافية",
     hero_products_sub: "MGREFOTS Ltd. هي علامة تجارية متخصصة في تطوير وتصنيع وتسويق المكملات الغذائية الرياضية عالية الجودة والمصممة على أحدث الأسس العلمية، وتستهدف أسواق أفريقيا والشرق الأوسط، مع تواجدها المباشر ومقرها في رواندا ومصر. مع توفير أداة تحليل InBody كخدمة مضافة لدعم أهداف الرياضيين.",
-    free_banner: "🌟 تحليلات الـ InBody والاستشارات هي خدمات مساندة مضافة ومجانية من شركة MGREFOTS Ltd.!",
+    free_banner: "🌟 اسأل خبير MGREFOTS بالذكاء الاصطناعي مجانًا، أو تواصل مباشرة مع محمد زينة عبر واتساب.",
     login_guest_btn: "دخول متجر المنتجات (مجاناً)",
     guest_tag: "زائر نشط",
     
@@ -138,8 +138,8 @@ export const TRANSLATIONS: Record<Language, any> = {
     modal_ai_placeholder: "مثال: كيف أدمج هذا المكمل مع تماريني للحصول على أسرع نتيجة؟",
     modal_ai_btn: "تحدث مع كابتن محمد زينة",
     
-    analysis_title: "خدمة تحليل InBody من MGREFOTS",
-    analysis_subtitle: "إحدى الخدمات التكنولوجية المضافة من شركة MGREFOTS Ltd.: ارفع نتيجة InBody الخاصة بك واكتب هدفك، وسيقوم النظام المطور وفق منهجية NASM بتحديد خطة المكملات والبرنامج المناسب لجسمك.",
+    analysis_title: "استشر خبير MGREFOTS",
+    analysis_subtitle: "اسأل عن التغذية أو التدريب أو المكملات أو الصحة العامة أو أي موضوع آخر، واحصل على إجابة واضحة واحترافية.",
     upload_placeholder: "اختر ملف الـ InBody (PDF / JPG / PNG)",
     goal_label: "ما هو هدفك الرياضي؟ (مثال: خسارة دهون، زيادة عضل)",
     btn_analyze: "✨ صمم خطتي الآن",
@@ -151,10 +151,10 @@ export const TRANSLATIONS: Record<Language, any> = {
     supps_subtitle: "اضغط على أي مكمل لشرح فوائده العلمية وجرعاته لك فوراً.",
     click_to_analyze: "اضغط للتحليل بالتفصيل",
     
-    chat_title: "استشارة الكابتن المباشرة",
-    chat_desc: "نظام استشارة متدرب على خبرات كابتن محمد زينة المعتمدة من NASM لأكثر من ١٣ عاماً.",
-    chat_placeholder: "اسأل أي سؤال عن التغذية، التمارين، المكملات، الجرعات...",
-    chat_btn: "✨ تواصل مع كابتن محمد زينة",
+    chat_title: "استشر الخبير",
+    chat_desc: "اسأل عن التغذية أو التدريب أو المكملات أو أسلوب الحياة الصحي أو أي موضوع عام. يجيب الذكاء الاصطناعي وفق منهج MGREFOTS المعتمد ومعرفته المهنية المناسبة للسؤال.",
+    chat_placeholder: "اكتب سؤالك هنا…",
+    chat_btn: "✨ اسأل خبير الذكاء الاصطناعي",
     contact_expert_direct: "تحدث مع كابتن محمد زينة مباشرة",
     
     nutrients_title: "العناصر الغذائية المكونة للمكملات",
@@ -209,14 +209,14 @@ export const TRANSLATIONS: Record<Language, any> = {
   },
   rw: {
     nav_home: "Ibyakozwe",
-    nav_analysis: "Isuzuma rya InBody",
+    nav_analysis: "Baza Impuguke",
     nav_supps: "Inyongeramirire",
     nav_knowledge: "Shakisha Ubumenyi",
     nav_chat: "Vugisha Coach",
     
     hero_products_title: "MGREFOTS Ltd. | Inyongeramirire z'Ubuhanga",
     hero_products_sub: "MGREFOTS Ltd. ni sosiyete yihariye mu gukora, gutunganya n'icuruza rya inyongeramirire z'ubuhanga mu myitozo muri Afirika n'Iburasirazuba bwo Hafi (Rwanda & Misiri). Tukanakugeza ho n'isuzuma rya InBody.",
-    free_banner: "🌟 Isuzuma rya InBody n'inshuti ni serivisi y'inyongera y'ubuntu ya MGREFOTS Ltd.!",
+    free_banner: "🌟 Baza impuguke ya AI ya MGREFOTS ku buntu, cyangwa uvugishe Mohamed Zeina kuri WhatsApp.",
     login_guest_btn: "Injira mu Duka nk'Umushyitsi (Ubuntu)",
     guest_tag: "Umushyitsi",
     
@@ -241,8 +241,8 @@ export const TRANSLATIONS: Record<Language, any> = {
     modal_ai_placeholder: "Andika ikibazo cyawe hano...",
     modal_ai_btn: "Baza Coach Mohamed Zeina",
     
-    analysis_title: "Serivisi ya MGREFOTS yo Gusuzuma Umubiri",
-    analysis_subtitle: "Serivisi y'inyongera ya MGREFOTS Ltd.: Shyiraho InBody yawe uone uko ushobora gukoresha inyongeramirire neza.",
+    analysis_title: "Baza Impuguke ya MGREFOTS",
+    analysis_subtitle: "Baza ku mirire, imyitozo, inyunganiramirire, ubuzima rusange cyangwa ikindi kibazo, ubone igisubizo gisobanutse.",
     upload_placeholder: "Hitamo InBody (PDF/JPG/PNG)",
     goal_label: "Intego yawe ni iyihe?",
     btn_analyze: "✨ Kora Gahunda Yanjye",
@@ -254,10 +254,10 @@ export const TRANSLATIONS: Record<Language, any> = {
     supps_subtitle: "Kanda ku nyongeramirire yose, ubone ibisobanuro byimbitse.",
     click_to_analyze: "Kanda urebe",
     
-    chat_title: "Inama z'Inzobere",
-    chat_desc: "Sisitimu yatojwe ubuhanga bwa Mohamed Zeina.",
-    chat_placeholder: "Baza ikibazo cyawe...",
-    chat_btn: "✨ Ohereza ku Nzubere",
+    chat_title: "Baza Impuguke",
+    chat_desc: "Baza ku mirire, imyitozo, inyunganiramirire, imibereho myiza cyangwa ikindi kibazo. AI isubiza ikurikije uburyo bwa MGREFOTS n'ubumenyi bujyanye n'ikibazo.",
+    chat_placeholder: "Andika ikibazo cyawe hano…",
+    chat_btn: "✨ Baza Impuguke ya AI",
     contact_expert_direct: "Vugisha Mohamed Zeina moja kwa moja",
     
     nutrients_title: "Ibigize Inyongeramirire",

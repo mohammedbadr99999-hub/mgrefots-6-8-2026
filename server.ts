@@ -3,6 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import { buildExpertSystemPrompt, type ExpertLanguage } from "./shared/expertMethodology";
 
 dotenv.config();
 
@@ -21,16 +22,23 @@ async function startServer() {
   // API Endpoints
   app.post("/api/ai/chat", async (req, res) => {
     try {
-      const { prompt, systemInstruction } = req.body;
+      const { prompt, systemInstruction, lang } = req.body;
       const ai = getGeminiClient();
+
+      if (typeof prompt !== "string" || !prompt.trim() || prompt.length > 12000) {
+        return res.status(400).json({ error: "Invalid prompt" });
+      }
       
       if (!ai) {
         return res.status(500).json({ error: "Gemini API key not configured" });
       }
 
+      const responseLanguage: ExpertLanguage = lang === "ar" || lang === "rw" ? lang : "en";
+      const taskContext = typeof systemInstruction === "string" ? systemInstruction.slice(0, 1500) : "";
+      const expertInstruction = buildExpertSystemPrompt(responseLanguage, taskContext);
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: `${systemInstruction ? `System instruction: ${systemInstruction}\n\n` : ""}${prompt}`,
+        contents: `System instruction:\n${expertInstruction}\n\nVisitor question:\n${prompt}`,
         config: {
           maxOutputTokens: 2048,
           temperature: 0.7,
@@ -41,47 +49,6 @@ async function startServer() {
     } catch (error: any) {
       console.error("AI Chat error:", error);
       res.status(500).json({ error: error?.message || "AI generation failed" });
-    }
-  });
-
-  app.post("/api/ai/analyze", async (req, res) => {
-    try {
-      const { goal, lang, fileBase64, mimeType } = req.body;
-      const ai = getGeminiClient();
-
-      if (!ai) {
-        return res.status(500).json({ error: "Gemini API key not configured" });
-      }
-
-      const languageStr = lang === "ar" ? "Arabic" : lang === "rw" ? "Kinyarwanda" : "English";
-      const systemPrompt = `You are an ELITE bodybuilding coach with 13+ years of experience and NASM certification.
-Analyze the user's InBody scan and goal: ${goal}.
-Create an AGGRESSIVE, RESULT-DRIVEN, HIGH-VOLUME training & nutrition protocol.
-Language: Respond ONLY in ${languageStr}.`;
-
-      const contents: any[] = [{ text: systemPrompt }];
-      if (fileBase64 && mimeType) {
-        contents.push({
-          inlineData: {
-            mimeType,
-            data: fileBase64
-          }
-        });
-      }
-
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents,
-        config: {
-          maxOutputTokens: 4096,
-          temperature: 0.7,
-        }
-      });
-
-      res.json({ text: response.text });
-    } catch (error: any) {
-      console.error("AI Analyze error:", error);
-      res.status(500).json({ error: error?.message || "Analysis failed" });
     }
   });
 

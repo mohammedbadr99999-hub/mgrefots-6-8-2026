@@ -4,7 +4,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TRANSLATIONS } from './data/translations';
 import { Language, Product } from './types';
-import { Activity, Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
+import { Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((module) => ({ default: module.HomePage })));
 const ProductsPage = lazy(() => import('./pages/ProductsPage').then((module) => ({ default: module.ProductsPage })));
@@ -12,7 +12,6 @@ const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage').then((m
 const AboutPage = lazy(() => import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then((module) => ({ default: module.ContactPage })));
 const FaqPage = lazy(() => import('./pages/FaqPage').then((module) => ({ default: module.FaqPage })));
-const InBodyPage = lazy(() => import('./pages/InBodyPage').then((module) => ({ default: module.InBodyPage })));
 const SupplementsPage = lazy(() => import('./pages/SupplementsPage').then((module) => ({ default: module.SupplementsPage })));
 const KnowledgePage = lazy(() => import('./pages/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
 const ArticlesPage = lazy(() => import('./pages/ArticlesPage').then((module) => ({ default: module.ArticlesPage })));
@@ -75,9 +74,8 @@ function MobileBottomNav({ lang }: { lang: Language }) {
   const items = [
     { path: '/', label: t.nav_home, icon: ShoppingBag },
     { path: '/products', label: lang === 'ar' ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products', icon: ShoppingBag },
-    { path: '/analysis', label: t.nav_analysis, icon: Activity },
+    { path: '/analysis', label: t.nav_analysis, icon: MessageCircle },
     { path: '/knowledge', label: t.nav_knowledge || 'Knowledge', icon: BookOpen },
-    { path: '/chat', label: t.nav_chat, icon: MessageCircle },
   ];
 
   return (
@@ -124,7 +122,7 @@ export default function App() {
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, systemInstruction }),
+        body: JSON.stringify({ prompt, systemInstruction, lang }),
       });
       if (res.ok) {
         const data = await res.json();
@@ -134,42 +132,11 @@ export default function App() {
       console.warn('Backend API unavailable, using client fallback', e);
     }
 
-    return isRtl 
-      ? 'بناءً على التوجيهات العلمية لمنهجية NASM: ينصح بتناول المكمل بالجرعة المحددة مع المحافظة على نظام غذائي متوازن والتمارين عالية الشدة لتحقيق أقصى بناء عضلي.'
-      : 'Based on NASM science guidelines: take the recommended dosage alongside progressive resistance training and structured meal planning for maximum results.';
-  };
-
-  const handleRunInBodyAnalysis = async (file: File, goal: string) => {
-    try {
-      const reader = new FileReader();
-      const fileBase64 = await new Promise<string>((resolve) => {
-        reader.onload = () => {
-          const res = reader.result as string;
-          resolve(res.split(',')[1] || '');
-        };
-        reader.readAsDataURL(file);
-      });
-
-      const res = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ goal, lang, fileBase64, mimeType: file.type }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        return { result: data.text, pdfUrl: null };
-      }
-    } catch (e) {
-      console.warn('API error during analysis', e);
-    }
-
-    return {
-      result: isRtl 
-        ? `🔥 تحليل الخبير المعتمد بناءً على هدفك (${goal}):\n\n1. تقييم التكوين البدني: تحتاج لتنشيط معدل الأيض وزيادة البناء العضلي الصافي.\n2. التمارين: ٥ أيام أسبوعياً بتكرارات ٨-١٢ مع التركيز على الكرياتين والسيترولين.\n3. التغذية: بروتين 2g لكل كجم وزن، وتناول بروتين البازلاء والأرز MGREFOTS بعد التمرين مباشرة.` 
-        : `🔥 Expert Coach Analysis for your goal (${goal}):\n\n1. Physical Composition: Focus on muscle hypertrophy & fat oxidation.\n2. Workout Protocol: 5-day push-pull-legs split with high volume.\n3. Nutrition: 2g protein per kg, using MGREFOTS 70/30 Plant Protein post-workout.`,
-      pdfUrl: null
-    };
+    return lang === 'ar'
+      ? 'تعذر الوصول إلى الخبير الآن. حاول مرة أخرى أو تواصل مباشرة عبر واتساب.'
+      : lang === 'rw'
+        ? 'Ntitwashoboye kugera ku nzobere ubu. Ongera ugerageze cyangwa uyivugishe kuri WhatsApp.'
+        : 'The AI expert is temporarily unavailable. Please try again or contact the human expert on WhatsApp.';
   };
 
   return (
@@ -211,7 +178,7 @@ export default function App() {
                 <span>{t.free_banner}</span>
               </span>
               <Link
-                to="/chat"
+                to="/analysis"
                 className="bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#030914] px-5 py-2 rounded-2xl font-black text-xs transition-all shrink-0 hover:scale-105 shadow-lg shadow-[#F5A623]/20"
               >
                 {isRtl ? 'استشر الخبير مجاناً' : lang === 'rw' ? 'Baza impuguke ku buntu' : 'Ask an Expert Free'}
@@ -255,9 +222,9 @@ export default function App() {
             } />
 
             <Route path="/analysis" element={
-              <InBodyPage
+              <ChatPage
                 lang={lang}
-                onRunAnalysis={handleRunInBodyAnalysis}
+                onSendChatMessage={(msg) => queryAI(msg, 'This is the main Ask the Expert page. Answer the visitor directly and use the approved MGREFOTS methodology.')}
               />
             } />
 
@@ -297,7 +264,7 @@ export default function App() {
             <Route path="/chat" element={
               <ChatPage
                 lang={lang}
-                onSendChatMessage={(msg) => queryAI(msg, 'You are Mohamed Zeina, NASM certified fitness and nutrition coach. Give clear, direct, expert advice.')}
+                onSendChatMessage={(msg) => queryAI(msg, 'This legacy route uses the same MGREFOTS AI Expert methodology as the main consultation page.')}
               />
             } />
 

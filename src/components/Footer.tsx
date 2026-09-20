@@ -56,9 +56,6 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
           <Link to="/knowledge" className="hover:text-[#F5A623] transition">
             {t.nav_knowledge || 'Knowledge'}
           </Link>
-          <Link to="/chat" className="hover:text-[#F5A623] transition">
-            {t.nav_chat}
-          </Link>
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-[#94A3B8]">

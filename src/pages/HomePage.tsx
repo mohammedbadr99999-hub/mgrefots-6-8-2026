@@ -119,6 +119,13 @@ export const HomePage: React.FC<HomePageProps> = ({ lang, onSelectProduct }) => 
             </div>
           ))}
         </div>
+        <Link
+          to="/knowledge/guides/married-men-health-guide"
+          className="mx-auto mt-2 inline-flex items-center justify-center gap-2 rounded-full border border-amber-300/40 bg-amber-300/10 px-4 py-2 text-xs font-black text-amber-200 transition hover:bg-amber-300/15 hover:text-white"
+        >
+          <span aria-hidden="true">💍</span>
+          <span>{isRtl ? 'دليل الصحة الجنسية وصحة الرجال المتزوجين' : lang === 'rw' ? 'Ubuzima bw’imyororokere n’abagabo bashatse' : 'Men’s Sexual Health & Married Men’s Guide'}</span>
+        </Link>
       </div>
       </section>
 
