@@ -38,6 +38,10 @@ export const ProductGraphic: React.FC<ProductGraphicProps> = ({ productId, name,
             <img
               src={image}
               alt={name}
+              loading="lazy"
+              decoding="async"
+              width="210"
+              height="192"
               onLoad={() => setImgLoaded(true)}
               onError={() => setImgError(true)}
               className={`w-full h-full object-contain filter drop-shadow-[0_10px_15px_rgba(0,0,0,0.8)] transition-opacity duration-300 ${

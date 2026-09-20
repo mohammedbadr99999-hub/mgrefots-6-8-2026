@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { 
   ArrowLeft, Clock, Calendar, UserCheck, ShieldCheck, 
-  Sparkles, ExternalLink, Share2, Tag, MessageSquare, ShoppingBag 
+  ExternalLink, Share2, ShoppingBag, HelpCircle, BookOpen
 } from 'lucide-react';
 import { KnowledgeArticle, Language, Product } from '../types';
 import { TRANSLATIONS } from '../data/translations';
@@ -26,6 +26,41 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
 
   const relatedProduct = PRODUCTS.find((p) => p.id === article.relatedProductId);
 
+  const pageTitle = article.seo?.title[lang] || article.seo?.title.en || article.title[lang] || article.title.en;
+  const pageDescription = article.seo?.description[lang] || article.seo?.description.en || article.excerpt[lang] || article.excerpt.en;
+  const canonicalUrl = `https://www.mgrefots.com/articles/${article.slug}`;
+  const authorInitials = article.author.name === 'MGREFOTS Editorial Team' ? 'MG' : 'MZ';
+
+  useEffect(() => {
+    const previousTitle = document.title;
+    const description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    const ogTitle = document.querySelector<HTMLMetaElement>('meta[property="og:title"]');
+    const ogDescription = document.querySelector<HTMLMetaElement>('meta[property="og:description"]');
+    const ogType = document.querySelector<HTMLMetaElement>('meta[property="og:type"]');
+    const keywords = document.querySelector<HTMLMetaElement>('meta[name="keywords"]');
+    const previousDescription = description?.content;
+    const previousOgTitle = ogTitle?.content;
+    const previousOgDescription = ogDescription?.content;
+    const previousOgType = ogType?.content;
+    const previousKeywords = keywords?.content;
+
+    document.title = pageTitle;
+    description?.setAttribute('content', pageDescription);
+    ogTitle?.setAttribute('content', pageTitle);
+    ogDescription?.setAttribute('content', pageDescription);
+    ogType?.setAttribute('content', 'article');
+    if (article.seo?.keywords.length) keywords?.setAttribute('content', article.seo.keywords.join(', '));
+
+    return () => {
+      document.title = previousTitle;
+      if (previousDescription) description?.setAttribute('content', previousDescription);
+      if (previousOgTitle) ogTitle?.setAttribute('content', previousOgTitle);
+      if (previousOgDescription) ogDescription?.setAttribute('content', previousOgDescription);
+      if (previousOgType) ogType?.setAttribute('content', previousOgType);
+      if (previousKeywords) keywords?.setAttribute('content', previousKeywords);
+    };
+  }, [article.seo?.keywords, pageDescription, pageTitle]);
+
   const handleShare = () => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
@@ -34,23 +69,39 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
     }
   };
 
-  const structuredData = {
+  const structuredData = useMemo(() => ({
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    'headline': article.title[lang] || article.title.en,
-    'description': article.excerpt[lang] || article.excerpt.en,
-    'datePublished': article.publishedDate,
-    'dateModified': article.lastUpdated,
-    'author': {
-      '@type': 'Person',
-      'name': article.author.name,
-      'jobTitle': article.author.role[lang] || article.author.role.en
-    },
-    'publisher': {
-      '@type': 'Organization',
-      'name': 'MGREFOTS Ltd.'
-    }
-  };
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        'headline': article.title[lang] || article.title.en,
+        'description': article.excerpt[lang] || article.excerpt.en,
+        'datePublished': article.publishedAt || article.publishedDate,
+        'dateModified': article.updatedAt || article.lastUpdated,
+        'mainEntityOfPage': canonicalUrl,
+        'author': {
+          '@type': 'Organization',
+          'name': article.author.name
+        },
+        'publisher': {
+          '@type': 'Organization',
+          'name': 'MGREFOTS Ltd.',
+          'url': 'https://www.mgrefots.com/'
+        }
+      },
+      {
+        '@type': 'FAQPage',
+        'mainEntity': article.faqs.map((faq) => ({
+          '@type': 'Question',
+          'name': faq.question[lang] || faq.question.en,
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': faq.answer[lang] || faq.answer.en
+          }
+        }))
+      }
+    ]
+  }), [article, canonicalUrl, lang]);
 
   return (
     <div className="space-y-8 animate-fade-in max-w-4xl mx-auto">
@@ -63,7 +114,7 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
       <nav className="flex items-center gap-2 text-xs font-extrabold text-[#94A3B8]">
         <button onClick={onBack} className="hover:text-[#F5A623] transition flex items-center gap-1">
           <ArrowLeft size={14} className={isRtl ? 'rotate-180' : ''} />
-          <span>{isRtl ? 'العودة للمكتبة المعرفية' : 'Back to Knowledge Center'}</span>
+          <span>{isRtl ? 'العودة للمقالات' : lang === 'rw' ? 'Subira ku nyandiko' : 'Back to Articles'}</span>
         </button>
         <span>/</span>
         <span className="text-[#F5A623]">{article.category}</span>
@@ -87,6 +138,9 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
             </span>
             <button
               onClick={handleShare}
+              type="button"
+              aria-label={copied ? 'Article link copied' : 'Copy article link'}
+              title={copied ? 'Link copied' : 'Copy article link'}
               className="p-1.5 rounded-lg bg-[#091833] border border-[rgba(255,255,255,0.1)] hover:border-[#F5A623] text-white text-xs transition"
             >
               <Share2 size={14} className="text-[#F5A623]" />
@@ -106,11 +160,12 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
         <div className="pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#F5A623] to-[#FF8A00] flex items-center justify-center font-black text-[#030914]">
-              MZ
+              {authorInitials}
             </div>
             <div>
               <span className="block font-black text-white">{article.author.name}</span>
               <span className="text-[#94A3B8] text-[11px]">{article.author.role[lang] || article.author.role.en}</span>
+              <span className="mt-1 block text-[10px] text-[#64748B]">{article.medicalReviewer.role[lang] || article.medicalReviewer.role.en}</span>
             </div>
           </div>
         </div>
@@ -126,8 +181,62 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({
             <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed whitespace-pre-line">
               {sec.content[lang] || sec.content.en}
             </p>
+            {sec.callout && (
+              <div className="rounded-2xl border border-[#F5A623]/30 bg-[#0B1F45]/70 p-4">
+                <p className="mb-1 text-xs font-black uppercase tracking-wide text-[#F5A623]">
+                  {sec.callout.title[lang] || sec.callout.title.en}
+                </p>
+                <p className="text-sm font-medium leading-relaxed text-[#CBD5E1]">
+                  {sec.callout.text[lang] || sec.callout.text.en}
+                </p>
+              </div>
+            )}
           </section>
         ))}
+
+        {article.faqs.length > 0 && (
+          <section className="space-y-4 rounded-3xl border border-white/10 bg-[#071426] p-6 sm:p-8">
+            <h2 className="flex items-center gap-2 text-xl font-black text-white">
+              <HelpCircle className="text-[#F5A623]" size={21} />
+              {isRtl ? 'الأسئلة الشائعة' : lang === 'rw' ? 'Ibibazo bikunze kubazwa' : 'Frequently asked questions'}
+            </h2>
+            <div className="space-y-3">
+              {article.faqs.map((faq) => (
+                <details key={faq.question.en} className="group rounded-2xl border border-white/10 bg-[#091833] p-4">
+                  <summary className="cursor-pointer list-none pr-6 text-sm font-black text-white marker:hidden">
+                    {faq.question[lang] || faq.question.en}
+                  </summary>
+                  <p className="mt-3 border-t border-white/10 pt-3 text-sm leading-relaxed text-[#CBD5E1]">
+                    {faq.answer[lang] || faq.answer.en}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {article.references.length > 0 && (
+          <section className="space-y-4 rounded-3xl border border-white/10 bg-[#071426] p-6 sm:p-8">
+            <h2 className="flex items-center gap-2 text-xl font-black text-white">
+              <BookOpen className="text-[#F5A623]" size={21} />
+              {isRtl ? 'المصادر العلمية' : lang === 'rw' ? 'Inkomoko z’ubushakashatsi' : 'Scientific references'}
+            </h2>
+            <ol className="space-y-4">
+              {article.references.map((reference, index) => (
+                <li key={reference.id} className="text-sm leading-relaxed text-[#CBD5E1]">
+                  <span className="font-black text-[#F5A623]">{index + 1}.</span>{' '}
+                  <span className="font-bold text-white">{reference.title}.</span>{' '}
+                  {reference.authors} {reference.journal} ({reference.year}).{' '}
+                  {reference.doiOrUrl && (
+                    <a href={reference.doiOrUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-bold text-[#F5A623] hover:underline">
+                      Source <ExternalLink size={12} />
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
 
         {/* Product Educational Integration */}
         {relatedProduct && (

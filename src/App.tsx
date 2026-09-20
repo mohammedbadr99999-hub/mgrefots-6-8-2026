@@ -1,21 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { ProductDetailModal } from './components/ProductDetailModal';
-import { HomePage } from './pages/HomePage';
-import { ProductsPage } from './pages/ProductsPage';
-import { ProductDetailPage } from './pages/ProductDetailPage';
-import { AboutPage } from './pages/AboutPage';
-import { ContactPage } from './pages/ContactPage';
-import { FaqPage } from './pages/FaqPage';
-import { InBodyPage } from './pages/InBodyPage';
-import { SupplementsPage } from './pages/SupplementsPage';
-import { KnowledgePage } from './pages/KnowledgePage';
-import { ChatPage } from './pages/ChatPage';
 import { TRANSLATIONS } from './data/translations';
-import { Language, Product, UserState } from './types';
-import { Zap, Activity, Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
+import { Language, Product } from './types';
+import { Activity, Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
+
+const HomePage = lazy(() => import('./pages/HomePage').then((module) => ({ default: module.HomePage })));
+const ProductsPage = lazy(() => import('./pages/ProductsPage').then((module) => ({ default: module.ProductsPage })));
+const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage').then((module) => ({ default: module.ProductDetailPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then((module) => ({ default: module.ContactPage })));
+const FaqPage = lazy(() => import('./pages/FaqPage').then((module) => ({ default: module.FaqPage })));
+const InBodyPage = lazy(() => import('./pages/InBodyPage').then((module) => ({ default: module.InBodyPage })));
+const SupplementsPage = lazy(() => import('./pages/SupplementsPage').then((module) => ({ default: module.SupplementsPage })));
+const KnowledgePage = lazy(() => import('./pages/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
+const ArticlesPage = lazy(() => import('./pages/ArticlesPage').then((module) => ({ default: module.ArticlesPage })));
+const ArticlePage = lazy(() => import('./pages/ArticlePage').then((module) => ({ default: module.ArticlePage })));
+const ChatPage = lazy(() => import('./pages/ChatPage').then((module) => ({ default: module.ChatPage })));
+const ProductDetailModal = lazy(() => import('./components/ProductDetailModal').then((module) => ({ default: module.ProductDetailModal })));
+
+const SUPPORTED_LANGUAGES: Language[] = ['en', 'rw', 'ar'];
+
+function getInitialLanguage(): Language {
+  const savedLanguage = window.localStorage.getItem('mgrefots-language') as Language | null;
+  if (savedLanguage && SUPPORTED_LANGUAGES.includes(savedLanguage)) return savedLanguage;
+  return navigator.language.toLowerCase().startsWith('ar') ? 'ar' : 'en';
+}
+
+function PageLoading({ lang }: { lang: Language }) {
+  const label = lang === 'ar' ? 'جارٍ تحميل الصفحة' : lang === 'rw' ? 'Urupapuro rurimo gutangira' : 'Loading page';
+
+  return (
+    <div className="min-h-[45vh] flex items-center justify-center" role="status" aria-live="polite">
+      <div className="flex items-center gap-3 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#091833]/80 px-5 py-3 text-sm font-bold text-[#A7B3C4]">
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#F5A623]/30 border-t-[#F5A623]" aria-hidden="true" />
+        <span>{label}</span>
+      </div>
+    </div>
+  );
+}
 
 // Scroll To Top on Route Change
 function ScrollToTop() {
@@ -23,6 +47,21 @@ function ScrollToTop() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+
+  return null;
+}
+
+function RouteMetadata() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const canonicalUrl = `https://www.mgrefots.com${pathname === '/' ? '/' : pathname}`;
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const openGraphUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
+
+    canonical?.setAttribute('href', canonicalUrl);
+    openGraphUrl?.setAttribute('content', canonicalUrl);
   }, [pathname]);
 
   return null;
@@ -52,6 +91,7 @@ function MobileBottomNav({ lang }: { lang: Language }) {
           <Link
             key={item.path}
             to={item.path}
+            aria-current={isActive ? 'page' : undefined}
             className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all ${
               isActive ? 'text-[#F5A623] font-bold scale-105' : 'text-[#A7B3C4] hover:text-white'
             }`}
@@ -66,17 +106,17 @@ function MobileBottomNav({ lang }: { lang: Language }) {
 }
 
 export default function App() {
-  const [lang, setLang] = useState<Language>('en');
+  const [lang, setLang] = useState<Language>(getInitialLanguage);
   const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
-
-  const [user] = useState<UserState>({
-    id: 'guest',
-    phone: 'Guest',
-    isGuest: true
-  });
 
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
+
+  useEffect(() => {
+    window.localStorage.setItem('mgrefots-language', lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+  }, [lang, isRtl]);
 
   // API Helper for Gemini requests
   const queryAI = async (prompt: string, systemInstruction?: string) => {
@@ -135,6 +175,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <RouteMetadata />
       <div className={`min-h-screen bg-[#030914] text-[#F5F7FA] relative overflow-x-hidden ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
@@ -151,7 +192,6 @@ export default function App() {
         <Header
           lang={lang}
           onSelectLang={setLang}
-          user={user}
         />
 
         {/* Small Scroll Indicator on side */}
@@ -179,6 +219,7 @@ export default function App() {
             </div>
           </div>
 
+          <Suspense fallback={<PageLoading lang={lang} />}>
           <Routes>
             <Route path="/" element={
               <HomePage
@@ -242,6 +283,17 @@ export default function App() {
               />
             } />
 
+            <Route path="/articles" element={
+              <ArticlesPage lang={lang} />
+            } />
+
+            <Route path="/articles/:slug" element={
+              <ArticlePage
+                lang={lang}
+                onSelectProductModal={(p) => setSelectedProductModal(p)}
+              />
+            } />
+
             <Route path="/chat" element={
               <ChatPage
                 lang={lang}
@@ -257,15 +309,18 @@ export default function App() {
               />
             } />
           </Routes>
+          </Suspense>
         </main>
 
         {/* Product Specs Detail Quick Modal */}
-        <ProductDetailModal
-          product={selectedProductModal}
-          lang={lang}
-          onClose={() => setSelectedProductModal(null)}
-          onQueryAI={(prompt) => queryAI(prompt, 'Provide product integration advice as a NASM certified fitness coach.')}
-        />
+        <Suspense fallback={null}>
+          <ProductDetailModal
+            product={selectedProductModal}
+            lang={lang}
+            onClose={() => setSelectedProductModal(null)}
+            onQueryAI={(prompt) => queryAI(prompt, 'Provide product integration advice as a NASM certified fitness coach.')}
+          />
+        </Suspense>
 
         {/* Consistent Footer Across All Pages */}
         <Footer lang={lang} />
