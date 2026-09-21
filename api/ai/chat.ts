@@ -77,7 +77,7 @@ const resolveKnowledgeStore = async (ai: GoogleGenAI): Promise<string | undefine
   if (configuredStore) return configuredStore;
   if (cachedKnowledgeStoreName) return cachedKnowledgeStoreName;
 
-  const stores = await ai.fileSearchStores.list({ config: { pageSize: 100 } });
+  const stores = await ai.fileSearchStores.list({ config: { pageSize: 20 } });
   for await (const store of stores) {
     if (store.displayName === KNOWLEDGE_STORE_DISPLAY_NAME && store.name) {
       cachedKnowledgeStoreName = store.name;
