@@ -222,7 +222,7 @@ export default {
             ],
             chunkingConfig: {
               whiteSpaceConfig: {
-                maxTokensPerChunk: 700,
+                maxTokensPerChunk: 512,
                 maxOverlapTokens: 100,
               },
             },
