@@ -60,12 +60,13 @@ ${taskContext ? `\nPage-specific context: ${taskContext}` : ''}`;
 const KNOWLEDGE_RULES = `
 Private MGREFOTS nutrition library rules:
 - For nutrition, sports nutrition, coaching, performance, food, or supplement questions, search the private reference library before answering.
-- For those subjects, the private books are the exclusive scientific source. Use the model only to retrieve, reason over, organize, simplify, and explain what the books support; do not add outside nutritional facts from general model knowledge.
+- Treat the private books as the first and preferred scientific source.
+- Search the books first. If they provide enough support, build the answer from them.
+- If the books do not provide enough support for part or all of the question, complete the answer using Gemini Pro's professional knowledge and reasoning. Do not use Google Search or any external web-search tool.
 - Synthesize the retrieved material in original language. Never reproduce long passages, chapters, tables, or pages from a source.
-- If retrieved material appears incomplete, internally inconsistent, or potentially outdated, describe that limitation using only what can be established from the library. Do not silently replace it with outside evidence.
-- Do not invent a source, page number, quotation, or claim that was not retrieved.
-- If the library does not contain enough support for a nutrition-related answer, say clearly that the current MGREFOTS library does not provide enough information and recommend asking the human expert when appropriate. Do not fill the gap from general knowledge.
-- MGREFOTS label facts supplied in the product context may be used to identify a relevant product, but every nutritional benefit or mechanism must still be supported by the retrieved books.
+- Do not tell the visitor whether a statement came from the books or from Gemini Pro. Do not display citations, filenames, source lists, retrieval notes, or an evidence-basis section unless the visitor explicitly asks for sources.
+- Give the requested answer directly, accurately, and without filler or commentary about the answering process.
+- MGREFOTS label facts supplied in the product context may be used to identify a relevant product.
 - If the question is unrelated to nutrition or health, answer it normally without forcing a library reference or product recommendation.
 `;
 
@@ -89,47 +90,6 @@ const resolveKnowledgeStore = async (ai: GoogleGenAI): Promise<string | undefine
   }
 
   return undefined;
-};
-
-type KnowledgeSource = {
-  name: string;
-  page?: number;
-};
-
-const extractKnowledgeSources = (steps: unknown): KnowledgeSource[] => {
-  if (!Array.isArray(steps)) return [];
-
-  const unique = new Map<string, KnowledgeSource>();
-
-  for (const step of steps) {
-    if (!step || typeof step !== 'object' || !('content' in step)) continue;
-    const content = (step as { content?: unknown }).content;
-    if (!Array.isArray(content)) continue;
-
-    for (const block of content) {
-      if (!block || typeof block !== 'object' || !('annotations' in block)) continue;
-      const annotations = (block as { annotations?: unknown }).annotations;
-      if (!Array.isArray(annotations)) continue;
-
-      for (const annotation of annotations) {
-        if (!annotation || typeof annotation !== 'object') continue;
-        const citation = annotation as {
-          type?: string;
-          file_name?: string;
-          page_number?: number;
-        };
-        if (citation.type !== 'file_citation' || !citation.file_name) continue;
-
-        const source = {
-          name: citation.file_name,
-          ...(Number.isFinite(citation.page_number) ? { page: citation.page_number } : {}),
-        };
-        unique.set(`${source.name}:${source.page ?? ''}`, source);
-      }
-    }
-  }
-
-  return [...unique.values()].slice(0, 8);
 };
 
 const safeErrorDetails = (error: unknown) => {
@@ -193,11 +153,12 @@ export default {
 
       const ai = new GoogleGenAI({ apiKey });
       const expertInstruction = buildExpertSystemPrompt(lang, taskContext);
+      const proModel = process.env.GEMINI_PRO_MODEL?.trim() || 'gemini-pro-latest';
 
       const fileSearchStore = await resolveKnowledgeStore(ai);
       if (fileSearchStore) {
         const interaction = await ai.interactions.create({
-          model: process.env.GEMINI_FILE_SEARCH_MODEL?.trim() || 'gemini-3.8-flash',
+          model: proModel,
           input: prompt,
           system_instruction: `${expertInstruction}\n${KNOWLEDGE_RULES}`,
           tools: [{
@@ -216,25 +177,23 @@ export default {
           throw new Error('Gemini File Search returned an empty response');
         }
 
-        const sources = extractKnowledgeSources(interaction.steps);
-        console.info('[api/ai/chat] grounded response generated', {
-          sourceCount: sources.length,
-        });
-        return Response.json({ text, sources, grounded: sources.length > 0 });
+        console.info('[api/ai/chat] library-assisted Gemini Pro response generated');
+        return Response.json({ text });
       }
 
-      console.info('[api/ai/chat] knowledge store not configured; using base model');
+      console.info('[api/ai/chat] knowledge store not configured; using Gemini Pro knowledge');
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: proModel,
         contents: `System instruction:\n${expertInstruction}\n\nVisitor question:\n${prompt}`,
         config: {
           maxOutputTokens: 2048,
-          temperature: 0.7,
+          temperature: 0.5,
         },
       });
-
-      console.info('[api/ai/chat] Gemini response generated');
-      return Response.json({ text: response.text });
+      const text = response.text?.trim();
+      if (!text) throw new Error('Gemini Pro returned an empty response');
+      console.info('[api/ai/chat] Gemini Pro response generated');
+      return Response.json({ text });
     } catch (error) {
       console.error('[api/ai/chat] Gemini request failed', safeErrorDetails(error));
       return Response.json({
