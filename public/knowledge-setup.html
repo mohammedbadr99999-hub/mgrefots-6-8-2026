@@ -37,10 +37,72 @@
       const tokenInput = document.querySelector('#token');
       const button = document.querySelector('#upload');
       const status = document.querySelector('#status');
+      const CHUNK_BYTES = 2 * 1024 * 1024;
 
       const show = (message, className = '') => {
         status.textContent = message;
         status.className = className;
+      };
+
+      const requestJson = async (url, token, options = {}) => {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            ...(options.headers || {}),
+          },
+          body: options.body,
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.details?.message || result.error || `HTTP ${response.status}`);
+        }
+        return result;
+      };
+
+      const uploadBook = async (file, token, fileNumber, totalFiles) => {
+        show(`Preparing ${fileNumber}/${totalFiles}: ${file.name}`);
+        const start = await requestJson('/api/ai/knowledge?action=start', token, {
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: file.name,
+            fileSize: file.size,
+            mimeType: file.type || 'application/pdf',
+          }),
+        });
+        if (start.skipped) return `${file.name} (already indexed)`;
+
+        let operation;
+        for (let offset = 0; offset < file.size; offset += CHUNK_BYTES) {
+          const end = Math.min(offset + CHUNK_BYTES, file.size);
+          const isFinal = end === file.size;
+          const percent = Math.round((end / file.size) * 100);
+          show(`Uploading ${fileNumber}/${totalFiles}: ${file.name}\n${percent}% (${(end / 1048576).toFixed(1)} of ${(file.size / 1048576).toFixed(1)} MB)`);
+          const result = await requestJson('/api/ai/knowledge?action=chunk', token, {
+            headers: {
+              'Content-Type': 'application/octet-stream',
+              'X-Knowledge-Upload-Url': start.uploadUrl,
+              'X-Knowledge-Upload-Offset': String(offset),
+              'X-Knowledge-Upload-Final': String(isFinal),
+            },
+            body: file.slice(offset, end),
+          });
+          if (isFinal) operation = result.operation;
+        }
+
+        if (!operation) throw new Error('The indexing operation did not start.');
+        const deadline = Date.now() + 20 * 60 * 1000;
+        while (Date.now() < deadline) {
+          show(`Indexing ${fileNumber}/${totalFiles}: ${file.name}\nThe upload is complete. Gemini is reading and indexing the book.`);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          const result = await requestJson('/api/ai/knowledge?action=status', token, {
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ operation }),
+          });
+          operation = result.operation;
+          if (result.done) return `${file.name} (indexed)`;
+        }
+        throw new Error('Indexing is taking longer than 20 minutes. Check the library status before retrying.');
       };
 
       button.addEventListener('click', async () => {
@@ -60,19 +122,7 @@
         try {
           for (let index = 0; index < files.length; index += 1) {
             const file = files[index];
-            show(`Uploading ${index + 1}/${files.length}: ${file.name}\nThis can take several minutes.`);
-            const data = new FormData();
-            data.append('file', file, file.name);
-            const response = await fetch('/api/ai/knowledge', {
-              method: 'POST',
-              headers: { Authorization: `Bearer ${token}` },
-              body: data,
-            });
-            const result = await response.json().catch(() => ({}));
-            if (!response.ok) {
-              throw new Error(result.details?.message || result.error || `HTTP ${response.status}`);
-            }
-            completed.push(`${file.name}${result.skipped ? ' (already indexed)' : ' (indexed)'}`);
+            completed.push(await uploadBook(file, token, index + 1, files.length));
           }
           show(`Knowledge library is ready.\n\n${completed.join('\n')}`, 'ok');
         } catch (error) {
