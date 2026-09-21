@@ -62,9 +62,9 @@ Private MGREFOTS nutrition library rules:
 - For nutrition, sports nutrition, coaching, performance, food, or supplement questions, search the private reference library before answering.
 - Treat the private books as the first and preferred scientific source.
 - Search the books first. If they provide enough support, build the answer from them.
-- If the books do not provide enough support for part or all of the question, complete the answer using Gemini Pro's professional knowledge and reasoning. Do not use Google Search or any external web-search tool.
+- If the books do not provide enough support for part or all of the question, complete the answer using Gemini's professional knowledge and reasoning. Do not use Google Search or any external web-search tool.
 - Synthesize the retrieved material in original language. Never reproduce long passages, chapters, tables, or pages from a source.
-- Do not tell the visitor whether a statement came from the books or from Gemini Pro. Do not display citations, filenames, source lists, retrieval notes, or an evidence-basis section unless the visitor explicitly asks for sources.
+- Do not tell the visitor whether a statement came from the books or from Gemini. Do not display citations, filenames, source lists, retrieval notes, or an evidence-basis section unless the visitor explicitly asks for sources.
 - Give the requested answer directly, accurately, and without filler or commentary about the answering process.
 - MGREFOTS label facts supplied in the product context may be used to identify a relevant product.
 - If the question is unrelated to nutrition or health, answer it normally without forcing a library reference or product recommendation.
@@ -153,21 +153,21 @@ export default {
 
       const ai = new GoogleGenAI({ apiKey });
       const expertInstruction = buildExpertSystemPrompt(lang, taskContext);
-      const proModel = process.env.GEMINI_PRO_MODEL?.trim() || 'gemini-pro-latest';
+      const responseModel = process.env.GEMINI_RESPONSE_MODEL?.trim() || 'gemini-3.8-flash';
 
       const fileSearchStore = await resolveKnowledgeStore(ai);
       if (fileSearchStore) {
         const interaction = await ai.interactions.create({
-          model: proModel,
+          model: responseModel,
           input: prompt,
           system_instruction: `${expertInstruction}\n${KNOWLEDGE_RULES}`,
           tools: [{
             type: 'file_search',
             file_search_store_names: [fileSearchStore],
-            top_k: 10,
+            top_k: 6,
           }],
           generation_config: {
-            max_output_tokens: 2048,
+            max_output_tokens: 900,
           },
           store: false,
         });
@@ -177,22 +177,22 @@ export default {
           throw new Error('Gemini File Search returned an empty response');
         }
 
-        console.info('[api/ai/chat] library-assisted Gemini Pro response generated');
+        console.info('[api/ai/chat] library-assisted Gemini Flash response generated');
         return Response.json({ text });
       }
 
-      console.info('[api/ai/chat] knowledge store not configured; using Gemini Pro knowledge');
+      console.info('[api/ai/chat] knowledge store not configured; using Gemini Flash knowledge');
       const response = await ai.models.generateContent({
-        model: proModel,
+        model: responseModel,
         contents: `System instruction:\n${expertInstruction}\n\nVisitor question:\n${prompt}`,
         config: {
-          maxOutputTokens: 2048,
+          maxOutputTokens: 900,
           temperature: 0.5,
         },
       });
       const text = response.text?.trim();
-      if (!text) throw new Error('Gemini Pro returned an empty response');
-      console.info('[api/ai/chat] Gemini Pro response generated');
+      if (!text) throw new Error('Gemini Flash returned an empty response');
+      console.info('[api/ai/chat] Gemini Flash response generated');
       return Response.json({ text });
     } catch (error) {
       console.error('[api/ai/chat] Gemini request failed', safeErrorDetails(error));
