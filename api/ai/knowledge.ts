@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, UploadToFileSearchStoreOperation } from '@google/genai';
 import { timingSafeEqual } from 'node:crypto';
 
 const STORE_DISPLAY_NAME = 'MGREFOTS Nutrition Knowledge';
@@ -154,7 +154,9 @@ export default {
         ) {
           return Response.json({ error: 'A valid indexing operation is required' }, { status: 400 });
         }
-        const updated = await ai.operations.get({ operation: operation as never });
+        const typedOperation = new UploadToFileSearchStoreOperation();
+        typedOperation.name = (operation as { name: string }).name;
+        const updated = await ai.operations.get({ operation: typedOperation });
         if (updated.error) {
           throw new Error(`Gemini indexing failed: ${JSON.stringify(updated.error)}`);
         }
