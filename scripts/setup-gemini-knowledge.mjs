@@ -4,7 +4,7 @@ import process from 'node:process';
 import { GoogleGenAI } from '@google/genai';
 
 const STORE_DISPLAY_NAME = 'MGREFOTS Nutrition Knowledge';
-const MAX_TOKENS_PER_CHUNK = 700;
+const MAX_TOKENS_PER_CHUNK = 512;
 const MAX_OVERLAP_TOKENS = 100;
 
 const sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
