@@ -33,7 +33,7 @@ for (const filePath of filePaths) {
 const ai = new GoogleGenAI({ apiKey });
 
 let store;
-const stores = await ai.fileSearchStores.list({ config: { pageSize: 100 } });
+const stores = await ai.fileSearchStores.list({ config: { pageSize: 20 } });
 for await (const candidate of stores) {
   if (candidate.displayName === STORE_DISPLAY_NAME) {
     store = candidate;
@@ -60,7 +60,7 @@ if (!store.name) {
 const existingDocuments = new Set();
 const documents = await ai.fileSearchStores.documents.list({
   parent: store.name,
-  config: { pageSize: 100 },
+  config: { pageSize: 20 },
 });
 for await (const document of documents) {
   if (document.displayName) existingDocuments.add(document.displayName);
