@@ -25,7 +25,7 @@ const safeError = (error: unknown) => {
 };
 
 const getOrCreateStore = async (ai: GoogleGenAI) => {
-  const stores = await ai.fileSearchStores.list({ config: { pageSize: 100 } });
+  const stores = await ai.fileSearchStores.list({ config: { pageSize: 20 } });
   for await (const store of stores) {
     if (store.displayName === STORE_DISPLAY_NAME && store.name) return store;
   }
@@ -41,7 +41,7 @@ const getOrCreateStore = async (ai: GoogleGenAI) => {
 const getExistingDocument = async (ai: GoogleGenAI, storeName: string, fileName: string) => {
   const documents = await ai.fileSearchStores.documents.list({
     parent: storeName,
-    config: { pageSize: 100 },
+    config: { pageSize: 20 },
   });
   for await (const document of documents) {
     if (document.displayName === fileName) return document;
@@ -168,7 +168,7 @@ export default {
         const documents = [];
         const pager = await ai.fileSearchStores.documents.list({
           parent: store.name,
-          config: { pageSize: 100 },
+          config: { pageSize: 20 },
         });
         for await (const document of pager) {
           documents.push({
