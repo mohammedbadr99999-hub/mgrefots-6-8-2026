@@ -1,5 +1,11 @@
 export type Language = 'en' | 'rw' | 'ar';
 
+export type LocalizedText = {
+  en: string;
+  rw?: string;
+  ar?: string;
+};
+
 export type NavigationTab = 'home' | 'analysis' | 'supps' | 'knowledge' | 'chat';
 
 export interface SupplementFact {
@@ -72,23 +78,44 @@ export interface KnowledgeGuide {
 export interface KnowledgeArticle {
   id: string;
   slug: string;
-  title: Record<Language, string>;
-  excerpt: Record<Language, string>;
+  status?: 'draft' | 'approved' | 'published';
+  title: LocalizedText;
+  excerpt: LocalizedText;
   category: string;
   tags: string[];
   readingTime: string;
   publishedDate: string;
   lastUpdated: string;
+  publishedAt?: string;
+  updatedAt?: string;
+  seo?: {
+    title: LocalizedText;
+    description: LocalizedText;
+    keywords: string[];
+  };
   author: {
     name: string;
-    role: Record<Language, string>;
+    role: LocalizedText;
   };
   medicalReviewer: {
     name: string;
-    role: Record<Language, string>;
+    role: LocalizedText;
   };
-  sections: KnowledgeSection[];
-  faqs: KnowledgeFAQ[];
+  sections: Array<{
+    id: string;
+    title: LocalizedText;
+    content: LocalizedText;
+    callout?: {
+      type: 'tip' | 'warning' | 'key-takeaway' | 'science';
+      title: LocalizedText;
+      text: LocalizedText;
+    };
+  }>;
+  faqs: Array<{
+    category?: string;
+    question: LocalizedText;
+    answer: LocalizedText;
+  }>;
   references: ScientificReference[];
   relatedGuideId?: string;
   relatedProductId?: string;

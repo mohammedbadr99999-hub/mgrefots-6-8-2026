@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>MGREFOTS Private Knowledge Setup</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, Arial, sans-serif; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: #020b18; color: #f8fafc; display: grid; place-items: center; padding: 24px; }
+      main { width: min(760px, 100%); background: #09162a; border: 1px solid #263b5a; border-radius: 24px; padding: 32px; box-shadow: 0 24px 70px #0008; }
+      h1 { color: #ff9f0a; margin-top: 0; }
+      p { color: #cbd5e1; line-height: 1.65; }
+      .notice { background: #06101f; border-left: 4px solid #ff9f0a; padding: 14px 16px; border-radius: 10px; }
+      input { width: 100%; margin: 18px 0; padding: 18px; background: #020b18; color: #fff; border: 1px dashed #64748b; border-radius: 12px; }
+      #token { border-style: solid; margin-bottom: 0; }
+      button { width: 100%; padding: 15px; border: 0; border-radius: 12px; background: #ff9f0a; color: #07111f; font-size: 16px; font-weight: 800; cursor: pointer; }
+      button:disabled { opacity: .55; cursor: wait; }
+      #status { margin-top: 20px; white-space: pre-wrap; background: #020b18; padding: 16px; border-radius: 12px; min-height: 72px; }
+      .ok { color: #4ade80; }
+      .error { color: #f87171; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>MGREFOTS Private Nutrition Library</h1>
+      <p class="notice">This page works only on the protected Vercel Preview deployment. Files are sent to the private Gemini File Search store and are not added to the website or GitHub repository.</p>
+      <p>Select the three purchased nutrition textbooks. They will be uploaded and indexed one at a time. Keep this tab open until all files finish.</p>
+      <input id="token" type="password" autocomplete="off" placeholder="Knowledge admin token" />
+      <input id="files" type="file" accept="application/pdf,.pdf" multiple />
+      <button id="upload" type="button">Upload and index books</button>
+      <div id="status">Waiting for PDF files.</div>
+    </main>
+    <script>
+      const input = document.querySelector('#files');
+      const tokenInput = document.querySelector('#token');
+      const button = document.querySelector('#upload');
+      const status = document.querySelector('#status');
+      const CHUNK_BYTES = 2 * 1024 * 1024;
+
+      const show = (message, className = '') => {
+        status.textContent = message;
+        status.className = className;
+      };
+
+      const requestJson = async (url, token, options = {}) => {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            ...(options.headers || {}),
+          },
+          body: options.body,
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(result.details?.message || result.error || `HTTP ${response.status}`);
+        }
+        return result;
+      };
+
+      const uploadBook = async (file, token, fileNumber, totalFiles) => {
+        show(`Preparing ${fileNumber}/${totalFiles}: ${file.name}`);
+        const start = await requestJson('/api/ai/knowledge?action=start', token, {
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fileName: file.name,
+            fileSize: file.size,
+            mimeType: file.type || 'application/pdf',
+          }),
+        });
+        if (start.skipped) return `${file.name} (already indexed)`;
+
+        let operation;
+        for (let offset = 0; offset < file.size; offset += CHUNK_BYTES) {
+          const end = Math.min(offset + CHUNK_BYTES, file.size);
+          const isFinal = end === file.size;
+          const percent = Math.round((end / file.size) * 100);
+          show(`Uploading ${fileNumber}/${totalFiles}: ${file.name}\n${percent}% (${(end / 1048576).toFixed(1)} of ${(file.size / 1048576).toFixed(1)} MB)`);
+          const result = await requestJson('/api/ai/knowledge?action=chunk', token, {
+            headers: {
+              'Content-Type': 'application/octet-stream',
+              'X-Knowledge-Upload-Url': start.uploadUrl,
+              'X-Knowledge-Upload-Offset': String(offset),
+              'X-Knowledge-Upload-Final': String(isFinal),
+            },
+            body: file.slice(offset, end),
+          });
+          if (isFinal) operation = result.operation;
+        }
+
+        if (!operation) throw new Error('The indexing operation did not start.');
+        const deadline = Date.now() + 20 * 60 * 1000;
+        while (Date.now() < deadline) {
+          show(`Indexing ${fileNumber}/${totalFiles}: ${file.name}\nThe upload is complete. Gemini is reading and indexing the book.`);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          const result = await requestJson('/api/ai/knowledge?action=status', token, {
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ operation }),
+          });
+          operation = result.operation;
+          if (result.done) return `${file.name} (indexed)`;
+        }
+        throw new Error('Indexing is taking longer than 20 minutes. Check the library status before retrying.');
+      };
+
+      button.addEventListener('click', async () => {
+        const files = [...input.files];
+        const token = tokenInput.value.trim();
+        if (!token) {
+          show('Enter the knowledge admin token first.', 'error');
+          return;
+        }
+        if (!files.length) {
+          show('Choose the PDF books first.', 'error');
+          return;
+        }
+
+        button.disabled = true;
+        const completed = [];
+        try {
+          for (let index = 0; index < files.length; index += 1) {
+            const file = files[index];
+            completed.push(await uploadBook(file, token, index + 1, files.length));
+          }
+          show(`Knowledge library is ready.\n\n${completed.join('\n')}`, 'ok');
+        } catch (error) {
+          show(`Upload stopped.\n${error.message}\n\nCompleted:\n${completed.join('\n') || 'None'}`, 'error');
+        } finally {
+          button.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>

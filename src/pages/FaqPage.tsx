@@ -70,16 +70,16 @@ export const FaqPage: React.FC<FaqPageProps> = ({ lang }) => {
       }
     },
     {
-      category: 'inbody',
+      category: 'expert',
       question: {
-        en: 'How does the AI InBody Analysis scan tool work?',
-        ar: 'كيف تعمل أداة تحليل InBody بالذكاء الاصطناعي في الموقع؟',
-        rw: 'Igikoresho cy\'ubwenge bwasanzwe bwa InBody gikora gite?'
+        en: 'How does the MGREFOTS AI Expert work?',
+        ar: 'كيف يعمل خبير MGREFOTS بالذكاء الاصطناعي؟',
+        rw: 'Impuguke ya AI ya MGREFOTS ikora ite?'
       },
       answer: {
-        en: 'You can upload an image or PDF of your InBody body composition scan on our Analysis page. Our NASM-trained AI system processes your body fat %, skeletal muscle mass, and water ratios to generate a custom nutrition & supplement protocol.',
-        ar: 'يمكنك رفع صورة أو ملف PDF لتقرير InBody الخاص بك في صفحة التحليل. يقوم نظام الذكاء الاصطناعي المدرب على منهجية NASM بتحليل نسبة الدهون، الكتلة العضلية، والماء لتقديم خطة مكملات وتغذية دقيقة.',
-        rw: 'Shyiraho ifoto ya InBody yawe ku ipaji y\'isuzuma, ubwenge bwasanzwe bukuyobora ku buryo bwiza bwo gufata supplements.'
+        en: 'Write your question on the Ask the Expert page. The AI follows the approved MGREFOTS nutrition methodology, answers in your selected language, and recommends a product only when it is genuinely relevant. You can also contact Mohamed Zeina directly through WhatsApp.',
+        ar: 'اكتب سؤالك في صفحة «استشر الخبير». يجيب الذكاء الاصطناعي باللغة التي اخترتها وفق منهج MGREFOTS التغذوي، ولا يرشح منتجًا إلا عندما يكون مناسبًا فعلًا للسؤال. ويمكنك أيضًا التواصل مباشرة مع محمد زينة عبر واتساب.',
+        rw: 'Andika ikibazo cyawe ku ipaji ya Baza Impuguke. AI isubiza mu rurimi wahisemo ikurikije uburyo bwa MGREFOTS kandi igatanga igicuruzwa gusa iyo gihuye n’ikibazo. Ushobora no kuvugisha Mohamed Zeina kuri WhatsApp.'
       }
     },
     {
@@ -102,7 +102,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ lang }) => {
     { id: 'products', label: isRtl ? 'المكملات والجودة' : 'Supplements & Quality' },
     { id: 'married', label: isRtl ? 'دليل المتزوجين' : 'Married Men Protocol' },
     { id: 'shipping', label: isRtl ? 'الشحن والتوصيل' : 'Shipping & Dispatch' },
-    { id: 'inbody', label: isRtl ? 'تحليل InBody' : 'InBody Scan' }
+    { id: 'expert', label: isRtl ? 'استشر الخبير' : lang === 'rw' ? 'Baza Impuguke' : 'Ask the Expert' }
   ];
 
   const filteredFaqs = faqData.filter((f) => {

@@ -4,7 +4,7 @@ import { Language } from '../types';
 
 interface ChatPageProps {
   lang: Language;
-  onSendChatMessage: (message: string) => Promise<string>;
+  onSendChatMessage: (message: string, file?: File) => Promise<string>;
 }
 
 export const ChatPage: React.FC<ChatPageProps> = ({ lang, onSendChatMessage }) => {

@@ -1,21 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { ProductDetailModal } from './components/ProductDetailModal';
-import { HomePage } from './pages/HomePage';
-import { ProductsPage } from './pages/ProductsPage';
-import { ProductDetailPage } from './pages/ProductDetailPage';
-import { AboutPage } from './pages/AboutPage';
-import { ContactPage } from './pages/ContactPage';
-import { FaqPage } from './pages/FaqPage';
-import { InBodyPage } from './pages/InBodyPage';
-import { SupplementsPage } from './pages/SupplementsPage';
-import { KnowledgePage } from './pages/KnowledgePage';
-import { ChatPage } from './pages/ChatPage';
 import { TRANSLATIONS } from './data/translations';
-import { Language, Product, UserState } from './types';
-import { Zap, Activity, Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
+import { Language, Product } from './types';
+import { Sparkles, MessageCircle, ShoppingBag, BookOpen, Paperclip, X } from 'lucide-react';
+import { serializeAIFile, validateAIFile } from './utils/aiFile';
+
+const HomePage = lazy(() => import('./pages/HomePage').then((module) => ({ default: module.HomePage })));
+const ProductsPage = lazy(() => import('./pages/ProductsPage').then((module) => ({ default: module.ProductsPage })));
+const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage').then((module) => ({ default: module.ProductDetailPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then((module) => ({ default: module.AboutPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then((module) => ({ default: module.ContactPage })));
+const FaqPage = lazy(() => import('./pages/FaqPage').then((module) => ({ default: module.FaqPage })));
+const SupplementsPage = lazy(() => import('./pages/SupplementsPage').then((module) => ({ default: module.SupplementsPage })));
+const KnowledgePage = lazy(() => import('./pages/KnowledgePage').then((module) => ({ default: module.KnowledgePage })));
+const ArticlesPage = lazy(() => import('./pages/ArticlesPage').then((module) => ({ default: module.ArticlesPage })));
+const ArticlePage = lazy(() => import('./pages/ArticlePage').then((module) => ({ default: module.ArticlePage })));
+const ChatPage = lazy(() => import('./pages/ChatPage').then((module) => ({ default: module.ChatPage })));
+const ProductDetailModal = lazy(() => import('./components/ProductDetailModal').then((module) => ({ default: module.ProductDetailModal })));
+
+const SUPPORTED_LANGUAGES: Language[] = ['en', 'rw', 'ar'];
+
+function getInitialLanguage(): Language {
+  const savedLanguage = window.localStorage.getItem('mgrefots-language') as Language | null;
+  if (savedLanguage && SUPPORTED_LANGUAGES.includes(savedLanguage)) return savedLanguage;
+  return 'en';
+}
+
+function PageLoading({ lang }: { lang: Language }) {
+  const label = lang === 'ar' ? 'جارٍ تحميل الصفحة' : lang === 'rw' ? 'Urupapuro rurimo gutangira' : 'Loading page';
+
+  return (
+    <div className="min-h-[45vh] flex items-center justify-center" role="status" aria-live="polite">
+      <div className="flex items-center gap-3 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#091833]/80 px-5 py-3 text-sm font-bold text-[#A7B3C4]">
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#F5A623]/30 border-t-[#F5A623]" aria-hidden="true" />
+        <span>{label}</span>
+      </div>
+    </div>
+  );
+}
 
 // Scroll To Top on Route Change
 function ScrollToTop() {
@@ -28,6 +52,21 @@ function ScrollToTop() {
   return null;
 }
 
+function RouteMetadata() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const canonicalUrl = `https://www.mgrefots.com${pathname === '/' ? '/' : pathname}`;
+    const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const openGraphUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
+
+    canonical?.setAttribute('href', canonicalUrl);
+    openGraphUrl?.setAttribute('content', canonicalUrl);
+  }, [pathname]);
+
+  return null;
+}
+
 // Mobile Bottom Sticky Nav
 function MobileBottomNav({ lang }: { lang: Language }) {
   const location = useLocation();
@@ -35,10 +74,9 @@ function MobileBottomNav({ lang }: { lang: Language }) {
 
   const items = [
     { path: '/', label: t.nav_home, icon: ShoppingBag },
-    { path: '/products', label: lang === 'ar' ? 'المنتجات' : 'Products', icon: ShoppingBag },
-    { path: '/analysis', label: t.nav_analysis, icon: Activity },
+    { path: '/products', label: lang === 'ar' ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products', icon: ShoppingBag },
+    { path: '/analysis', label: t.nav_analysis, icon: MessageCircle },
     { path: '/knowledge', label: t.nav_knowledge || 'Knowledge', icon: BookOpen },
-    { path: '/chat', label: t.nav_chat, icon: MessageCircle },
   ];
 
   return (
@@ -52,6 +90,7 @@ function MobileBottomNav({ lang }: { lang: Language }) {
           <Link
             key={item.path}
             to={item.path}
+            aria-current={isActive ? 'page' : undefined}
             className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all ${
               isActive ? 'text-[#F5A623] font-bold scale-105' : 'text-[#A7B3C4] hover:text-white'
             }`}
@@ -66,75 +105,150 @@ function MobileBottomNav({ lang }: { lang: Language }) {
 }
 
 export default function App() {
-  const [lang, setLang] = useState<Language>('en');
+  const [lang, setLang] = useState<Language>(getInitialLanguage);
   const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
-
-  const [user] = useState<UserState>({
-    id: 'guest',
-    phone: 'Guest',
-    isGuest: true
-  });
+  const [quickQuestion, setQuickQuestion] = useState('');
+  const [quickAnswer, setQuickAnswer] = useState('');
+  const [isQuickAnswering, setIsQuickAnswering] = useState(false);
+  const [quickFile, setQuickFile] = useState<File | null>(null);
+  const [quickFileError, setQuickFileError] = useState('');
 
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
+  const quickExpertCopy = {
+    en: {
+      placeholder: 'Put your question here and press ASK to get the answer',
+      label: 'Ask the MGREFOTS AI Expert',
+      loading: 'Preparing your answer…',
+      fullPage: 'Open full expert consultation', upload: 'Upload PDF or image', remove: 'Clear question and answer',
+      typeError: 'Please choose a PDF, JPG, PNG, or WebP file.', sizeError: 'The file must be 10 MB or smaller.',
+      privacy: 'The file is analyzed for this answer and is not added to the private book library.'
+    },
+    rw: {
+      placeholder: 'Andika ikibazo cyawe hano, ukande ASK ubone igisubizo',
+      label: 'Baza Impuguke ya AI ya MGREFOTS',
+      loading: 'Turimo gutegura igisubizo…',
+      fullPage: 'Fungura urupapuro rw’impuguke', upload: 'Ohereza PDF cyangwa ifoto', remove: 'Siba ikibazo n’igisubizo',
+      typeError: 'Hitamo PDF, JPG, PNG cyangwa WebP.', sizeError: 'Dosiye ntigomba kurenza 10 MB.',
+      privacy: 'Dosiye isesengurwa kuri iki gisubizo gusa kandi ntiyongerwa mu isomero ry’ibitabo.'
+    },
+    ar: {
+      placeholder: 'ضع سؤالك هنا واضغط على ASK وستحصل على الإجابة',
+      label: 'اسأل خبير MGREFOTS بالذكاء الاصطناعي',
+      loading: 'جارٍ إعداد الإجابة…',
+      fullPage: 'افتح صفحة الاستشارة الكاملة', upload: 'ارفع PDF أو صورة', remove: 'امسح السؤال والإجابة',
+      typeError: 'اختر ملف PDF أو صورة JPG أو PNG أو WebP.', sizeError: 'يجب ألا يزيد حجم الملف على 10 ميجابايت.',
+      privacy: 'يُحلَّل الملف لهذه الإجابة فقط ولا يُضاف إلى مكتبة الكتب الخاصة.'
+    }
+  }[lang];
+
+  useEffect(() => {
+    window.localStorage.setItem('mgrefots-language', lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+  }, [lang, isRtl]);
 
   // API Helper for Gemini requests
-  const queryAI = async (prompt: string, systemInstruction?: string) => {
+  const queryAI = async (prompt: string, systemInstruction?: string, file?: File) => {
     try {
+      const serializedFile = file ? await serializeAIFile(file) : undefined;
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, systemInstruction }),
+        body: JSON.stringify({ prompt, systemInstruction, lang, file: serializedFile }),
       });
-      if (res.ok) {
-        const data = await res.json();
-        return data.text || 'No response from AI';
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        console.error('AI endpoint returned a non-JSON response', {
+          status: res.status,
+          contentType,
+        });
+        throw new Error('AI_ENDPOINT_INVALID_RESPONSE');
       }
+
+      const data = await res.json() as { text?: string; error?: string; code?: string };
+      if (!res.ok) {
+        console.error('AI endpoint request failed', {
+          status: res.status,
+          code: data.code,
+          error: data.error,
+        });
+        throw new Error(data.code || `AI_HTTP_${res.status}`);
+      }
+
+      return data.text || 'No response from AI';
     } catch (e) {
-      console.warn('Backend API unavailable, using client fallback', e);
+      console.warn('AI query failed', e);
     }
 
-    return isRtl 
-      ? 'بناءً على التوجيهات العلمية لمنهجية NASM: ينصح بتناول المكمل بالجرعة المحددة مع المحافظة على نظام غذائي متوازن والتمارين عالية الشدة لتحقيق أقصى بناء عضلي.'
-      : 'Based on NASM science guidelines: take the recommended dosage alongside progressive resistance training and structured meal planning for maximum results.';
+    return lang === 'ar'
+      ? 'تعذر الوصول إلى الخبير الآن. حاول مرة أخرى أو تواصل مباشرة عبر واتساب.'
+      : lang === 'rw'
+        ? 'Ntitwashoboye kugera ku nzobere ubu. Ongera ugerageze cyangwa uyivugishe kuri WhatsApp.'
+        : 'The AI expert is temporarily unavailable. Please try again or contact the human expert on WhatsApp.';
   };
 
-  const handleRunInBodyAnalysis = async (file: File, goal: string) => {
+  const handleQuickExpertQuestion = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const question = quickQuestion.trim();
+    if ((!question && !quickFile) || isQuickAnswering) return;
+
+    setIsQuickAnswering(true);
+    setQuickAnswer('');
     try {
-      const reader = new FileReader();
-      const fileBase64 = await new Promise<string>((resolve) => {
-        reader.onload = () => {
-          const res = reader.result as string;
-          resolve(res.split(',')[1] || '');
-        };
-        reader.readAsDataURL(file);
-      });
+      const answer = await queryAI(question, 'This question comes from the homepage quick-answer box. Give a complete, useful, well-organized answer using the full MGREFOTS expert response format. If a visitor file is attached, analyze it together with the question. Do not answer with only a definition or a one-line summary.', quickFile ?? undefined);
+      setQuickAnswer(answer);
+    } finally {
+      setIsQuickAnswering(false);
+    }
+  };
 
-      const res = await fetch('/api/ai/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ goal, lang, fileBase64, mimeType: file.type }),
-      });
+  const resetQuickExpert = () => {
+    setQuickQuestion('');
+    setQuickAnswer('');
+    setQuickFile(null);
+    setQuickFileError('');
+  };
 
-      if (res.ok) {
-        const data = await res.json();
-        return { result: data.text, pdfUrl: null };
-      }
-    } catch (e) {
-      console.warn('API error during analysis', e);
+  const handleQuickFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    const error = validateAIFile(file);
+    if (error) {
+      setQuickFile(null);
+      setQuickFileError(error === 'size' ? quickExpertCopy.sizeError : quickExpertCopy.typeError);
+      return;
+    }
+    setQuickFile(file);
+    setQuickFileError('');
+  };
+
+  const formatQuickAnswer = (text: string) => text.split('\n').map((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) return <div key={`quick-space-${index}`} className="h-2" />;
+
+    const isHeading = /^#{1,4}\s+/.test(trimmed) || (/^[^\p{L}\p{N}]/u.test(trimmed) && trimmed.length <= 90 && !/^[-•*]\s+/.test(trimmed));
+    const isBullet = /^[-•*]\s+/.test(trimmed);
+    const cleaned = trimmed.replace(/^#{1,4}\s*/, '').replace(/\*\*/g, '').replace(/^[-•*]\s+/, '');
+
+    if (isHeading) {
+      return <h3 key={`quick-heading-${index}`} className="mb-2 mt-4 text-base font-black text-[#F5A623] first:mt-0">{cleaned}</h3>;
     }
 
-    return {
-      result: isRtl 
-        ? `🔥 تحليل الخبير المعتمد بناءً على هدفك (${goal}):\n\n1. تقييم التكوين البدني: تحتاج لتنشيط معدل الأيض وزيادة البناء العضلي الصافي.\n2. التمارين: ٥ أيام أسبوعياً بتكرارات ٨-١٢ مع التركيز على الكرياتين والسيترولين.\n3. التغذية: بروتين 2g لكل كجم وزن، وتناول بروتين البازلاء والأرز MGREFOTS بعد التمرين مباشرة.` 
-        : `🔥 Expert Coach Analysis for your goal (${goal}):\n\n1. Physical Composition: Focus on muscle hypertrophy & fat oxidation.\n2. Workout Protocol: 5-day push-pull-legs split with high volume.\n3. Nutrition: 2g protein per kg, using MGREFOTS 70/30 Plant Protein post-workout.`,
-      pdfUrl: null
-    };
-  };
+    return (
+      <p key={`quick-answer-${index}`} className={`mb-2 text-sm font-medium leading-7 text-[#E2E8F0] ${isBullet ? 'flex items-start gap-2' : ''}`}>
+        {isBullet ? <span className="mt-0.5 shrink-0 font-black text-[#F5A623]">✓</span> : null}
+        <span>{cleaned}</span>
+      </p>
+    );
+  });
 
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <RouteMetadata />
       <div className={`min-h-screen bg-[#030914] text-[#F5F7FA] relative overflow-x-hidden ${isRtl ? 'font-arabic' : 'font-sans'}`} dir={isRtl ? 'rtl' : 'ltr'}>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
@@ -151,34 +265,81 @@ export default function App() {
         <Header
           lang={lang}
           onSelectLang={setLang}
-          user={user}
+          onLogoClick={resetQuickExpert}
         />
 
         {/* Small Scroll Indicator on side */}
         <div className={`fixed top-24 ${isRtl ? 'left-2 sm:left-4' : 'right-2 sm:right-4'} z-40 bg-[#091833]/90 text-[#F5A623] border border-[#F5A623]/40 px-3 py-1.5 rounded-full text-[10px] font-black shadow-2xl backdrop-blur-md flex items-center gap-1.5 animate-bounce pointer-events-none`}>
           <span>📜</span>
-          <span>{isRtl ? 'سكرول للاسفل لترى المزيد' : 'scroll down to see more'}</span>
+          <span>{isRtl ? 'مرّر لأسفل لرؤية المزيد' : lang === 'rw' ? 'Manuka hasi urebe ibindi' : 'Scroll down to see more'}</span>
         </div>
 
         {/* Main Routed Content Container */}
         <main className="pt-28 pb-24 max-w-7xl mx-auto px-4 sm:px-6">
 
-          {/* Limited Free Banner */}
+          {/* Homepage quick expert question */}
           <div className="mb-8 animate-fade-in">
-            <div className="bg-gradient-to-r from-[#0B1F45]/90 via-[#091833]/90 to-[#173A73]/90 border border-[rgba(255,255,255,0.12)] text-white px-6 py-4 rounded-3xl flex flex-wrap items-center justify-between shadow-2xl backdrop-blur-xl gap-4">
-              <span className="font-extrabold text-xs sm:text-sm flex items-center gap-2.5">
-                <Sparkles size={18} className="text-[#F5A623] shrink-0 animate-pulse" />
-                <span>{t.free_banner}</span>
-              </span>
-              <Link
-                to="/chat"
-                className="bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#030914] px-5 py-2 rounded-2xl font-black text-xs transition-all shrink-0 hover:scale-105 shadow-lg shadow-[#F5A623]/20"
-              >
-                {isRtl ? 'استشر الخبير مجاناً' : 'Ask Expert Free'}
-              </Link>
+            <div className="bg-gradient-to-r from-[#0B1F45]/90 via-[#091833]/90 to-[#173A73]/90 border border-[rgba(255,255,255,0.12)] text-white px-4 sm:px-6 py-4 rounded-3xl shadow-2xl backdrop-blur-xl">
+              <form onSubmit={handleQuickExpertQuestion} className="flex flex-col sm:flex-row items-stretch gap-3">
+                <label htmlFor="quick-expert-question" className="sr-only">{quickExpertCopy.label}</label>
+                <div className="relative flex-1">
+                  <Sparkles size={17} className={`absolute top-1/2 -translate-y-1/2 text-[#F5A623] ${isRtl ? 'right-4' : 'left-4'}`} aria-hidden="true" />
+                  <input
+                    id="quick-expert-question"
+                    type="text"
+                    value={quickQuestion}
+                    onChange={(event) => setQuickQuestion(event.target.value)}
+                    dir="auto"
+                    maxLength={12000}
+                    placeholder={quickExpertCopy.placeholder}
+                    className={`min-h-[48px] w-full rounded-2xl border border-white/10 bg-[#030914]/75 py-3 text-sm font-bold text-white outline-none transition placeholder:text-[#94A3B8] focus:border-[#F5A623]/70 ${isRtl ? 'pr-11 pl-4 text-right' : 'pl-11 pr-4 text-left'}`}
+                  />
+                </div>
+                <label className="min-h-[48px] cursor-pointer rounded-2xl border border-[#F5A623]/45 bg-[#091833] px-4 py-3 text-sm font-black text-[#F5A623] transition hover:border-[#F5A623] hover:bg-[#0B1F45] flex items-center justify-center gap-2" title={quickExpertCopy.upload}>
+                  <Paperclip size={18} aria-hidden="true" />
+                  <span className="sm:sr-only">{quickExpertCopy.upload}</span>
+                  <input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" onChange={handleQuickFile} className="sr-only" />
+                </label>
+                <button
+                  type="submit"
+                  disabled={isQuickAnswering || (!quickQuestion.trim() && !quickFile)}
+                  className="min-h-[48px] rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] px-8 py-3 text-sm font-black text-[#030914] shadow-lg shadow-[#F5A623]/20 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  {isQuickAnswering ? '…' : 'ASK'}
+                </button>
+              </form>
+
+              {quickFile ? (
+                <div className={`mt-3 flex items-center gap-2 text-xs font-bold text-[#CBD5E1] ${isRtl ? 'justify-start' : 'justify-start'}`}>
+                  <Paperclip size={14} className="text-[#F5A623]" aria-hidden="true" />
+                  <span className="max-w-[75%] truncate" title={quickFile.name}>{quickFile.name}</span>
+                  <button type="button" onClick={() => setQuickFile(null)} className="rounded-full p-1 text-[#94A3B8] transition hover:bg-white/10 hover:text-white" aria-label={quickExpertCopy.remove}>
+                    <X size={15} />
+                  </button>
+                  <span className="hidden sm:inline text-[#64748B]">{quickExpertCopy.privacy}</span>
+                </div>
+              ) : null}
+              {quickFileError ? <p role="alert" className={`mt-2 text-xs font-bold text-red-400 ${isRtl ? 'text-right' : 'text-left'}`}>{quickFileError}</p> : null}
+
+              <div aria-live="polite" aria-busy={isQuickAnswering}>
+                {isQuickAnswering ? (
+                  <p className={`mt-3 animate-pulse text-xs font-bold text-[#F5A623] ${isRtl ? 'text-right' : 'text-left'}`}>{quickExpertCopy.loading}</p>
+                ) : quickAnswer ? (
+                  <div className={`relative mt-4 rounded-2xl border border-[#F5A623]/25 bg-[#030914]/70 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+                    <button type="button" onClick={resetQuickExpert} className={`absolute top-3 rounded-full border border-white/10 bg-[#091833] p-1.5 text-[#94A3B8] transition hover:border-[#F5A623]/50 hover:text-white ${isRtl ? 'left-3' : 'right-3'}`} aria-label={quickExpertCopy.remove} title={quickExpertCopy.remove}>
+                      <X size={16} />
+                    </button>
+                    <div dir="auto" style={{ textAlign: 'start' }}>{formatQuickAnswer(quickAnswer)}</div>
+                    <Link to="/analysis" className="mt-3 inline-flex text-xs font-black text-[#F5A623] hover:text-white transition">
+                      {quickExpertCopy.fullPage}
+                    </Link>
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
 
+          <Suspense fallback={<PageLoading lang={lang} />}>
           <Routes>
             <Route path="/" element={
               <HomePage
@@ -214,9 +375,9 @@ export default function App() {
             } />
 
             <Route path="/analysis" element={
-              <InBodyPage
+              <ChatPage
                 lang={lang}
-                onRunAnalysis={handleRunInBodyAnalysis}
+                onSendChatMessage={(msg, file) => queryAI(msg, 'This is the main Ask the Expert page. Answer the visitor directly and use the approved MGREFOTS methodology. If a visitor file is attached, analyze it together with the question.', file)}
               />
             } />
 
@@ -242,10 +403,21 @@ export default function App() {
               />
             } />
 
+            <Route path="/articles" element={
+              <ArticlesPage lang={lang} />
+            } />
+
+            <Route path="/articles/:slug" element={
+              <ArticlePage
+                lang={lang}
+                onSelectProductModal={(p) => setSelectedProductModal(p)}
+              />
+            } />
+
             <Route path="/chat" element={
               <ChatPage
                 lang={lang}
-                onSendChatMessage={(msg) => queryAI(msg, 'You are Mohamed Zeina, NASM certified fitness and nutrition coach. Give clear, direct, expert advice.')}
+                onSendChatMessage={(msg, file) => queryAI(msg, 'This legacy route uses the same MGREFOTS AI Expert methodology as the main consultation page. If a visitor file is attached, analyze it together with the question.', file)}
               />
             } />
 
@@ -257,15 +429,18 @@ export default function App() {
               />
             } />
           </Routes>
+          </Suspense>
         </main>
 
         {/* Product Specs Detail Quick Modal */}
-        <ProductDetailModal
-          product={selectedProductModal}
-          lang={lang}
-          onClose={() => setSelectedProductModal(null)}
-          onQueryAI={(prompt) => queryAI(prompt, 'Provide product integration advice as a NASM certified fitness coach.')}
-        />
+        <Suspense fallback={null}>
+          <ProductDetailModal
+            product={selectedProductModal}
+            lang={lang}
+            onClose={() => setSelectedProductModal(null)}
+            onQueryAI={(prompt) => queryAI(prompt, 'Provide product integration advice as a NASM certified fitness coach.')}
+          />
+        </Suspense>
 
         {/* Consistent Footer Across All Pages */}
         <Footer lang={lang} />

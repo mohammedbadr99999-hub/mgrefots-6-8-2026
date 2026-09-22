@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Zap, Activity, ShoppingBag, MessageCircle, Menu, X, ShieldCheck, BookOpen, Info, HelpCircle, ChevronDown } from 'lucide-react';
-import { Language, UserState } from '../types';
+import { Zap, ShoppingBag, MessageCircle, Menu, X, BookOpen, Info, HelpCircle, ChevronDown, Newspaper } from 'lucide-react';
+import { Language } from '../types';
 import { TRANSLATIONS } from '../data/translations';
 
 interface HeaderProps {
   lang: Language;
   onSelectLang: (lang: Language) => void;
-  user: UserState | null;
+  onLogoClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   lang,
   onSelectLang,
-  user
+  onLogoClick,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -46,18 +46,18 @@ export const Header: React.FC<HeaderProps> = ({
   }, [isMobileMenuOpen]);
 
   const mainCategoryItems = [
-    { path: '/products', label: isRtl ? 'المنتجات' : 'Products', icon: ShoppingBag, badge: isRtl ? 'المكملات' : 'Catalog' },
-    { path: '/analysis', label: t.nav_analysis, icon: Activity, badge: 'InBody' },
-    { path: '/supplements', label: t.nav_supps, icon: Zap, badge: isRtl ? 'موسوعة' : 'Guide' },
-    { path: '/knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen, badge: isRtl ? 'المكتبة' : 'Library' },
+    { path: '/products', label: isRtl ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products', icon: ShoppingBag, badge: isRtl ? 'المكملات' : lang === 'rw' ? 'Urutonde' : 'Catalog' },
+    { path: '/articles', label: isRtl ? 'المقالات' : lang === 'rw' ? 'Inyandiko' : 'Articles', icon: Newspaper, badge: isRtl ? 'جديد' : lang === 'rw' ? 'Ubushakashatsi' : 'Research' },
+    { path: '/analysis', label: t.nav_analysis, icon: MessageCircle, badge: isRtl ? 'ذكاء اصطناعي' : lang === 'rw' ? 'AI' : 'AI Expert' },
+    { path: '/supplements', label: t.nav_supps, icon: Zap, badge: isRtl ? 'موسوعة' : lang === 'rw' ? 'Inyoborabuhanga' : 'Guide' },
+    { path: '/knowledge', label: t.nav_knowledge || 'Knowledge Center', icon: BookOpen, badge: isRtl ? 'المكتبة' : lang === 'rw' ? 'Isomero' : 'Library' },
   ];
 
   const otherNavItems = [
     { path: '/', label: t.nav_home, icon: ShoppingBag },
-    { path: '/about', label: isRtl ? 'عن الشركة' : 'About', icon: Info },
-    { path: '/contact', label: isRtl ? 'اتصل بنا' : 'Contact', icon: MessageCircle },
-    { path: '/faq', label: isRtl ? 'الأسئلة الشائعة' : 'FAQ', icon: HelpCircle },
-    { path: '/chat', label: t.nav_chat, icon: MessageCircle },
+    { path: '/about', label: isRtl ? 'عن الشركة' : lang === 'rw' ? 'Ibyerekeye' : 'About', icon: Info },
+    { path: '/contact', label: isRtl ? 'اتصل بنا' : lang === 'rw' ? 'Twandikire' : 'Contact', icon: MessageCircle },
+    { path: '/faq', label: isRtl ? 'الأسئلة الشائعة' : lang === 'rw' ? 'Ibibazo' : 'FAQ', icon: HelpCircle },
   ];
 
   const allNavItems = [...mainCategoryItems, ...otherNavItems];
@@ -68,9 +68,12 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
           
           {/* Logo & Brand */}
-          <Link 
-            to="/"
+              <Link
+              to="/"
+              onClick={onLogoClick}
+              aria-current={location.pathname === '/' ? 'page' : undefined}
             className="flex items-center gap-3 cursor-pointer group shrink-0"
+            aria-label="MGREFOTS home"
           >
             <div className="relative">
               <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] opacity-40 group-hover:opacity-100 blur-sm transition duration-300"></div>
@@ -105,6 +108,11 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                type="button"
+                aria-expanded={isDropdownOpen}
+                aria-haspopup="true"
+                aria-controls="desktop-navigation-menu"
+                aria-label={isRtl ? 'فتح قائمة الموقع' : lang === 'rw' ? 'Fungura ibice by’urubuga' : 'Open site navigation'}
                 className="flex items-center gap-3 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#091833] to-[#0B1F45] hover:from-[#0B1F45] hover:to-[#173A73] text-white border border-[#F5A623]/50 shadow-xl transition-all duration-300 font-black text-xs uppercase tracking-wider group cursor-pointer"
               >
                 {/* 3 lines / hamburger icon with animation */}
@@ -115,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 <span className="text-[#F5A623] font-black tracking-wide text-xs">
-                  {isRtl ? 'قائمة منسدلة' : 'Dropdown Menu'}
+                  {isRtl ? 'أقسام الموقع' : lang === 'rw' ? 'Ibice by’urubuga' : 'Site Menu'}
                 </span>
 
                 <ChevronDown size={15} className={`text-[#F5A623] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -123,11 +131,11 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Dropdown Card */}
               {isDropdownOpen && (
-                <div className={`absolute top-full mt-3 ${isRtl ? 'right-0' : 'left-0'} w-80 bg-[#071426]/95 backdrop-blur-2xl border border-[rgba(255,255,255,0.15)] rounded-3xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 animate-fade-in space-y-2`}>
+                <div id="desktop-navigation-menu" aria-label="Site navigation" className={`absolute top-full mt-3 ${isRtl ? 'right-0' : 'left-0'} w-80 bg-[#071426]/95 backdrop-blur-2xl border border-[rgba(255,255,255,0.15)] rounded-3xl p-3.5 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 animate-fade-in space-y-2`}>
                   <div className="px-3 py-2 text-[11px] font-black uppercase tracking-wider text-[#F5A623] border-b border-[rgba(255,255,255,0.08)] flex items-center justify-between">
                     <span className="flex items-center gap-2">
                       <span className="text-base">☰</span>
-                      <span>{isRtl ? 'قائمة منسدلة - أقسام الموقع' : 'Dropdown Menu - Navigation'}</span>
+                      <span>{isRtl ? 'أقسام الموقع' : lang === 'rw' ? 'Ibice by’urubuga' : 'Site Navigation'}</span>
                     </span>
                     <span className="text-[10px] bg-[#0B1F45] text-amber-300 px-2 py-0.5 rounded-full border border-amber-400/30">MGREFOTS</span>
                   </div>
@@ -135,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Main Sections (المنتجات, تحليل InBody, موسوعة المكملات, المكتبة المعرفية) */}
                   <div className="space-y-1">
                     <div className="text-[10px] font-extrabold text-[#94A3B8] px-3 pt-1 uppercase tracking-widest">
-                      {isRtl ? 'الأقسام الرئيسية' : 'Main Sections'}
+                      {isRtl ? 'الأقسام الرئيسية' : lang === 'rw' ? 'Ibice by’ingenzi' : 'Main Sections'}
                     </div>
                     {mainCategoryItems.map((item) => {
                       const Icon = item.icon;
@@ -146,6 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
                           key={item.path}
                           to={item.path}
                           onClick={() => setIsDropdownOpen(false)}
+                          aria-current={isActive ? 'page' : undefined}
                           className={`flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-2xl font-bold text-xs transition-all ${
                             isActive
                               ? 'bg-gradient-to-r from-[#0B1F45] to-[#173A73] text-[#F5A623] border border-[#F5A623]/40 shadow-md font-black scale-[1.01]'
@@ -169,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Other Pages */}
                   <div className="border-t border-[rgba(255,255,255,0.08)] pt-2 space-y-1">
                     <div className="text-[10px] font-extrabold text-[#94A3B8] px-3 uppercase tracking-widest">
-                      {isRtl ? 'صفحات أخرى' : 'Other Pages'}
+                      {isRtl ? 'صفحات أخرى' : lang === 'rw' ? 'Izindi paji' : 'Other Pages'}
                     </div>
                     {otherNavItems.map((item) => {
                       const Icon = item.icon;
@@ -182,6 +191,7 @@ export const Header: React.FC<HeaderProps> = ({
                           key={item.path}
                           to={item.path}
                           onClick={() => setIsDropdownOpen(false)}
+                          aria-current={isActive ? 'page' : undefined}
                           className={`flex items-center gap-3 px-3.5 py-2 rounded-xl font-bold text-xs transition-all ${
                             isActive
                               ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/30'
@@ -199,26 +209,17 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Language Switcher & Married Men Button */}
+          {/* Language switcher stays visually dominant; specialist guides live in the page journey. */}
           <div className="flex items-center gap-2.5">
-            {/* Married Man Button */}
-            <Link
-              to="/knowledge/guides/married-men-health-guide"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 border border-amber-300/80 shrink-0 cursor-pointer animate-pulse"
-              title={lang === 'ar' ? 'دليل صحة الرجال المتزوجين' : lang === 'rw' ? 'Inyoborabuhanga y\'abagabo bashatse' : 'Married Men\'s Health Guide'}
-            >
-              <span className="text-sm">💍</span>
-              <span className="whitespace-nowrap font-extrabold text-[11px]">
-                {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
-              </span>
-            </Link>
-
             {/* Language Selector */}
-            <div className="flex bg-[#091833] rounded-full p-1 border border-[rgba(255,255,255,0.08)] shadow-inner" dir="ltr">
+            <div className="flex bg-[#091833] rounded-full p-1 border border-[rgba(255,255,255,0.08)] shadow-inner" dir="ltr" role="group" aria-label="Language">
               {(['en', 'rw', 'ar'] as Language[]).map((l) => (
                 <button
                   key={l}
                   onClick={() => onSelectLang(l)}
+                  type="button"
+                  aria-pressed={lang === l}
+                  aria-label={`Switch language to ${l === 'en' ? 'English' : l === 'rw' ? 'Kinyarwanda' : 'Arabic'}`}
                   className={`px-3 py-1 rounded-full text-[11px] font-black uppercase transition-all duration-200 ${
                     lang === l
                       ? 'bg-gradient-to-r from-[#F5A623] to-[#FF8A00] text-[#030914] shadow-md shadow-[#F5A623]/20 font-black'
@@ -233,6 +234,10 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              type="button"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation-menu"
+              aria-label={isMobileMenuOpen ? (isRtl ? 'إغلاق القائمة' : lang === 'rw' ? 'Funga ibice' : 'Close navigation') : (isRtl ? 'فتح القائمة' : lang === 'rw' ? 'Fungura ibice' : 'Open navigation')}
               className="md:hidden p-2.5 rounded-2xl bg-[#091833] border border-[rgba(255,255,255,0.08)] text-[#94A3B8] hover:text-white transition-colors"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -246,10 +251,11 @@ export const Header: React.FC<HeaderProps> = ({
         <div 
           className="fixed inset-0 bg-black/70 backdrop-blur-md z-40 md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
         />
       )}
 
-      <div className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} h-full w-80 bg-[#071426] z-50 shadow-2xl flex flex-col md:hidden border-r border-[rgba(255,255,255,0.08)] transition-transform duration-300 ease-in-out ${
+      <nav id="mobile-navigation-menu" aria-label="Mobile navigation" aria-hidden={!isMobileMenuOpen} className={`fixed top-0 ${isRtl ? 'right-0' : 'left-0'} h-full w-80 bg-[#071426] z-50 shadow-2xl flex flex-col md:hidden border-r border-[rgba(255,255,255,0.08)] transition-transform duration-300 ease-in-out ${
         isMobileMenuOpen ? 'translate-x-0' : (isRtl ? 'translate-x-full' : '-translate-x-full')
       }`}>
         <div className="flex items-center justify-between p-6 border-b border-[rgba(255,255,255,0.08)]">
@@ -259,6 +265,8 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
           <button
             onClick={() => setIsMobileMenuOpen(false)}
+            type="button"
+            aria-label={isRtl ? 'إغلاق القائمة' : lang === 'rw' ? 'Funga ibice' : 'Close navigation'}
             className="w-9 h-9 rounded-full bg-[#0E2247] border border-[rgba(255,255,255,0.08)] text-[#A7B3C4] hover:text-white flex items-center justify-center font-black"
           >
             ✕
@@ -266,20 +274,8 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex flex-col p-4 gap-2 flex-1 overflow-y-auto">
-          {/* Married Men Mobile Button */}
-          <Link
-            to="/knowledge/guides/married-men-health-guide"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl font-black text-xs bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 text-slate-950 shadow-lg border border-amber-300 transition-all hover:scale-[1.02] cursor-pointer mb-2"
-          >
-            <span className="text-lg">💍</span>
-            <span>
-              {lang === 'ar' ? 'إذا كنت رجل متزوج اضغط هنا' : lang === 'rw' ? 'Niba uri umugabo washatse, kanda hano' : 'If you are a married man, click here'}
-            </span>
-          </Link>
-
           <div className="text-[10px] font-extrabold text-[#F5A623] uppercase tracking-widest px-2 pt-2">
-            {isRtl ? 'قائمة منسدلة (الأقسام الرئيسية)' : 'Dropdown Menu (Main)'}
+            {isRtl ? 'الأقسام الرئيسية' : lang === 'rw' ? 'Ibice by’ingenzi' : 'Main Sections'}
           </div>
 
           {allNavItems.map((item) => {
@@ -292,6 +288,7 @@ export const Header: React.FC<HeaderProps> = ({
                 key={item.path}
                 to={item.path}
                 onClick={() => setIsMobileMenuOpen(false)}
+                aria-current={isActive ? 'page' : undefined}
                 className={`w-full flex items-center gap-4 p-3.5 rounded-2xl font-bold text-sm transition-all ${
                   isActive
                     ? 'bg-[#0B1F45] text-[#F5A623] border border-[#F5A623]/40 shadow-lg'
@@ -308,7 +305,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="p-6 border-t border-[rgba(255,255,255,0.08)] text-center">
           <p className="text-xs font-bold text-[#A7B3C4]" dir="ltr">© 2026 MGREFOTS LTD</p>
         </div>
-      </div>
+      </nav>
     </>
   );
 };

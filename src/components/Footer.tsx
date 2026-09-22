@@ -36,16 +36,16 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
             {t.nav_home}
           </Link>
           <Link to="/products" className="hover:text-[#F5A623] transition">
-            {isRtl ? 'المنتجات' : 'Products'}
+            {isRtl ? 'المنتجات' : lang === 'rw' ? 'Ibicuruzwa' : 'Products'}
           </Link>
           <Link to="/about" className="hover:text-[#F5A623] transition">
-            {isRtl ? 'عن الشركة' : 'About Us'}
+            {isRtl ? 'عن الشركة' : lang === 'rw' ? 'Ibyerekeye sosiyete' : 'About Us'}
           </Link>
           <Link to="/contact" className="hover:text-[#F5A623] transition">
-            {isRtl ? 'اتصل بنا' : 'Contact'}
+            {isRtl ? 'اتصل بنا' : lang === 'rw' ? 'Twandikire' : 'Contact'}
           </Link>
           <Link to="/faq" className="hover:text-[#F5A623] transition">
-            {isRtl ? 'الأسئلة الشائعة' : 'FAQ'}
+            {isRtl ? 'الأسئلة الشائعة' : lang === 'rw' ? 'Ibibazo bikunze kubazwa' : 'FAQ'}
           </Link>
           <Link to="/analysis" className="hover:text-[#F5A623] transition">
             {t.nav_analysis}
@@ -55,9 +55,6 @@ export const Footer: React.FC<FooterProps> = ({ lang }) => {
           </Link>
           <Link to="/knowledge" className="hover:text-[#F5A623] transition">
             {t.nav_knowledge || 'Knowledge'}
-          </Link>
-          <Link to="/chat" className="hover:text-[#F5A623] transition">
-            {t.nav_chat}
           </Link>
         </div>
 

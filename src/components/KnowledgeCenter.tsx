@@ -13,6 +13,11 @@ import { GuideDetail } from './GuideDetail';
 import { ArticleDetail } from './ArticleDetail';
 import { TRANSLATIONS } from '../data/translations';
 import { PRODUCTS } from '../data/products';
+import { ARTICLES } from '../content/articles';
+
+// New review-first articles are added alongside the original Knowledge Center
+// articles. Existing creatine guides, research cards, and FAQs remain intact.
+const ALL_KNOWLEDGE_ARTICLES = [...ARTICLES, ...KNOWLEDGE_ARTICLES];
 
 interface KnowledgeCenterProps {
   lang: Language;
@@ -48,7 +53,7 @@ export const KnowledgeCenter: React.FC<KnowledgeCenterProps> = ({
 
   // Active guide or article detail views
   const activeGuide = FEATURED_GUIDES.find((g) => g.id === selectedGuideId);
-  const activeArticle = KNOWLEDGE_ARTICLES.find((a) => a.id === selectedArticleId);
+  const activeArticle = ALL_KNOWLEDGE_ARTICLES.find((a) => a.id === selectedArticleId);
 
   // Filtered guides based on search, category, goal
   const filteredGuides = useMemo(() => {
@@ -334,7 +339,7 @@ export const KnowledgeCenter: React.FC<KnowledgeCenterProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {KNOWLEDGE_ARTICLES.map((art) => (
+          {ALL_KNOWLEDGE_ARTICLES.map((art) => (
             <div
               key={art.id}
               onClick={() => setSelectedArticleId(art.id)}
