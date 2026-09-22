@@ -7,11 +7,13 @@ import { TRANSLATIONS } from '../data/translations';
 interface HeaderProps {
   lang: Language;
   onSelectLang: (lang: Language) => void;
+  onLogoClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   lang,
-  onSelectLang
+  onSelectLang,
+  onLogoClick,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -68,6 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Logo & Brand */}
               <Link
               to="/"
+              onClick={onLogoClick}
               aria-current={location.pathname === '/' ? 'page' : undefined}
             className="flex items-center gap-3 cursor-pointer group shrink-0"
             aria-label="MGREFOTS home"

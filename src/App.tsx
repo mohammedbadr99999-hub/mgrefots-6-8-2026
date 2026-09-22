@@ -4,7 +4,8 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { TRANSLATIONS } from './data/translations';
 import { Language, Product } from './types';
-import { Sparkles, MessageCircle, ShoppingBag, BookOpen } from 'lucide-react';
+import { Sparkles, MessageCircle, ShoppingBag, BookOpen, Paperclip, X } from 'lucide-react';
+import { serializeAIFile, validateAIFile } from './utils/aiFile';
 
 const HomePage = lazy(() => import('./pages/HomePage').then((module) => ({ default: module.HomePage })));
 const ProductsPage = lazy(() => import('./pages/ProductsPage').then((module) => ({ default: module.ProductsPage })));
@@ -109,6 +110,8 @@ export default function App() {
   const [quickQuestion, setQuickQuestion] = useState('');
   const [quickAnswer, setQuickAnswer] = useState('');
   const [isQuickAnswering, setIsQuickAnswering] = useState(false);
+  const [quickFile, setQuickFile] = useState<File | null>(null);
+  const [quickFileError, setQuickFileError] = useState('');
 
   const t = TRANSLATIONS[lang];
   const isRtl = lang === 'ar';
@@ -117,19 +120,25 @@ export default function App() {
       placeholder: 'Put your question here and press ASK to get the answer',
       label: 'Ask the MGREFOTS AI Expert',
       loading: 'Preparing your answer…',
-      fullPage: 'Open full expert consultation'
+      fullPage: 'Open full expert consultation', upload: 'Upload PDF or image', remove: 'Clear question and answer',
+      typeError: 'Please choose a PDF, JPG, PNG, or WebP file.', sizeError: 'The file must be 10 MB or smaller.',
+      privacy: 'The file is analyzed for this answer and is not added to the private book library.'
     },
     rw: {
       placeholder: 'Andika ikibazo cyawe hano, ukande ASK ubone igisubizo',
       label: 'Baza Impuguke ya AI ya MGREFOTS',
       loading: 'Turimo gutegura igisubizo…',
-      fullPage: 'Fungura urupapuro rw’impuguke'
+      fullPage: 'Fungura urupapuro rw’impuguke', upload: 'Ohereza PDF cyangwa ifoto', remove: 'Siba ikibazo n’igisubizo',
+      typeError: 'Hitamo PDF, JPG, PNG cyangwa WebP.', sizeError: 'Dosiye ntigomba kurenza 10 MB.',
+      privacy: 'Dosiye isesengurwa kuri iki gisubizo gusa kandi ntiyongerwa mu isomero ry’ibitabo.'
     },
     ar: {
       placeholder: 'ضع سؤالك هنا واضغط على ASK وستحصل على الإجابة',
       label: 'اسأل خبير MGREFOTS بالذكاء الاصطناعي',
       loading: 'جارٍ إعداد الإجابة…',
-      fullPage: 'افتح صفحة الاستشارة الكاملة'
+      fullPage: 'افتح صفحة الاستشارة الكاملة', upload: 'ارفع PDF أو صورة', remove: 'امسح السؤال والإجابة',
+      typeError: 'اختر ملف PDF أو صورة JPG أو PNG أو WebP.', sizeError: 'يجب ألا يزيد حجم الملف على 10 ميجابايت.',
+      privacy: 'يُحلَّل الملف لهذه الإجابة فقط ولا يُضاف إلى مكتبة الكتب الخاصة.'
     }
   }[lang];
 
@@ -140,12 +149,13 @@ export default function App() {
   }, [lang, isRtl]);
 
   // API Helper for Gemini requests
-  const queryAI = async (prompt: string, systemInstruction?: string) => {
+  const queryAI = async (prompt: string, systemInstruction?: string, file?: File) => {
     try {
+      const serializedFile = file ? await serializeAIFile(file) : undefined;
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, systemInstruction, lang }),
+        body: JSON.stringify({ prompt, systemInstruction, lang, file: serializedFile }),
       });
 
       const contentType = res.headers.get('content-type') || '';
@@ -182,16 +192,37 @@ export default function App() {
   const handleQuickExpertQuestion = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const question = quickQuestion.trim();
-    if (!question || isQuickAnswering) return;
+    if ((!question && !quickFile) || isQuickAnswering) return;
 
     setIsQuickAnswering(true);
     setQuickAnswer('');
     try {
-      const answer = await queryAI(question, 'This question comes from the homepage quick-answer box. Give a complete, useful, well-organized answer using the full MGREFOTS expert response format. Do not answer with only a definition or a one-line summary.');
+      const answer = await queryAI(question, 'This question comes from the homepage quick-answer box. Give a complete, useful, well-organized answer using the full MGREFOTS expert response format. If a visitor file is attached, analyze it together with the question. Do not answer with only a definition or a one-line summary.', quickFile ?? undefined);
       setQuickAnswer(answer);
     } finally {
       setIsQuickAnswering(false);
     }
+  };
+
+  const resetQuickExpert = () => {
+    setQuickQuestion('');
+    setQuickAnswer('');
+    setQuickFile(null);
+    setQuickFileError('');
+  };
+
+  const handleQuickFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    const error = validateAIFile(file);
+    if (error) {
+      setQuickFile(null);
+      setQuickFileError(error === 'size' ? quickExpertCopy.sizeError : quickExpertCopy.typeError);
+      return;
+    }
+    setQuickFile(file);
+    setQuickFileError('');
   };
 
   const formatQuickAnswer = (text: string) => text.split('\n').map((line, index) => {
@@ -234,6 +265,7 @@ export default function App() {
         <Header
           lang={lang}
           onSelectLang={setLang}
+          onLogoClick={resetQuickExpert}
         />
 
         {/* Small Scroll Indicator on side */}
@@ -257,26 +289,47 @@ export default function App() {
                     type="text"
                     value={quickQuestion}
                     onChange={(event) => setQuickQuestion(event.target.value)}
+                    dir="auto"
                     maxLength={12000}
                     placeholder={quickExpertCopy.placeholder}
                     className={`min-h-[48px] w-full rounded-2xl border border-white/10 bg-[#030914]/75 py-3 text-sm font-bold text-white outline-none transition placeholder:text-[#94A3B8] focus:border-[#F5A623]/70 ${isRtl ? 'pr-11 pl-4 text-right' : 'pl-11 pr-4 text-left'}`}
                   />
                 </div>
+                <label className="min-h-[48px] cursor-pointer rounded-2xl border border-[#F5A623]/45 bg-[#091833] px-4 py-3 text-sm font-black text-[#F5A623] transition hover:border-[#F5A623] hover:bg-[#0B1F45] flex items-center justify-center gap-2" title={quickExpertCopy.upload}>
+                  <Paperclip size={18} aria-hidden="true" />
+                  <span className="sm:sr-only">{quickExpertCopy.upload}</span>
+                  <input type="file" accept="application/pdf,image/jpeg,image/png,image/webp" onChange={handleQuickFile} className="sr-only" />
+                </label>
                 <button
                   type="submit"
-                  disabled={isQuickAnswering || !quickQuestion.trim()}
+                  disabled={isQuickAnswering || (!quickQuestion.trim() && !quickFile)}
                   className="min-h-[48px] rounded-2xl bg-gradient-to-r from-[#F5A623] to-[#FF8A00] px-8 py-3 text-sm font-black text-[#030914] shadow-lg shadow-[#F5A623]/20 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   {isQuickAnswering ? '…' : 'ASK'}
                 </button>
               </form>
 
+              {quickFile ? (
+                <div className={`mt-3 flex items-center gap-2 text-xs font-bold text-[#CBD5E1] ${isRtl ? 'justify-start' : 'justify-start'}`}>
+                  <Paperclip size={14} className="text-[#F5A623]" aria-hidden="true" />
+                  <span className="max-w-[75%] truncate" title={quickFile.name}>{quickFile.name}</span>
+                  <button type="button" onClick={() => setQuickFile(null)} className="rounded-full p-1 text-[#94A3B8] transition hover:bg-white/10 hover:text-white" aria-label={quickExpertCopy.remove}>
+                    <X size={15} />
+                  </button>
+                  <span className="hidden sm:inline text-[#64748B]">{quickExpertCopy.privacy}</span>
+                </div>
+              ) : null}
+              {quickFileError ? <p role="alert" className={`mt-2 text-xs font-bold text-red-400 ${isRtl ? 'text-right' : 'text-left'}`}>{quickFileError}</p> : null}
+
               <div aria-live="polite" aria-busy={isQuickAnswering}>
                 {isQuickAnswering ? (
                   <p className={`mt-3 animate-pulse text-xs font-bold text-[#F5A623] ${isRtl ? 'text-right' : 'text-left'}`}>{quickExpertCopy.loading}</p>
                 ) : quickAnswer ? (
-                  <div className={`mt-4 rounded-2xl border border-[#F5A623]/25 bg-[#030914]/70 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
-                    <div>{formatQuickAnswer(quickAnswer)}</div>
+                  <div className={`relative mt-4 rounded-2xl border border-[#F5A623]/25 bg-[#030914]/70 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+                    <button type="button" onClick={resetQuickExpert} className={`absolute top-3 rounded-full border border-white/10 bg-[#091833] p-1.5 text-[#94A3B8] transition hover:border-[#F5A623]/50 hover:text-white ${isRtl ? 'left-3' : 'right-3'}`} aria-label={quickExpertCopy.remove} title={quickExpertCopy.remove}>
+                      <X size={16} />
+                    </button>
+                    <div dir="auto" style={{ textAlign: 'start' }}>{formatQuickAnswer(quickAnswer)}</div>
                     <Link to="/analysis" className="mt-3 inline-flex text-xs font-black text-[#F5A623] hover:text-white transition">
                       {quickExpertCopy.fullPage}
                     </Link>
@@ -324,7 +377,7 @@ export default function App() {
             <Route path="/analysis" element={
               <ChatPage
                 lang={lang}
-                onSendChatMessage={(msg) => queryAI(msg, 'This is the main Ask the Expert page. Answer the visitor directly and use the approved MGREFOTS methodology.')}
+                onSendChatMessage={(msg, file) => queryAI(msg, 'This is the main Ask the Expert page. Answer the visitor directly and use the approved MGREFOTS methodology. If a visitor file is attached, analyze it together with the question.', file)}
               />
             } />
 
@@ -364,7 +417,7 @@ export default function App() {
             <Route path="/chat" element={
               <ChatPage
                 lang={lang}
-                onSendChatMessage={(msg) => queryAI(msg, 'This legacy route uses the same MGREFOTS AI Expert methodology as the main consultation page.')}
+                onSendChatMessage={(msg, file) => queryAI(msg, 'This legacy route uses the same MGREFOTS AI Expert methodology as the main consultation page. If a visitor file is attached, analyze it together with the question.', file)}
               />
             } />
 
