@@ -187,12 +187,32 @@ export default function App() {
     setIsQuickAnswering(true);
     setQuickAnswer('');
     try {
-      const answer = await queryAI(question, 'This question comes from the homepage quick-answer box. Answer directly and concisely while following the approved MGREFOTS expert methodology.');
+      const answer = await queryAI(question, 'This question comes from the homepage quick-answer box. Give a complete, useful, well-organized answer using the full MGREFOTS expert response format. Do not answer with only a definition or a one-line summary.');
       setQuickAnswer(answer);
     } finally {
       setIsQuickAnswering(false);
     }
   };
+
+  const formatQuickAnswer = (text: string) => text.split('\n').map((line, index) => {
+    const trimmed = line.trim();
+    if (!trimmed) return <div key={`quick-space-${index}`} className="h-2" />;
+
+    const isHeading = /^#{1,4}\s+/.test(trimmed) || (/^[^\p{L}\p{N}]/u.test(trimmed) && trimmed.length <= 90 && !/^[-•*]\s+/.test(trimmed));
+    const isBullet = /^[-•*]\s+/.test(trimmed);
+    const cleaned = trimmed.replace(/^#{1,4}\s*/, '').replace(/\*\*/g, '').replace(/^[-•*]\s+/, '');
+
+    if (isHeading) {
+      return <h3 key={`quick-heading-${index}`} className="mb-2 mt-4 text-base font-black text-[#F5A623] first:mt-0">{cleaned}</h3>;
+    }
+
+    return (
+      <p key={`quick-answer-${index}`} className={`mb-2 text-sm font-medium leading-7 text-[#E2E8F0] ${isBullet ? 'flex items-start gap-2' : ''}`}>
+        {isBullet ? <span className="mt-0.5 shrink-0 font-black text-[#F5A623]">✓</span> : null}
+        <span>{cleaned}</span>
+      </p>
+    );
+  });
 
   return (
     <BrowserRouter>
@@ -256,7 +276,7 @@ export default function App() {
                   <p className={`mt-3 animate-pulse text-xs font-bold text-[#F5A623] ${isRtl ? 'text-right' : 'text-left'}`}>{quickExpertCopy.loading}</p>
                 ) : quickAnswer ? (
                   <div className={`mt-4 rounded-2xl border border-[#F5A623]/25 bg-[#030914]/70 p-4 ${isRtl ? 'text-right' : 'text-left'}`}>
-                    <p className="whitespace-pre-wrap text-sm font-medium leading-7 text-[#E2E8F0]">{quickAnswer}</p>
+                    <div>{formatQuickAnswer(quickAnswer)}</div>
                     <Link to="/analysis" className="mt-3 inline-flex text-xs font-black text-[#F5A623] hover:text-white transition">
                       {quickExpertCopy.fullPage}
                     </Link>
