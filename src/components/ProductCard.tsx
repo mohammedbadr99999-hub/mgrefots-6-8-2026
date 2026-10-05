@@ -1,3 +1,4 @@
+import { OrderButton } from '../components/OrderButton';
 import React, { useState } from 'react';
 import { CheckCircle2, MessageSquare, Info, Sparkles, Star, ShoppingCart, ThumbsUp, ChevronDown } from 'lucide-react';
 import { Product, Language } from '../types';
@@ -138,15 +139,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           ))}
         </div>
 
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full min-h-[48px] mb-2.5 py-3.5 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:brightness-110 text-[#071426] rounded-2xl font-black text-sm transition-all shadow-lg shadow-[#F5A623]/20 flex items-center justify-center gap-2.5"
-        >
-          <MessageSquare size={18} className="text-[#071426]" />
-          <span>{t.btn_order_whatsapp}</span>
-        </a>
+        <OrderButton product={product} lang={lang} />
 
         {/* More Details Toggle Button */}
         <button

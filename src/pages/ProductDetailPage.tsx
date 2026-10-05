@@ -1,3 +1,4 @@
+import { OrderButton } from '../components/OrderButton';
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
@@ -181,15 +182,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ lang, onQu
             </p>
 
             {/* Primary Order Button */}
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-4 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#030914] rounded-2xl font-black text-base transition shadow-xl shadow-[#F5A623]/20 flex items-center justify-center gap-3"
-            >
-              <MessageSquare size={20} />
-              <span>{t.btn_order_whatsapp}</span>
-            </a>
+            <OrderButton product={product} lang={lang} />
 
             {/* Direct Ask Coach Button */}
             <a

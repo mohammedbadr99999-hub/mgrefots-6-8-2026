@@ -1,3 +1,4 @@
+import { CheckoutPage } from './pages/CheckoutPage';
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Header } from './components/Header';
@@ -341,6 +342,7 @@ export default function App() {
 
           <Suspense fallback={<PageLoading lang={lang} />}>
           <Routes>
+            <Route path="/checkout/:productId" element={<CheckoutPage lang={lang} />} />
             <Route path="/" element={
               <HomePage
                 lang={lang}

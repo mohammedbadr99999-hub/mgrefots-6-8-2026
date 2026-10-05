@@ -1,6 +1,6 @@
 import { Product } from '../types';
 
-export const PRODUCTS: Product[] = [
+const ORIGINAL_PRODUCTS: Product[] = [
   {
     id: 'creatine-monohydrate',
     name: {
@@ -470,3 +470,322 @@ export const PRODUCTS: Product[] = [
     }
   }
 ];
+
+const PRODUCT_UPDATES: Record<string, Partial<Product>> = {
+  "creatine-monohydrate": {
+    "name": {
+      "en": "MGREFOTS Creatine Monohydrate",
+      "ar": "كرياتين مونوهيدرات MGREFOTS",
+      "rw": "MGREFOTS Creatine Monohydrate"
+    },
+    "subtitle": {
+      "en": "99.8% · 200 Mesh",
+      "ar": "99.8% · 200 Mesh",
+      "rw": "99.8% · 200 Mesh"
+    },
+    "badge": {
+      "en": "99.8% · 200 Mesh",
+      "ar": "99.8% · 200 Mesh",
+      "rw": "99.8% · 200 Mesh"
+    },
+    "size": "300g Powder",
+    "isSoldOut": false,
+    "description": {
+      "en": "MGREFOTS Creatine Monohydrate. 300g Powder. Creatine monohydrate. 5g per serving, 60 servings.",
+      "ar": "كرياتين مونوهيدرات MGREFOTS. 300g Powder. Creatine monohydrate. 5g per serving, 60 servings.",
+      "rw": "MGREFOTS Creatine Monohydrate. 300g Powder. Creatine monohydrate. 5g per serving, 60 servings."
+    },
+    "highlights": {
+      "en": [
+        "300g Powder",
+        "Creatine monohydrate. 5g per serving, 60 servings."
+      ],
+      "ar": [
+        "300g Powder",
+        "Creatine monohydrate. 5g per serving, 60 servings."
+      ],
+      "rw": [
+        "300g Powder",
+        "Creatine monohydrate. 5g per serving, 60 servings."
+      ]
+    },
+    "ingredients": {
+      "en": "Creatine monohydrate. 5g per serving, 60 servings.",
+      "ar": "Creatine monohydrate. 5g per serving, 60 servings.",
+      "rw": "Creatine monohydrate. 5g per serving, 60 servings."
+    },
+    "usage": {
+      "en": "Follow the directions on the product packaging.",
+      "ar": "اتبع تعليمات الاستخدام المدونة على العبوة.",
+      "rw": "Follow the directions on the product packaging."
+    },
+    "scienceNote": {
+      "en": "See the product packaging for the complete product information.",
+      "ar": "راجع العبوة للحصول على معلومات المنتج الكاملة.",
+      "rw": "See the product packaging for the complete product information."
+    },
+    "whatsappText": {
+      "en": "Hello, I would like to ask about MGREFOTS Creatine Monohydrate.",
+      "ar": "مرحباً، أود الاستفسار عن كرياتين مونوهيدرات MGREFOTS.",
+      "rw": "Hello, I would like to ask about MGREFOTS Creatine Monohydrate."
+    },
+    "image": "/images/products/creatine-monohydrate-oct2026.webp"
+  },
+  "citrulline": {
+    "name": {
+      "en": "MGREFOTS L-Citrulline",
+      "ar": "إل سيترولين MGREFOTS",
+      "rw": "MGREFOTS L-Citrulline"
+    },
+    "subtitle": {
+      "en": "99.3% · 150g",
+      "ar": "99.3% · 150g",
+      "rw": "99.3% · 150g"
+    },
+    "badge": {
+      "en": "99.3% · 150g",
+      "ar": "99.3% · 150g",
+      "rw": "99.3% · 150g"
+    },
+    "size": "150g Powder",
+    "isSoldOut": false,
+    "description": {
+      "en": "MGREFOTS L-Citrulline. 150g Powder. L-Citrulline. 5g per serving, 30 servings.",
+      "ar": "إل سيترولين MGREFOTS. 150g Powder. L-Citrulline. 5g per serving, 30 servings.",
+      "rw": "MGREFOTS L-Citrulline. 150g Powder. L-Citrulline. 5g per serving, 30 servings."
+    },
+    "highlights": {
+      "en": [
+        "150g Powder",
+        "L-Citrulline. 5g per serving, 30 servings."
+      ],
+      "ar": [
+        "150g Powder",
+        "L-Citrulline. 5g per serving, 30 servings."
+      ],
+      "rw": [
+        "150g Powder",
+        "L-Citrulline. 5g per serving, 30 servings."
+      ]
+    },
+    "ingredients": {
+      "en": "L-Citrulline. 5g per serving, 30 servings.",
+      "ar": "L-Citrulline. 5g per serving, 30 servings.",
+      "rw": "L-Citrulline. 5g per serving, 30 servings."
+    },
+    "usage": {
+      "en": "Follow the directions on the product packaging.",
+      "ar": "اتبع تعليمات الاستخدام المدونة على العبوة.",
+      "rw": "Follow the directions on the product packaging."
+    },
+    "scienceNote": {
+      "en": "See the product packaging for the complete product information.",
+      "ar": "راجع العبوة للحصول على معلومات المنتج الكاملة.",
+      "rw": "See the product packaging for the complete product information."
+    },
+    "whatsappText": {
+      "en": "Hello, I would like to ask about MGREFOTS L-Citrulline.",
+      "ar": "مرحباً، أود الاستفسار عن إل سيترولين MGREFOTS.",
+      "rw": "Hello, I would like to ask about MGREFOTS L-Citrulline."
+    },
+    "image": "/images/products/citrulline-oct2026.webp"
+  },
+  "l-carnitine": {
+    "name": {
+      "en": "MEPACO L-Carnitine",
+      "ar": "إل كارنيتين ميباكو",
+      "rw": "MEPACO L-Carnitine"
+    },
+    "subtitle": {
+      "en": "350mg · 30 Capsules",
+      "ar": "350mg · 30 Capsules",
+      "rw": "350mg · 30 Capsules"
+    },
+    "badge": {
+      "en": "350mg · 30 Capsules",
+      "ar": "350mg · 30 Capsules",
+      "rw": "350mg · 30 Capsules"
+    },
+    "size": "30 Hard Gelatin Capsules",
+    "isSoldOut": false,
+    "description": {
+      "en": "MEPACO L-Carnitine. 30 Hard Gelatin Capsules. L-Carnitine 350mg per capsule.",
+      "ar": "إل كارنيتين ميباكو. 30 Hard Gelatin Capsules. L-Carnitine 350mg per capsule.",
+      "rw": "MEPACO L-Carnitine. 30 Hard Gelatin Capsules. L-Carnitine 350mg per capsule."
+    },
+    "highlights": {
+      "en": [
+        "30 Hard Gelatin Capsules",
+        "L-Carnitine 350mg per capsule."
+      ],
+      "ar": [
+        "30 Hard Gelatin Capsules",
+        "L-Carnitine 350mg per capsule."
+      ],
+      "rw": [
+        "30 Hard Gelatin Capsules",
+        "L-Carnitine 350mg per capsule."
+      ]
+    },
+    "ingredients": {
+      "en": "L-Carnitine 350mg per capsule.",
+      "ar": "L-Carnitine 350mg per capsule.",
+      "rw": "L-Carnitine 350mg per capsule."
+    },
+    "usage": {
+      "en": "Follow the directions on the product packaging.",
+      "ar": "اتبع تعليمات الاستخدام المدونة على العبوة.",
+      "rw": "Follow the directions on the product packaging."
+    },
+    "scienceNote": {
+      "en": "See the product packaging for the complete product information.",
+      "ar": "راجع العبوة للحصول على معلومات المنتج الكاملة.",
+      "rw": "See the product packaging for the complete product information."
+    },
+    "whatsappText": {
+      "en": "Hello, I would like to ask about MEPACO L-Carnitine.",
+      "ar": "مرحباً، أود الاستفسار عن إل كارنيتين ميباكو.",
+      "rw": "Hello, I would like to ask about MEPACO L-Carnitine."
+    },
+    "image": "/images/products/l-carnitine-oct2026.webp",
+    "servings": "30 Capsules"
+  },
+  "c-zinc": {
+    "name": {
+      "en": "C Zinc",
+      "ar": "سي زنك",
+      "rw": "C Zinc"
+    },
+    "subtitle": {
+      "en": "500mg Vitamin C · 12.5mg Zinc",
+      "ar": "500mg Vitamin C · 12.5mg Zinc",
+      "rw": "500mg Vitamin C · 12.5mg Zinc"
+    },
+    "badge": {
+      "en": "500mg Vitamin C · 12.5mg Zinc",
+      "ar": "500mg Vitamin C · 12.5mg Zinc",
+      "rw": "500mg Vitamin C · 12.5mg Zinc"
+    },
+    "size": "30 Hard Gelatin Capsules",
+    "isSoldOut": false,
+    "description": {
+      "en": "C Zinc. 30 Hard Gelatin Capsules. Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule.",
+      "ar": "سي زنك. 30 Hard Gelatin Capsules. Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule.",
+      "rw": "C Zinc. 30 Hard Gelatin Capsules. Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule."
+    },
+    "highlights": {
+      "en": [
+        "30 Hard Gelatin Capsules",
+        "Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule."
+      ],
+      "ar": [
+        "30 Hard Gelatin Capsules",
+        "Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule."
+      ],
+      "rw": [
+        "30 Hard Gelatin Capsules",
+        "Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule."
+      ]
+    },
+    "ingredients": {
+      "en": "Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule.",
+      "ar": "Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule.",
+      "rw": "Vitamin C 500mg; zinc bisglycinate 62.5mg, equivalent to elemental zinc 12.5mg per capsule."
+    },
+    "usage": {
+      "en": "Follow the directions on the product packaging.",
+      "ar": "اتبع تعليمات الاستخدام المدونة على العبوة.",
+      "rw": "Follow the directions on the product packaging."
+    },
+    "scienceNote": {
+      "en": "See the product packaging for the complete product information.",
+      "ar": "راجع العبوة للحصول على معلومات المنتج الكاملة.",
+      "rw": "See the product packaging for the complete product information."
+    },
+    "whatsappText": {
+      "en": "Hello, I would like to ask about C Zinc.",
+      "ar": "مرحباً، أود الاستفسار عن سي زنك.",
+      "rw": "Hello, I would like to ask about C Zinc."
+    },
+    "image": "/images/products/c-zinc-oct2026.webp",
+    "servings": "30 Capsules"
+  }
+};
+
+PRODUCT_UPDATES['creatine-monohydrate'].price = '50,000 RWF';
+PRODUCT_UPDATES['c-zinc'].price = '27,000 RWF';
+PRODUCT_UPDATES['l-carnitine'].price = '40,000 RWF';
+
+export const PRODUCTS: Product[] = ORIGINAL_PRODUCTS.map(product => PRODUCT_UPDATES[product.id] ? { ...product, ...PRODUCT_UPDATES[product.id] } : { ...product, isSoldOut: true });
+PRODUCTS.push({
+  "id": "milga-advance",
+  "name": {
+    "en": "Milga Advance",
+    "ar": "ميلجا أدفانس",
+    "rw": "Milga Advance"
+  },
+  "subtitle": {
+    "en": "30 Film Coated Tablets",
+    "ar": "٣٠ قرص مغلف",
+    "rw": "30 Film Coated Tablets"
+  },
+  "category": "immunity",
+  "badge": {
+    "en": "30 Tablets",
+    "ar": "٣٠ قرص",
+    "rw": "30 Tablets"
+  },
+  "badgeColor": "bg-red-700 text-white",
+  "gradient": "from-red-700 via-blue-900 to-slate-950",
+  "accentColor": "text-red-400",
+  "iconName": "Zap",
+  "price": "50,000 RWF",
+  "image": "/images/products/milga-advance-oct2026.webp",
+  "servings": "30 Tablets",
+  "size": "30 Film Coated Tablets",
+  "rating": 0,
+  "reviewsCount": 0,
+  "buyersCount": 0,
+  "description": {
+    "en": "Milga Advance by EVA Pharma. 30 film coated tablets.",
+    "ar": "ميلجا أدفانس من إيفا فارما. ٣٠ قرص مغلف.",
+    "rw": "Milga Advance by EVA Pharma. 30 film coated tablets."
+  },
+  "highlights": {
+    "en": [
+      "Benfotiamine 300mg",
+      "Vitamin B6 100mg",
+      "Vitamin B12 250mcg"
+    ],
+    "ar": [
+      "Benfotiamine 300mg",
+      "Vitamin B6 100mg",
+      "Vitamin B12 250mcg"
+    ],
+    "rw": [
+      "Benfotiamine 300mg",
+      "Vitamin B6 100mg",
+      "Vitamin B12 250mcg"
+    ]
+  },
+  "usage": {
+    "en": "Follow the product leaflet or pharmacist’s directions.",
+    "ar": "اتبع النشرة الداخلية أو تعليمات الصيدلي.",
+    "rw": "Follow the product leaflet or pharmacist’s directions."
+  },
+  "ingredients": {
+    "en": "Benfotiamine 300mg, vitamin B6 100mg, vitamin B12 250mcg.",
+    "ar": "بنفوتيامين ٣٠٠ مجم، فيتامين ب٦ ١٠٠ مجم، فيتامين ب١٢ ٢٥٠ ميكروجرام.",
+    "rw": "Benfotiamine 300mg, vitamin B6 100mg, vitamin B12 250mcg."
+  },
+  "scienceNote": {
+    "en": "See the product leaflet for complete information.",
+    "ar": "راجع النشرة الداخلية لمعلومات المنتج الكاملة.",
+    "rw": "See the product leaflet for complete information."
+  },
+  "whatsappText": {
+    "en": "Hello, I would like to ask about Milga Advance.",
+    "ar": "مرحباً، أود الاستفسار عن ميلجا أدفانس.",
+    "rw": "Hello, I would like to ask about Milga Advance."
+  }
+});

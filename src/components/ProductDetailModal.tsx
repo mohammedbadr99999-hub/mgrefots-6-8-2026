@@ -1,3 +1,4 @@
+import { OrderButton } from '../components/OrderButton';
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, MessageSquare, Sparkles, Send, Clock, Beaker, FileText, Star, ShoppingCart, ThumbsUp, ShieldCheck, ListCheck } from 'lucide-react';
@@ -305,15 +306,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* Order WhatsApp CTA */}
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full py-4 bg-gradient-to-r from-[#F5A623] to-[#FF8A00] hover:from-[#FF8A00] hover:to-[#F5A623] text-[#071426] rounded-2xl font-black text-base shadow-xl flex items-center justify-center gap-3 transition hover:scale-[1.01]"
-        >
-          <MessageSquare size={20} className="text-[#071426]" />
-          <span>{t.btn_order_whatsapp}</span>
-        </a>
+        <OrderButton product={product} lang={lang} />
       </div>
     </div>,
     document.body
