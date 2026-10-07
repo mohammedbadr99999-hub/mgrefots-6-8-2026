@@ -99,7 +99,7 @@ export const PRODUCTS: Product[] = [
     accentColor: 'text-red-500',
     iconName: 'Activity',
     price: '40,000 RWF',
-    image: '/images/products/citrulline.png',
+    image: '/images/products/citrulline.webp',
     servings: '30 Servings',
     size: '90g Powder',
     rating: 5.0,
